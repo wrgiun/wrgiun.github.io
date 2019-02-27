@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title><![CDATA[Hello World]]></title>
-    <url>%2F2019%2F02%2F27%2Fhello-world%2F</url>
-    <content type="text"><![CDATA[Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. hello hexoQuick StartCreate a new post1$ hexo new "My New Post" More info: Writing Run server1$ hexo server More info: Server Generate static files1$ hexo generate More info: Generating Deploy to remote sites1$ hexo deploy More info: Deployment]]></content>
+    <title><![CDATA[Ubuntu系统安装搜狗输入法]]></title>
+    <url>%2F2019%2F02%2F27%2Fpostname%2F</url>
+    <content type="text"><![CDATA[ubuntu默认是字母，当然有中文输入法fcixtx(小企鹅输入法)，但是我不怎么喜欢用，接下来我们就来安装搜狗输入法下载命令全部在终端中执行 一、下载搜狗输入法的安装包​ 下载地址为：http://pinyin.sogou.com/linux/ 12下载命令wget &quot;http://cdn2.ime.sogou.com/dl/index/1524572264/sogoupinyin_2.2.0.0108_amd64.deb?st=tQdHKEaxh6PcyFVf4QfT1A&amp;e=1539855246&amp;fn=sogoupinyin_2.2.0.0108_amd64.deb&quot; 注意：要选择与自己系统相对应的安装包，我的系统是ubuntu64位，所以我下载64位的安装包 二、查看是否下载成功输入命令ls -l 三、安装搜狗输入法安装包1sudo dpkg -i sogoupinyin_2.2.0.0082_amd64.deb//-i后面为我们下载的安装包的文件名 四、选择fcitx输入法从系统设置里面点击“语言支持”，从语言支持里面选择小企鹅输入法（fcitx），默认为ibus，搜狗输入要安装在fcitx输入法上面。你可能会打不开“语言支持”，只需执行命令sudo apt-get install -f 即可修复错误，打开语音支持 如果没有小企鹅输入法的话执行以下命令 12sudo apt-get updatesudo apt-get upgrade 1、重启（可以使用命令reboot）然后在系统设置中选择 fcitx configure,然后按下图操作 六、安装中文语言操作如下图等他下载完成后最后重启，大功告成]]></content>
   </entry>
 </search>
