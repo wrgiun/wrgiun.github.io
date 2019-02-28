@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[PHP strcmp（）函数 引入文件语句的区别 魔术方法]]></title>
+    <url>%2F2019%2F02%2F28%2FPHP1%2F</url>
+    <content type="text"><![CDATA[一、strcmp（）函数1、strcmp（）的作用是比较2个字符串（区分大小写）2、基本语法： stcmp(string1,string2)//string1和2进行比较 3、技术细节：如果返回值为0,2个字符串相等如果返回值小于0,string1小于string2如果返回值大于0,string1大于string2注意的是，PHP版本得为4+ 该函数与stncmop()函数类似，不同的是，stncmop()函数可以指定字符串用于比较的字符数基本语法： strncmp(string1,string2,length) 二、include() 、require()语句包含并运行指定文件。这两结构在包含文件上完全一样，唯一的区别是对于错误的处理。require()语句在遇到包含文件不存在，或是出错的时候，就停止即行，并报错。include()则继续即行。 include(‘hello.php’); echo ‘include test final!’;//include报错，但是会继续执行，显示：include test final! require(‘hello.php’); echo ‘require test final!’;//require报错，停止代码的执行。 二、include, include_once, require, require_once 的区别include 和 include_once 只有在 php 执行到该语句时才会执行文件包含的操作。其中，include在包含文件出错时会提示 warning, 但后续的代码仍会继续执行, iclude_once 不会重复包含同一文件;require 和 require_once 在php文件执行前就把需要包含的文件的内容替换掉 require 语句本身, 所以在包含文件出错时会抛出error, 后续代码不会继续执行, require_once 也只执行一次包含操作.下面这篇博客是教详细介绍了他们·的区别https://blog.csdn.net/j393819650/article/details/53836525 三、魔术方法具体的大家可以看php手册之魔术方法这边就只是简单介绍下他们何时会触发 1、__construct,构造函数，具有构造函数的类会在每次创建新对象时先调用此方法（实例化对象时） 2、__destruct,解析函数，析构函数会在到某个对象的所有引用都被删除或者当对象被显式销毁时执行。（类对象使用结束时自动调用） 3、属性重载在给不可访问（未定义）属性赋值时，__set() 会被调用。 读取不可访问（未定义）属性的值时，__get() 会被调用。 当对不可访问（未定义）属性调用 isset() 或 empty() 时，__isset() 会被调用。 当对不可访问（未定义）属性调用 unset() 时，__unset() 会被调用。注意的是：这些魔术方法的参数都不能通过引用传递 4、方法重载在对象中调用一个不可访问方法时，__call() 会被调用。 在静态上下文中调用一个不可访问方法时，__callStatic() 会被调用 5、__sleep(),serialize() 函数会检查类中是否存在一个魔术方法 __sleep()。如果存在，该方法会先被调用，然后才执行序列化操作 6、 __wakeup ，与之相反，unserialize() 会检查是否存在一个 wakeup() 方法。如果存在，则会先调用 wakeup 方法，预先准备对象需要的资源。__wakeup() 经常用在反序列化操作中。 7、__toString() 方法用于一个类被当成字符串时应怎样回应。例如 echo $obj; 应该显示些什么。此方法必须返回一个字符串，否则将发出一条 E_RECOVERABLE_ERROR 级别的致命错误 注意！！！！不能在 __toString() 方法中抛出异常。这么做会导致致命错误。 8、__invoke()当尝试以调用函数的方式调用一个对象时，__invoke() 方法会被自动调用。注意：在PHP5.3.0版本上才有效 9、 __set_state()，自 PHP 5.1.0 起当调用 var_export() 导出类时，此静态 方法会被调用。 10、__clone(),当使用__clone()复制一个对象时候调用。 11、__debugInfo ( ) :，在转储对象以获取应该显示的属性时，var_dump()调用此方法。如果方法没有在对象上定义，那么将显示所有公共、受保护和私有属性。]]></content>
+      <categories>
+        <category>PHP基础</category>
+      </categories>
+      <tags>
+        <tag>PHP</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[Ubuntu系统安装搜狗输入法]]></title>
     <url>%2F2019%2F02%2F27%2Fpostname%2F</url>
     <content type="text"><![CDATA[ubuntu默认是字母，当然有中文输入法fcixtx(小企鹅输入法)，但是我不怎么喜欢用，接下来我们就来安装搜狗输入法下载命令全部在终端中执行 一、下载搜狗输入法的安装包​ 下载地址为：http://pinyin.sogou.com/linux/ 12下载命令wget &quot;http://cdn2.ime.sogou.com/dl/index/1524572264/sogoupinyin_2.2.0.0108_amd64.deb?st=tQdHKEaxh6PcyFVf4QfT1A&amp;e=1539855246&amp;fn=sogoupinyin_2.2.0.0108_amd64.deb&quot; 注意：要选择与自己系统相对应的安装包，我的系统是ubuntu64位，所以我下载64位的安装包 二、查看是否下载成功输入命令ls -l 三、安装搜狗输入法安装包1sudo dpkg -i sogoupinyin_2.2.0.0082_amd64.deb//-i后面为我们下载的安装包的文件名 四、选择fcitx输入法从系统设置里面点击“语言支持”，从语言支持里面选择小企鹅输入法（fcitx），默认为ibus，搜狗输入要安装在fcitx输入法上面。你可能会打不开“语言支持”，只需执行命令sudo apt-get install -f 即可修复错误，打开语音支持 如果没有小企鹅输入法的话执行以下命令 12sudo apt-get updatesudo apt-get upgrade 1、重启（可以使用命令reboot）然后在系统设置中选择 fcitx configure,然后按下图操作 六、安装中文语言操作如下图等他下载完成后最后重启，大功告成]]></content>
