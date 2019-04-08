@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.0.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.0.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.0.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="一、pass011、首先我们尝试下上传一个php文件，发现文件类型被限制了我们查看下源码发现是使用js代码对文件类型进行限制。那么我们使用火狐浏览器的插件Noscript，打开这个插件即可禁用掉js代码，然后成功上传PHP,文件。2、当然这个太麻烦了，我们可以直接删除这个坚持文件格式的函数即可。3、我们上传个正常的图片，图片的路径：http://127.0.0.1/upload-lab/uploa">
+<meta property="og:type" content="article">
+<meta property="og:title" content="upload-labs 1-17">
+<meta property="og:url" content="https://wrgiun.github.io/2019/04/08/upload-labs-1-17/index.html">
+<meta property="og:site_name" content="giun">
+<meta property="og:description" content="一、pass011、首先我们尝试下上传一个php文件，发现文件类型被限制了我们查看下源码发现是使用js代码对文件类型进行限制。那么我们使用火狐浏览器的插件Noscript，打开这个插件即可禁用掉js代码，然后成功上传PHP,文件。2、当然这个太麻烦了，我们可以直接删除这个坚持文件格式的函数即可。3、我们上传个正常的图片，图片的路径：http://127.0.0.1/upload-lab/uploa">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://wrgiun.github.io/2019/04/08/upload-labs-1-17/1.jpg">
+<meta property="og:image" content="https://wrgiun.github.io/2019/04/08/upload-labs-1-17/2.jpg">
+<meta property="og:image" content="https://wrgiun.github.io/2019/04/08/upload-labs-1-17/3.jpg">
+<meta property="og:image" content="https://wrgiun.github.io/2019/04/08/upload-labs-1-17/4.jpg">
+<meta property="og:image" content="https://wrgiun.github.io/2019/04/08/upload-labs-1-17/5.jpg">
+<meta property="og:image" content="https://wrgiun.github.io/2019/04/08/upload-labs-1-17/6.jpg">
+<meta property="og:image" content="https://wrgiun.github.io/2019/04/08/upload-labs-1-17/7.jpg">
+<meta property="og:image" content="https://wrgiun.github.io/2019/04/08/upload-labs-1-17/8.jpg">
+<meta property="og:image" content="https://wrgiun.github.io/2019/04/08/upload-labs-1-17/9.jpg">
+<meta property="og:image" content="https://wrgiun.github.io/2019/04/08/upload-labs-1-17/10.jpg">
+<meta property="og:image" content="https://wrgiun.github.io/2019/04/08/upload-labs-1-17/11.jpg">
+<meta property="og:image" content="https://wrgiun.github.io/2019/04/08/upload-labs-1-17/12.jpg">
+<meta property="og:image" content="https://wrgiun.github.io/2019/04/08/upload-labs-1-17/13.jpg">
+<meta property="og:image" content="https://wrgiun.github.io/2019/04/08/upload-labs-1-17/14.jpg">
+<meta property="og:image" content="https://wrgiun.github.io/2019/04/08/upload-labs-1-17/15.jpg">
+<meta property="og:image" content="https://wrgiun.github.io/2019/04/08/upload-labs-1-17/16.jpg">
+<meta property="og:updated_time" content="2019-04-08T12:26:36.339Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="upload-labs 1-17">
+<meta name="twitter:description" content="一、pass011、首先我们尝试下上传一个php文件，发现文件类型被限制了我们查看下源码发现是使用js代码对文件类型进行限制。那么我们使用火狐浏览器的插件Noscript，打开这个插件即可禁用掉js代码，然后成功上传PHP,文件。2、当然这个太麻烦了，我们可以直接删除这个坚持文件格式的函数即可。3、我们上传个正常的图片，图片的路径：http://127.0.0.1/upload-lab/uploa">
+<meta name="twitter:image" content="https://wrgiun.github.io/2019/04/08/upload-labs-1-17/1.jpg">
+
+
+
+
+
+
+  <link rel="canonical" href="https://wrgiun.github.io/2019/04/08/upload-labs-1-17/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>upload-labs 1-17 | giun</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">giun</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://wrgiun.github.io/2019/04/08/upload-labs-1-17/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wr">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="giun">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">upload-labs 1-17
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-04-08 20:17:01 / 修改时间：20:26:36" itemprop="dateCreated datePublished" datetime="2019-04-08T20:17:01+08:00">2019-04-08</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/web/" itemprop="url" rel="index"><span itemprop="name">web</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="一、pass01"><a href="#一、pass01" class="headerlink" title="一、pass01"></a>一、pass01</h2><p>1、首先我们尝试下上传一个php文件，发现文件类型被限制了<br><img src="/2019/04/08/upload-labs-1-17/1.jpg" alt="在这里插入图片描述"><br>我们查看下源码<br><img src="/2019/04/08/upload-labs-1-17/2.jpg" alt="在这里插入图片描述"><br>发现是使用js代码对文件类型进行限制。<br>那么我们使用火狐浏览器的插件Noscript，打开这个插件即可禁用掉js代码，然后成功上传PHP,文件。<br>2、当然这个太麻烦了，我们可以直接删除这个坚持文件格式的函数即可。<br><img src="/2019/04/08/upload-labs-1-17/3.jpg" alt="在这里插入图片描述"><br>3、我们上传个正常的图片，图片的路径：<a href="http://127.0.0.1/upload-lab/upload/1.jpg" target="_blank" rel="noopener">http://127.0.0.1/upload-lab/upload/1.jpg</a><br>查看图片路径发现文件名没被修改，那么我们可以使用抓包，修改文件名类型，把php文件改为jpg文件，然后通过抓包再改为PHP文件。<br><img src="/2019/04/08/upload-labs-1-17/4.jpg" alt="在这里插入图片描述"></p>
+<h2 id="二、pass02"><a href="#二、pass02" class="headerlink" title="二、pass02"></a>二、pass02</h2><p>使用第一题中的第三种方法即可。查看提示<br><img src="/2019/04/08/upload-labs-1-17/5.jpg" alt="在这里插入图片描述"><br>mime的意思就是文件的后缀名</p>
+<h2 id="三、pass03"><a href="#三、pass03" class="headerlink" title="三、pass03"></a>三、pass03</h2><p>发现第二题的方法已经失效了，<br>我们查看下源码。</p>
+<pre><code>$is_upload = false;
+$msg = null;
+if (isset($_POST[&apos;submit&apos;])) {
+    if (file_exists(UPLOAD_PATH)) {
+        $deny_ext = array(&apos;.asp&apos;,&apos;.aspx&apos;,&apos;.php&apos;,&apos;.jsp&apos;);
+        $file_name = trim($_FILES[&apos;upload_file&apos;][&apos;name&apos;]);
+        $file_name = deldot($file_name);//删除文件名末尾的点
+        $file_ext = strrchr($file_name, &apos;.&apos;);//查找字符在指定字符串中从左边开始的最后一次出现的位置，如果成功，返回该字符以及其后面的字符
+        $file_ext = strtolower($file_ext); //转换为小写，就可以防止大小写逃逸了
+        $file_ext = str_ireplace(&apos;::$DATA&apos;, &apos;&apos;, $file_ext);//去除字符串::$DATA
+        $file_ext = trim($file_ext); //收尾去空
+
+        if(!in_array($file_ext, $deny_ext)) {
+            $temp_file = $_FILES[&apos;upload_file&apos;][&apos;tmp_name&apos;];
+            $img_path = UPLOAD_PATH.&apos;/&apos;.date(&quot;YmdHis&quot;).rand(1000,9999).$file_ext;            
+            if (move_uploaded_file($temp_file,$img_path)) {
+                 $is_upload = true;
+            } else {
+                $msg = &apos;上传出错！&apos;;
+            }
+        } else {
+            $msg = &apos;不允许上传.asp,.aspx,.php,.jsp后缀文件！&apos;;
+        }
+    } else {
+        $msg = UPLOAD_PATH . &apos;文件夹不存在,请手工创建！&apos;;
+    }
+}
+</code></pre><p>可以看到代码使用黑名单来过滤，php的话有时候（配置的原因）php、php3、php4、php5、phtml、pht这些后缀也是可以被解析的，其他语言也有类似的情况，需要尝试：</p>
+<p><img src="/2019/04/08/upload-labs-1-17/6.jpg" alt="在这里插入图片描述"><br>由于我这里使用的是phpstudy+windows，由于配置原因是解析不了php3等等这些后缀的</p>
+<h2 id="四、pass04"><a href="#四、pass04" class="headerlink" title="四、pass04"></a>四、pass04</h2><p>第四题直接进制常见的.asp|.aspx|.php|.jsp等常见后缀文件，但是又一种文件格式没禁用，那就是<br><a href="https://baike.baidu.com/item/htaccess/1645473?fr=aladdin" target="_blank" rel="noopener">.htaccess</a></p>
+<p>启用.htaccess，需要修改httpd.conf，启用AllowOverride（将该值改为all），并可以用AllowOverride限制特定命令的使用。如果需要使用.htaccess以外的其他文件名，可以用AccessFileName指令来改变。例如，需要使用.config ，则可以在服务器配置文件中按以下方法配置：AccessFileName .config 。 </p>
+<p>然后先上传,htaccess文件，文件内容如下</p>
+<pre><code>&lt;FilesMatch &quot;2.jpg&quot;&gt;
+SetHandler application/x-httpd-php
+&lt;/FilesMatch&gt;
+</code></pre><p>.htaccess文件的内容的意思是 对2.jpg使用php重新解析<br>然后再上传jpg脚本，</p>
+<p><img src="/2019/04/08/upload-labs-1-17/7.jpg" alt="在这里插入图片描述"></p>
+<h2 id="五、pass05"><a href="#五、pass05" class="headerlink" title="五、pass05"></a>五、pass05</h2><p>观察源码我们可以发现，本题把<code>.htaccess</code>文件也禁用了。但是认真对比与第四题的代码，本题去掉了大小写绕过的逃逸。<br><img src="/2019/04/08/upload-labs-1-17/8.jpg" alt="在这里插入图片描述"></p>
+<h2 id="六、pass06"><a href="#六、pass06" class="headerlink" title="六、pass06"></a>六、pass06</h2><p>对比第五题的源码可以发现，本题源码少了</p>
+<pre><code>$file_ext = trim($file_ext); //首尾去空，那么我们可以上传PHP文件，然后使用burp suit抓包修改后缀名格式为php加空格。
+</code></pre><p><img src="/2019/04/08/upload-labs-1-17/9.jpg" alt="在这里插入图片描述"><br>但返回题目提示文件不允许上传，不慌<br>观察抓包的文件，其实文件已经上传，路径在抓包里有<br><img src="/2019/04/08/upload-labs-1-17/10.jpg" alt="在这里插入图片描述"></p>
+<p><img src="/2019/04/08/upload-labs-1-17/11.jpg" alt="在这里插入图片描述"></p>
+<h2 id="七、pass07"><a href="#七、pass07" class="headerlink" title="七、pass07"></a>七、pass07</h2><p>与第六题源码对比，发现少了<code>$file_name = deldot($file_name);//删除文件名末尾的点</code>这句代码。<br>那么我们就可以。<br>那么在文件名末尾加个点号就可以了，参考第6题</p>
+<h2 id="八、pass08"><a href="#八、pass08" class="headerlink" title="八、pass08"></a>八、pass08</h2><p>比第七题少了<code>$file_ext = str_ireplace(&#39;::$DATA&#39;, &#39;&#39;, $file_ext);//去除字符串::$DATA</code></p>
+<pre><code>在php+windows的情况下：如果文件名+&quot;::$DATA&quot;会把::$DATA之后的数据当成文件流处理,不会检测后缀名.且保持&quot;::$DATA&quot;之前的文件名。
+</code></pre><p>参考第6题<br><img src="/2019/04/08/upload-labs-1-17/12.jpg" alt="在这里插入图片描述"></p>
+<h2 id="九、pass09"><a href="#九、pass09" class="headerlink" title="九、pass09"></a>九、pass09</h2><p>这一关是上面几关的综合，但是他有个逻辑漏洞<br>程序先是去除文件名前后的空格，再去除文件名最后所有的.，再通过strrchar来寻找.来确认文件名的后缀，但是最后保存文件的时候没有重命名而使用的原始的文件名，导致可以利用类似one.php. .(两个点号之间有一个空格)绕过，这有点像sql注入中的re_place只过滤一次关键字。<br>操作与第6题类似.</p>
+<h1 id="十、pass10"><a href="#十、pass10" class="headerlink" title="十、pass10"></a>十、pass10</h1><p>上传php文件发现，文件后缀名没掉了。上传jpg文件一切正常。怀疑是绕过<br>观察下源码</p>
+<pre><code>$deny_ext = array(&quot;php&quot;,&quot;php5&quot;,&quot;php4&quot;,&quot;php3&quot;,&quot;php2&quot;,&quot;html&quot;,&quot;htm&quot;,&quot;phtml&quot;,&quot;pht&quot;,&quot;jsp&quot;,&quot;jspa&quot;,&quot;jspx&quot;,&quot;jsw&quot;,&quot;jsv&quot;,&quot;jspf&quot;,&quot;jtml&quot;,&quot;asp&quot;,&quot;aspx&quot;,&quot;asa&quot;,&quot;asax&quot;,&quot;ascx&quot;,&quot;ashx&quot;,&quot;asmx&quot;,&quot;cer&quot;,&quot;swf&quot;,&quot;htaccess&quot;);
+
+        $file_name = trim($_FILES[&apos;upload_file&apos;][&apos;name&apos;]);
+        $file_name = str_ireplace($deny_ext,&quot;&quot;, $file_name);
+</code></pre><p>由这3句可以看出，部分文件1后缀名被替换成了空格<br>那么我们抓包，该后缀名，双写绕过。<br><img src="/2019/04/08/upload-labs-1-17/13.jpg" alt="在这里插入图片描述"></p>
+<h2 id="十一、pass11"><a href="#十一、pass11" class="headerlink" title="十一、pass11"></a>十一、pass11</h2><p>关键的代码在于这里的’save_path’是一个可控的变量，但是后面还拼接上一个后缀名，也需要绕过</p>
+<pre><code>$img_path = $_GET[&apos;save_path&apos;].&quot;/&quot;.rand(10, 99).date(&quot;YmdHis&quot;).&quot;.&quot;.$file_ext;
+</code></pre><p>这个时候可以使用%00截断，但这东西有点过气了，因为需要两个条件<br>php版本小于5.3.4<br>php的magic_quotes_gpc为OFF状态<br>如果要完成这一个题目就必须要实现上面的两个条件，但是现在都PHP7了，这东西也就很少见了，满足上面的条件的时候php就是把它当成结束符，后面的数据直接忽略，这也导致了很多的问题，文件包含也可以利用这一点<br><img src="/2019/04/08/upload-labs-1-17/14.jpg" alt="在这里插入图片描述"><br>所以如果要绕过，我们可以这样去实现，另save_path等于下面的值</p>
+<p>../upload/4.php%00<br>1</p>
+<h2 id="十二、pass12"><a href="#十二、pass12" class="headerlink" title="十二、pass12"></a>十二、pass12</h2><p>这里的源代码就改了一点点，就是把get改为post类型，一样的方式绕过，只不过这里需要在二进制里面修改%00，因为post不会像get对%00进行自动解码。</p>
+<pre><code>$img_path = $_POST[&apos;save_path&apos;].&quot;/&quot;.rand(10, 99).date(&quot;YmdHis&quot;).&quot;.&quot;.$file_ext;
+</code></pre><p><img src="/2019/04/08/upload-labs-1-17/15.jpg" alt="在这里插入图片描述"></p>
+<h2 id="十三、pass13"><a href="#十三、pass13" class="headerlink" title="十三、pass13"></a>十三、pass13</h2><p>观察源码可以发现只对文件的头2个字节做检测</p>
+<pre><code>$bin = fread($file, 2); //只读2字节
+   fclose($file);
+</code></pre><p>制作木马图片，然后上传即可，上传图片后利用就要结和文件包含漏洞了。</p>
+<p>制作木马图片最简单的方式</p>
+<pre><code>copy 1.jpg /b + 1l.php /a 1.jpg
+</code></pre><h2 id="十四、pass14"><a href="#十四、pass14" class="headerlink" title="十四、pass14"></a>十四、pass14</h2><p>是这里用getimagesize获取文件类型，还是直接就可以利用图片马就可进行绕过：<br>介绍下getimagesize</p>
+<pre><code>array getimagesize ( string $filename [, array &amp;$imageinfo ] )
+getimagesize() 函数将测定任何 GIF，JPG，PNG，SWF，SWC，PSD，TIFF，BMP，IFF，JP2，JPX，JB2，JPC，XBM 或 WBMP 图像文件的大小并返回图像的尺寸以及文件类型和一个可以用于普通 HTML 文件中 IMG 标记中的 height/width 文本字符串。
+如果不能访问 filename 指定的图像或者其不是有效的图像，getimagesize() 将返回 FALSE 并产生一条 E_WARNING 级的错误。
+</code></pre><h2 id="十五、pass15"><a href="#十五、pass15" class="headerlink" title="十五、pass15"></a>十五、pass15</h2><p>这里用到php_exif模块来判断文件类型，还是直接就可以利用图片马就可进行绕过：<br><img src="/2019/04/08/upload-labs-1-17/16.jpg" alt="在这里插入图片描述"></p>
+<h2 id="十六、pass16"><a href="#十六、pass16" class="headerlink" title="十六、pass16"></a>十六、pass16</h2><pre><code>imagecreatefrom 系列函数用于从文件或 URL 载入一幅图像，成功返回图像资源，失败则返回一个空字符串。
+该系列函数有：
+imagecreatefromgif()：创建一块画布，并从 GIF 文件或 URL 地址载入一副图像
+imagecreatefromjpeg()：创建一块画布，并从 JPEG 文件或 URL 地址载入一副图像
+imagecreatefrompng()：创建一块画布，并从 PNG 文件或 URL 地址载入一副图像
+imagecreatefromwbmp()：创建一块画布，并从 WBMP 文件或 URL 地址载入一副图像
+imagecreatefromstring()：创建一块画布，并从字符串中的图像流新建一副图像
+</code></pre><p>这一关对后缀名和文件类型啥的都进行了很严格的控制，而且在后面还对图片进行了二次编译<br>这一个题目的思路，寻找图片被渲染后与原始图片部分对比仍然相同的数据块部分，将Webshell代码插在该部分，然后上传，下载下来后发现这一部分插入代码的没变但是其他部分都变了。其他部分与13题一样</p>
+<h2 id="十七、pass17"><a href="#十七、pass17" class="headerlink" title="十七、pass17"></a>十七、pass17</h2><p>参考这篇博客<a href="http://www.cnblogs.com/jinqi520/p/9977256.html" target="_blank" rel="noopener">http://www.cnblogs.com/jinqi520/p/9977256.html</a></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+      <div>
+        
+
+
+
+  
+
+
+
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>wr</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    
+    <a href="https://wrgiun.github.io/2019/04/08/upload-labs-1-17/" title="upload-labs 1-17">https://wrgiun.github.io/2019/04/08/upload-labs-1-17/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/04/08/bugku-38-48/" rel="next" title="bugku 38-48 writeup(web)">
+                <i class="fa fa-chevron-left"></i> bugku 38-48 writeup(web)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/04/08/Blank-to-bypass/" rel="prev" title="绕过过滤的空白字符">
+                绕过过滤的空白字符 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="wr">
+            
+              <p class="site-author-name" itemprop="name">wr</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">25</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">8</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">7</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、pass01"><span class="nav-number">1.</span> <span class="nav-text">一、pass01</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、pass02"><span class="nav-number">2.</span> <span class="nav-text">二、pass02</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、pass03"><span class="nav-number">3.</span> <span class="nav-text">三、pass03</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四、pass04"><span class="nav-number">4.</span> <span class="nav-text">四、pass04</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#五、pass05"><span class="nav-number">5.</span> <span class="nav-text">五、pass05</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#六、pass06"><span class="nav-number">6.</span> <span class="nav-text">六、pass06</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#七、pass07"><span class="nav-number">7.</span> <span class="nav-text">七、pass07</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#八、pass08"><span class="nav-number">8.</span> <span class="nav-text">八、pass08</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#九、pass09"><span class="nav-number">9.</span> <span class="nav-text">九、pass09</span></a></li></ol><li class="nav-item nav-level-1"><a class="nav-link" href="#十、pass10"><span class="nav-number"></span> <span class="nav-text">十、pass10</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#十一、pass11"><span class="nav-number">1.</span> <span class="nav-text">十一、pass11</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#十二、pass12"><span class="nav-number">2.</span> <span class="nav-text">十二、pass12</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#十三、pass13"><span class="nav-number">3.</span> <span class="nav-text">十三、pass13</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#十四、pass14"><span class="nav-number">4.</span> <span class="nav-text">十四、pass14</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#十五、pass15"><span class="nav-number">5.</span> <span class="nav-text">十五、pass15</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#十六、pass16"><span class="nav-number">6.</span> <span class="nav-text">十六、pass16</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#十七、pass17"><span class="nav-number">7.</span> <span class="nav-text">十七、pass17</span></a></li></ol></li></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">wr</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.0.0</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+  
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.0"></script>
+
+  <script src="/js/src/motion.js?v=7.0.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=7.0.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=7.0.0"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.0"></script>
+<script src="/js/src/post-details.js?v=7.0.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=7.0.0"></script>
+
+
+
+  
+
+
+  
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  <style>
+    .copy-btn {
+      display: inline-block;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 20px;
+      color: #333;
+      white-space: nowrap;
+      vertical-align: middle;
+      cursor: pointer;
+      background-color: #eee;
+      background-image: linear-gradient(#fcfcfc, #eee);
+      border: 1px solid #d5d5d5;
+      border-radius: 3px;
+      user-select: none;
+      outline: 0;
+    }
+
+    .highlight-wrap .copy-btn {
+      transition: opacity .3s ease-in-out;
+      opacity: 0;
+      padding: 2px 6px;
+      position: absolute;
+      right: 4px;
+      top: 8px;
+    }
+
+    .highlight-wrap:hover .copy-btn,
+    .highlight-wrap .copy-btn:focus {
+      opacity: 1
+    }
+
+    .highlight-wrap {
+      position: relative;
+    }
+  </style>
+  <script>
+    $('.highlight').each(function(i, e) {
+      var $wrap = $('<div>').addClass('highlight-wrap');
+      $(e).after($wrap);
+      $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function(e) {
+        var code = $(this).parent().find('.code').find('.line').map(function(i, e) {
+          return $(e).text();
+        }).toArray().join('\n');
+        var ta = document.createElement('textarea');
+        var range = document.createRange(); //For Chrome
+        var sel = window.getSelection(); //For Chrome
+        var yPosition = window.pageYOffset || document.documentElement.scrollTop;
+        ta.style.top = yPosition + 'px'; //Prevent page scroll
+        ta.style.position = 'absolute';
+        ta.style.opacity = '0';
+        ta.value = code;
+        ta.textContent = code; //For FireFox
+        ta.contentEditable = true;
+        ta.readOnly = false;
+        document.body.appendChild(ta);
+        range.selectNode(ta);
+        sel.removeAllRanges();
+        sel.addRange(range);
+        ta.setSelectionRange(0, code.length);
+        var result = document.execCommand('copy');
+        
+          if (result) $(this).text('复制成功');
+          else $(this).text('复制失败');
+        
+        ta.blur(); //For iOS
+        $(this).blur();
+      })).on('mouseleave', function(e) {
+        var $b = $(this).find('.copy-btn');
+        setTimeout(function() {
+          $b.text('复制');
+        }, 300);
+      }).append(e);
+    })
+  </script>
+
+
+  
+
+</body>
+</html>

