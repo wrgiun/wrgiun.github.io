@@ -336,6 +336,540 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://wrgiun.github.io/2019/03/09/command-injection/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wr">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="giun">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/03/09/command-injection/" class="post-title-link" itemprop="url">command injection</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-03-09 17:19:03 / 修改时间：17:25:36" itemprop="dateCreated datePublished" datetime="2019-03-09T17:19:03+08:00">2019-03-09</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/DVWA/" itemprop="url" rel="index"><span itemprop="name">DVWA</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="一、什么是命令注入"><a href="#一、什么是命令注入" class="headerlink" title="一、什么是命令注入"></a>一、什么是命令注入</h2><p><strong>1、概念</strong><br>通过web应用程序在服务器上拼接系统命令。简单说就是注入的命令是系统命令，而注入是靠连接来完成的。<br>常见的windows命令：<br>ipconfig，查看本地网络<br>net user,查看系统用户<br> dir  “./ ”  查看当前目录<br> 等等<br>常见的命令拼接符有&amp;&amp;, &amp; ,|, ||</p>
+<p><img src="/2019/03/09/command-injection/1.jpg" alt="。"></p>
+<h2 id="二、尝试low等级"><a href="#二、尝试low等级" class="headerlink" title="二、尝试low等级"></a>二、尝试low等级</h2><p>输入127.0.0.1发现输出的内容就是在cmd执行ping命令的结果，也就是说它调用了系统命令，于是我们尝试下<br>输入127.0.0.1 &amp; net user注入成功<br><img src="/2019/03/09/command-injection/2.jpg" alt="在这里插入图片描述"></p>
+<h2 id="三、尝试medium等级"><a href="#三、尝试medium等级" class="headerlink" title="三、尝试medium等级"></a>三、尝试medium等级</h2><p><img src="/2019/03/09/command-injection/3.jpg" alt="在这里插入图片描述"></p>
+<h2 id="四、尝试下high等级"><a href="#四、尝试下high等级" class="headerlink" title="四、尝试下high等级"></a>四、尝试下high等级</h2><p><img src="/2019/03/09/command-injection/4.jpg" alt="在这里插入图片描述"><br>发现注入，那么我们采用   |    连接，发现注入成功<br><img src="/2019/03/09/command-injection/5.jpg" alt="在这里插入图片描述"><br>我们查看源码，发现了原因<br><img src="/2019/03/09/command-injection/6.jpg" alt="在这里插入图片描述"></p>
+<h2 id="五、尝试下impose等级"><a href="#五、尝试下impose等级" class="headerlink" title="五、尝试下impose等级"></a>五、尝试下impose等级</h2><p><img src="/2019/03/09/command-injection/7.jpg" alt="在这里插入图片描述"><br>发现它现在了我们的IP格式，这就是所谓的白名单，可以有效的防止命令注入。不推荐黑名单，应该可以通过双引号，略过黑名单。linux下还支持单引号</p>
+<p><img src="/2019/03/09/command-injection/8.jpg" alt="在这里插入图片描述"><br>如果不输出显示结果怎么办<br><img src="/2019/03/09/command-injection/9.jpg" alt="在这里插入图片描述"></p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://wrgiun.github.io/2019/03/09/bugku-12-16/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wr">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="giun">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/03/09/bugku-12-16/" class="post-title-link" itemprop="url">bugku 12-16 write up(web)</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-03-09 17:12:53 / 修改时间：17:18:28" itemprop="dateCreated datePublished" datetime="2019-03-09T17:12:53+08:00">2019-03-09</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/bugkuCTF/" itemprop="url" rel="index"><span itemprop="name">bugkuCTF</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="一、第12题（头等舱）"><a href="#一、第12题（头等舱）" class="headerlink" title="一、第12题（头等舱）"></a>一、第12题（头等舱）</h2><p>先尝试火狐浏览器的开发者工具，发现响应头为136字节，可是参数确说有139字节，隐藏了3个字节<br><img src="/2019/03/09/bugku-12-16/1.jpg" alt="在这里插入图片描述"><br>那么我们使用burp suit 抓包，然后使用repeater功能，go一下发现flag（flag即为隐藏的字节）<br><img src="/2019/03/09/bugku-12-16/2.jpg" alt="在这里插入图片描述"></p>
+<h2 id="二、第13题（网站被黑）"><a href="#二、第13题（网站被黑）" class="headerlink" title="二、第13题（网站被黑）"></a>二、第13题（网站被黑）</h2><p>首先，根据域名和网页提示，我们需要找到网站后台。我们使用御剑工具直接扫除后台<br><img src="/2019/03/09/bugku-12-16/3.jpg" alt="在这里插入图片描述"><br>成功扫出网站后台<br><img src="/2019/03/09/bugku-12-16/4.jpg" alt="在这里插入图片描述">进入网站后台，尝试了一些admin,password常用的密码之后，发现登入不了。<br><img src="/2019/03/09/bugku-12-16/5.jpg" alt="在这里插入图片描述"><br>我们使用burp suite,<a href="https://jingyan.baidu.com/album/200957619c8739cb0721b4ff.html" target="_blank" rel="noopener">爆破功能进行爆破</a><br><img src="/2019/03/09/bugku-12-16/6.jpg" alt="在这里插入图片描述"><br>扫出密码为hack,输入密码即可得到flag</p>
+<h2 id="三、第14题（管理员系统）"><a href="#三、第14题（管理员系统）" class="headerlink" title="三、第14题（管理员系统）"></a>三、第14题（管理员系统）</h2><p>使用火狐浏览器开发者工具查看源码<br>发现有段加密的base64代码<br><img src="/2019/03/09/bugku-12-16/7.jpg" alt="在这里插入图片描述"><br>解密后为test123，题目又提示，IP禁止访问，请联系本地管理员登陆，IP已被记录.。那么我们就给header添加个<a href="https://baike.sogou.com/v63184183.htm?fromTitle=X-Forwarded-For" target="_blank" rel="noopener">X-Forwarded-For</a>: 127.0.0.1参数。<br><img src="/2019/03/09/bugku-12-16/8.jpg" alt="在这里插入图片描述"></p>
+<h2 id="四、第15题（web4）"><a href="#四、第15题（web4）" class="headerlink" title="四、第15题（web4）"></a>四、第15题（web4）</h2><p>观察源码发现，有一堆utf-8加密的字符，那么我们进行<a href="https://www.107000.com/T-Utf8" target="_blank" rel="noopener">utf-8解密</a><br><img src="/2019/03/09/bugku-12-16/9.jpg" alt="在这里插入图片描述"><br>这个是解密后的结果<br><img src="/2019/03/09/bugku-12-16/10.jpg" alt="在这里插入图片描述"><br>观察<a href="http://www.w3school.com.cn/jsref/jsref_eval.asp" target="_blank" rel="noopener">eval函数语句</a>可知，我们应该输入，p1+54aa2+p2的值,输入果然得出flag</p>
+<h2 id="五、第十六题（flag在index里）"><a href="#五、第十六题（flag在index里）" class="headerlink" title="五、第十六题（flag在index里）"></a>五、第十六题（flag在index里）</h2><p><img src="/2019/03/09/bugku-12-16/11.jpg" alt="在这里插入图片描述"><br>点击进去。<br>发现这是个文件包含漏洞<br><img src="/2019/03/09/bugku-12-16/12.jpg" alt="在这里插入图片描述"><br>那么我们采用<a href="http://php.net/manual/zh/wrappers.php.php" target="_blank" rel="noopener">PHP伪协议</a>，<br>输入<code>http://123.206.87.240:8005/post/index.php?file=php://filter/read=convert.base64-encode/resource=index.php</code>会发现出现了base64代码。<br><img src="/2019/03/09/bugku-12-16/13.jpg" alt="在这里插入图片描述"><br>进行解码得到index.php的源码，发现flag被注释掉这就是我们为什么要使用base64编码输出的原因。</p>
+<pre><code>&lt;html&gt;
+    &lt;title&gt;Bugku-ctf&lt;/title&gt;
+
+&lt;?php
+    error_reporting(0);
+    if(!$_GET[file]){echo &apos;&lt;a href=&quot;./index.php?file=show.php&quot;&gt;click me? no&lt;/a&gt;&apos;;}
+    $file=$_GET[&apos;file&apos;];
+    if(strstr($file,&quot;../&quot;)||stristr($file, &quot;tp&quot;)||stristr($file,&quot;input&quot;)||stristr($file,&quot;data&quot;)){
+        echo &quot;Oh no!&quot;;
+        exit();
+    }
+    include($file); 
+//flag:flag{edulcni_elif_lacol_si_siht}
+?&gt;
+&lt;/html&gt;
+</code></pre><p>php://filter/是一种访问本地文件的协议，/read=convert.base64-encode/表示读取的方式是base64编码后，resource=index.php表示目标文件为index.php。</p>
+<p>通过传递这个参数可以得到index.php的源码，下面说说为什么，看到源码中的include函数，这个表示从外部引入php文件并执行，如果执行不成功，就返回文件的源码。</p>
+<p>而include的内容是由用户控制的，所以通过我们传递的file参数，是include（）函数引入了index.php的base64编码格式，因为是base64编码格式，所以执行不成功，返回源码</p>
+<p>本题参考这篇博客解答：<a href="https://blog.csdn.net/zpy1998zpy/article/details/80585443" target="_blank" rel="noopener">https://blog.csdn.net/zpy1998zpy/article/details/80585443</a> </p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://wrgiun.github.io/2019/03/06/bugku-1-11/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wr">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="giun">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/03/06/bugku-1-11/" class="post-title-link" itemprop="url">bugku  1~11题 write up（web）</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-03-06 21:47:32 / 修改时间：21:51:53" itemprop="dateCreated datePublished" datetime="2019-03-06T21:47:32+08:00">2019-03-06</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/bugkuCTF/" itemprop="url" rel="index"><span itemprop="name">bugkuCTF</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="一、第一题（web2）"><a href="#一、第一题（web2）" class="headerlink" title="一、第一题（web2）"></a>一、第一题（web2）</h2><p>查看源代码，查找flag,即可得出flag。</p>
+<h2 id="二、第二题（计算器）"><a href="#二、第二题（计算器）" class="headerlink" title="二、第二题（计算器）"></a>二、第二题（计算器）</h2><p><img src="/2019/03/06/bugku-1-11/1.jpg" alt="在这里插入图片描述"><br>输入163，发现只能输入一位数。位数被限制了。我们使用火狐浏览器的开发者工具（F12）调出来。定位到输入框的位置。发现<br><img src="https://img-blog.csdnimg.cn/20190306183039579.png" alt="在这里插入图片描述"><br>最大位数被限制了，把1改成3即可得出flag。</p>
+<h2 id="三、第三题-web基础-GET"><a href="#三、第三题-web基础-GET" class="headerlink" title="三、第三题(web基础$_GET)"></a>三、第三题(web基础$_GET)</h2><p>打开题目发现是PHP代码，阅读代码可知，我们在URL中传入参数?what=flag即可得出flag</p>
+<h2 id="四、第四题-web基础-POST"><a href="#四、第四题-web基础-POST" class="headerlink" title="四、第四题(web基础$_POST)"></a>四、第四题(web基础$_POST)</h2><p>打开题目发现是PHP代码，阅读代码可知，需要使用POST方式传值。<br>使用火狐浏览器的hackbar插件，如图<br><img src="/2019/03/06/bugku-1-11/2.jpg" alt="在这里插入图片描述"></p>
+<h2 id="五、第五题（矛盾）"><a href="#五、第五题（矛盾）" class="headerlink" title="五、第五题（矛盾）"></a>五、第五题（矛盾）</h2><p><strong>先介绍下is_numeric()函数：</strong><br>is_numeric() 函数用于检测变量是否为数字或数字字符串。<br>PHP 版本要求：PHP 4, PHP 5, PHP 7<br>如果指定的变量是数字和数字字符串则返回 TRUE，否则返回 FALSE。</p>
+<p>分析代码，可知，num必须==1，但是又不能是数字或者是数字字符串。<br> ==又表示只要值相等就可以了。那么我们可以在输入num=1XXX，xxx表示非数字。<br> <img src="/2019/03/06/bugku-1-11/3.jpg" alt="在这里插入图片描述"></p>
+<h2 id="六、第六题（web3）"><a href="#六、第六题（web3）" class="headerlink" title="六、第六题（web3）"></a>六、第六题（web3）</h2><p>1、进入题目发现一直在弹窗，点了几遍确定后感觉被耍了。<br>2、阻止弹窗查看源码。发现flag在最后一行的alert标签里。且被注释掉<br>3、发现flag是&amp;#x类型的，这是unicode编码。不知道也没事，百度下就可以知道<br>4、百度搜索unicode在线解码，就可以得出flag。</p>
+<h2 id="七、第七题（域名解析）"><a href="#七、第七题（域名解析）" class="headerlink" title="七、第七题（域名解析）"></a>七、第七题（域名解析）</h2><p>看到题目域名解析我们就要想到hosts文件。<br>我们打开hosts文件<br>hosts文件位置<code>C:\Windows\System32\drivers\etc</code><br>在文件末尾加入123.206.87.240 flag.baidu.com<br><img src="/2019/03/06/bugku-1-11/4.jpg" alt="在这里插入图片描述"><br>在浏览器中输入flag.baidu.com或者123.206.87.240 即可得出flag<br><img src="/2019/03/06/bugku-1-11/5.jpg" alt="在这里插入图片描述"></p>
+<h2 id="八、第八题（必须让他停下来）"><a href="#八、第八题（必须让他停下来）" class="headerlink" title="八、第八题（必须让他停下来）"></a>八、第八题（必须让他停下来）</h2><p>打开题目发现一直在刷新，<br>观察源码，发现flag应该在图片刷出来的时候出现。我们使用burp suit进行抓包放包，经过了j几次（GO）操作之后，我们发现了flag.</p>
+<h2 id="九、第九题本地包含"><a href="#九、第九题本地包含" class="headerlink" title="九、第九题本地包含"></a>九、第九题本地包含</h2><p>观察代码发现flag.php被隐藏起来了。<br>尝试下传入参数?hello=hello,发现hello在下面代码中体现<br><img src="/2019/03/06/bugku-1-11/6.jpg" alt="在这里插入图片描述"><br>这样我们就可以直接传入参数输出flag.php文件的内容，发现flag。<br>传入的参数是?hello=file(“flag.php”)<br><img src="/2019/03/06/bugku-1-11/7.jpg" alt="在这里插入图片描述"></p>
+<h2 id="十、第十题（变量1）"><a href="#十、第十题（变量1）" class="headerlink" title="十、第十题（变量1）"></a>十、第十题（变量1）</h2><p><img src="/2019/03/06/bugku-1-11/8.jpg" alt="在这里插入图片描述"><br>观察源码发现代码最后一行有个可变变量。<br><img src="https://img-blog.csdnimg.cn/2019030620273080.png" alt="在这里插入图片描述"><br>我们让args=GLOBALS   全局数组变量    </p>
+<pre><code>因为$args=GLOBALS 又var_dump($$args) ，所以和前面那个$ ，组成$GLOBALS
+flag变量又在$GLOBALS中，var_dump  eval  成功得到flag
+</code></pre><p><img src="/2019/03/06/bugku-1-11/9.jpg" alt="在这里插入图片描述"></p>
+<p><strong>$GLOBALS介绍</strong></p>
+<ol>
+<li><code>$GLOBALS[&#39;var&#39;]是外部的全局变量本身,在函数内部可以使用$GLOBALS数组调用</code><br>2.<code>作用域：Global的作用是定义全局变量,但是这个全局变量不是应用于整个网站,而是应用于当前页面,包括include或require的所有文件。</code>　　　　　<ol start="2">
+<li><code>$GLOBALS超全局数组适用于任何地方</code></li>
+</ol>
+</li>
+</ol>
+<h2 id="十一、第十一题（web5）"><a href="#十一、第十一题（web5）" class="headerlink" title="十一、第十一题（web5）"></a>十一、第十一题（web5）</h2><p><img src="/2019/03/06/bugku-1-11/10.jpg" alt="在这里插入图片描述"><br><strong>首先介绍下JSPFUCk</strong><br>JSFuck（或为了避讳脏话写作 JSF*ck ）是一种深奥的 JavaScript编程风格。以这种风格写成的代码中仅使用 [、]、(、)、! 和 + 六种字符。此编程风格的名字派生自仅使用较少符号写代码的Brainfuck语言。与其他深奥的编程语言不同，以JSFuck风格写出的代码不需要另外的编译器或解释器来执行，无论浏览器或JavaScript引擎中的原生 JavaScript 解释器皆可直接运行。鉴于 JavaScript 是弱类型语言，编写者可以用数量有限的字符重写 JavaScript 中的所有功能，且可以用这种方式执行任何类型的表达式。<br>简单地说，就是有人不想让自己的代码被别人认出来，用6种字符改造了自己的js代码</p>
+<p>我们查看源码发现有一堆的 [、]、(、)、! 和 + ，把他们扔进浏览器控制台（火狐浏览器按F12打开控制台）进行调试，即可得出flag,记得要大写。</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://wrgiun.github.io/2019/03/06/xss1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1820,538 +2354,6 @@ sqlmap -u [url]http://192.168.159.1/news.php?id=1[/url] --sql-shell
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://wrgiun.github.io/2019/03/03/sqlmap1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="wr">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="giun">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/03/03/sqlmap1/" class="post-title-link" itemprop="url">sqlmap之cookie注入（靶场第二题）</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2019-03-03 21:42:52 / 修改时间：22:02:08" itemprop="dateCreated datePublished" datetime="2019-03-03T21:42:52+08:00">2019-03-03</time>
-            
-
-            
-              
-
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/sqlmap/" itemprop="url" rel="index"><span itemprop="name">sqlmap</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>sqlmap<br>靶场第二题：<a href="https://hack.zkaq.org/?a=battle&amp;f=target&amp;id=31ac789a52edf9bb" target="_blank" rel="noopener">https://hack.zkaq.org/?a=battle&amp;f=target&amp;id=31ac789a52edf9bb</a><br>首先我们尝试下sql注入</p>
-<pre><code>http://120.203.13.75:8001/shownews.asp?id=171%20and%201=1
-</code></pre><p><img src="/2019/03/03/sqlmap1/1.jpg" alt="在这里插入图片描述"><br>说明该网站有防sql注入。那么我们使用cookie注入</p>
-<pre><code>http://120.203.13.75:8001/shownews.asp?id=171%20order%20by%2010
-</code></pre><p><img src="/2019/03/03/sqlmap1/2.jpg" alt="在这里插入图片描述"><br><strong>第一步</strong><br><strong>猜解表</strong></p>
-<pre><code>sqlmap -u &quot;http://120.203.13.75:8001/shownews.asp?&quot; --cookie &quot;id=171&quot; --table --level 2
-</code></pre><p><img src="/2019/03/03/sqlmap1/3.jpg" alt="在这里插入图片描述"><br><strong>第二步，猜字段</strong></p>
-<pre><code>sqlmap -u &quot;http://120.203.13.75:8001/shownews.asp?&quot; --cookie &quot;id=171&quot; --column -T admin --level 2
-</code></pre><p><img src="/2019/03/03/sqlmap1/4.jpg" alt="在这里插入图片描述"><br><strong>第三步，爆数据</strong></p>
-<pre><code>sqlmap -u &quot;http://120.203.13.75:8001/shownews.asp?&quot; --cookie &quot;id=171&quot;  --dump  -T admin -C &quot;username,password&quot; --level 2
-</code></pre><p><img src="/2019/03/03/sqlmap1/5.jpg" alt="在这里插入图片描述"><br>b9a2a2b5dffb918c,该密码是md5加密，百度搜索md5在线加密<br><img src="/2019/03/03/sqlmap1/6.jpg" alt="在这里插入图片描述"><br>我们已经拿到密码了<br>进入后台网站,利用御剑工作扫出后台<br><img src="/2019/03/03/sqlmap1/7.jpg" alt="在这里插入图片描述"><br><strong><a href="http://120.203.13.75:8001/admin" target="_blank" rel="noopener">http://120.203.13.75:8001/admin</a></strong><br>输入账号admin,密码welcome获取flag<br><img src="/2019/03/03/sqlmap1/8.jpg" alt="在这里插入图片描述"></p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://wrgiun.github.io/2019/03/03/sqlmap0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="wr">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="giun">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/03/03/sqlmap0/" class="post-title-link" itemprop="url">sqlmap安装与使用（实验吧第3题）</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2019-03-03 21:33:58 / 修改时间：22:01:57" itemprop="dateCreated datePublished" datetime="2019-03-03T21:33:58+08:00">2019-03-03</time>
-            
-
-            
-              
-
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/sqlmap/" itemprop="url" rel="index"><span itemprop="name">sqlmap</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>使用的环境是Ubuntu系统<br><img src="/2019/03/03/sqlmap0/77.jpg" alt="在这里插入图片描述"></p>
-<h2 id="sqlmap的安装"><a href="#sqlmap的安装" class="headerlink" title="sqlmap的安装"></a>sqlmap的安装</h2><p>sqlmap需要安装python2环境,python3不行(Ubuntu下默认安装python2)<br>输入命令：<code>sudo apt sqlamp</code><br>检查是否安装成功<br>输入命令：<code>sqlmap -help</code>返回下面结果即为成功。<br><img src="/2019/03/03/sqlmap0/66.jpg" alt="在这里插入图片描述"></p>
-<h2 id="sqlmap基本参数"><a href="#sqlmap基本参数" class="headerlink" title="sqlmap基本参数"></a>sqlmap基本参数</h2><p>sqlmap -h 查看帮助选项<br>is -dba 当前用户权限<br>dbs 所有数据库<br>current-db 网站当前数据库<br>users 所有数据库用户<br>current-user 当前数据库用户<br>tables 参数：列表名<br>columns  参数：字段名<br>dump 参数：下载数据</p>
-<h2 id="sqlmap牛刀小试"><a href="#sqlmap牛刀小试" class="headerlink" title="sqlmap牛刀小试"></a>sqlmap牛刀小试</h2><p>我们以这到题为例<a href="http://www.shiyanbar.com/ctf/33。" target="_blank" rel="noopener">http://www.shiyanbar.com/ctf/33。</a><br>如果没有注册过实验吧的朋友先注册下实验吧<br>拿到题目我们判断下有没有sql注入</p>
-<pre><code>在url后面加上and 1=1,没有报错
-加上and 1=2，报错。
-说明有sql注入
-</code></pre><p><img src="/2019/03/03/sqlmap0/55.jpg" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/201903022017271.png" alt="在这里插入图片描述"><br><strong>第一步使用sqlmap查看数据库信息</strong><br>输入命令：<code>sqlmap -u &quot;http://ctf5.shiyanbar.com/8/index.php?id=1&quot; --current-db</code><br><img src="/2019/03/03/sqlmap0/44.jpg" alt="在这里插入图片描述"><br>经过一些时间成功爆出当前数据库为my_db,如果注入过程提示选择y或者n，一般是选择y。大概就是尝试更多的方法进行注入<br><strong>第二步、爆出表名</strong><br>输入命令：<code>sqlmap -u &quot;http://ctf5.shiyanbar.com/8/index.php?id=1&quot; -D my_db --tables</code></p>
-<p><img src="/2019/03/03/sqlmap0/33.jpg" alt="在这里插入图片描述"><br><strong>第三步爆字段名</strong><br>输入命令：</p>
-<pre><code>sqlmap -u &quot;http://ctf5.shiyanbar.com/8/index.php?id=1&quot; -D my_db -T thiskey --columnsy
-</code></pre><p><img src="/2019/03/03/sqlmap0/11.jpg" alt="在这里插入图片描述"><br><strong>第四步、爆数据</strong><br>输入命令：</p>
-<pre><code>sqlmap -u &quot;http://ctf5.shiyanbar.com/8/index.php?id=1&quot; -D my_db -T thiskey -C k0y --dump
-</code></pre><p>稍等片刻，成功找到flag：<code>whatiMyD91dump</code><br><img src="/2019/03/03/sqlmap0/22.jpg" alt="在这里插入图片描述"></p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://wrgiun.github.io/2019/02/28/PHP1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="wr">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="giun">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/02/28/PHP1/" class="post-title-link" itemprop="url">PHP strcmp（）函数 引入文件语句的区别 魔术方法</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2019-02-28 16:46:26 / 修改时间：17:00:19" itemprop="dateCreated datePublished" datetime="2019-02-28T16:46:26+08:00">2019-02-28</time>
-            
-
-            
-              
-
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/PHP基础/" itemprop="url" rel="index"><span itemprop="name">PHP基础</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="一、strcmp（）函数"><a href="#一、strcmp（）函数" class="headerlink" title="一、strcmp（）函数"></a>一、strcmp（）函数</h2><p>1、strcmp（）的作用是比较2个字符串（区分大小写）<br><img src="/2019/02/28/PHP1/20190228134321111.jpg" alt="在这里插入图片描述"><br>2、基本语法：</p>
-<pre><code>stcmp(string1,string2)//string1和2进行比较
-</code></pre><p>3、技术细节：<br>如果返回值为0,2个字符串相等<br><img src="/2019/02/28/PHP1/2.jpg" alt="在这里插入图片描述"><br>如果返回值小于0,string1小于string2<br>如果返回值大于0,string1大于string2<br><img src="/2019/02/28/PHP1/3.jpg" alt="在这里插入图片描述"><br>注意的是，PHP版本得为4+</p>
-<p>该函数与stncmop()函数类似，不同的是，stncmop()函数可以指定字符串用于比较的字符数<br>基本语法：</p>
-<pre><code>strncmp(string1,string2,length)
-</code></pre><p>二、<br>include() 、require()语句包含并运行指定文件。这两结构在包含文件上完全一样，唯一的区别是对于错误的处理。require()语句在遇到包含文件不存在，或是出错的时候，就停止即行，并报错。include()则继续即行。</p>
-<p>include(‘hello.php’); </p>
-<p>echo ‘include test final!’;//include报错，但是会继续执行，显示：include test final! </p>
-<p>require(‘hello.php’); </p>
-<p>echo ‘require test final!’;//require报错，停止代码的执行。</p>
-<h2 id="二、include-include-once-require-require-once-的区别"><a href="#二、include-include-once-require-require-once-的区别" class="headerlink" title="二、include, include_once, require, require_once 的区别"></a>二、include, include_once, require, require_once 的区别</h2><p>include 和 include_once 只有在 php 执行到该语句时才会执行文件包含的操作。其中，include在包含文件出错时会提示 warning, 但后续的代码仍会继续执行, iclude_once 不会重复包含同一文件;<br>require 和 require_once 在php文件执行前就把需要包含的文件的内容替换掉 require 语句本身, 所以在包含文件出错时会抛出error, 后续代码不会继续执行, require_once 也只执行一次包含操作.<br>下面这篇博客是教详细介绍了他们·的区别<br><a href="https://blog.csdn.net/j393819650/article/details/53836525" target="_blank" rel="noopener">https://blog.csdn.net/j393819650/article/details/53836525</a></p>
-<h2 id="三、魔术方法"><a href="#三、魔术方法" class="headerlink" title="三、魔术方法"></a>三、魔术方法</h2><p>具体的大家可以看<a href="http://www.php.net/manual/zh/language.oop5.magic.php" target="_blank" rel="noopener">php手册之魔术方法</a><br>这边就只是简单介绍下他们何时会触发</p>
-<p>1、<strong><code>__construct,</code>构造函数</strong>，具有构造函数的类会在每次创建新对象时先调用此方法（实例化对象时）</p>
-<p>2、<strong><code>__destruct</code>,解析函数</strong>，析构函数会在到某个对象的所有引用都被删除或者当对象被显式销毁时执行。（类对象使用结束时自动调用）</p>
-<p>3、<strong>属性重载</strong><br>在给不可访问（未定义）属性赋值时，<code>__set()</code> 会被调用。</p>
-<p>读取不可访问（未定义）属性的值时，<code>__get()</code> 会被调用。</p>
-<p>当对不可访问（未定义）属性调用 <code>isset()</code> 或 <code>empty()</code> 时，__isset() 会被调用。</p>
-<p>当对不可访问（未定义）属性调用 <code>unset()</code> 时，<code>__unset()</code> 会被调用。<br>注意的是：这些魔术方法的参数都不能通过引用传递</p>
-<p>4、<strong>方法重载</strong><br>在对象中调用一个不可访问方法时，<code>__call()</code> 会被调用。</p>
-<p>在静态上下文中调用一个不可访问方法时，<code>__callStatic()</code> 会被调用</p>
-<p>5、<code>__sleep()</code>,serialize() 函数会检查类中是否存在一个魔术方法 __sleep()。如果存在，该方法会先被调用，然后才执行序列化操作</p>
-<p>6、 <code>__wakeup</code> ，与之相反，unserialize() 会检查是否存在一个 <strong>wakeup() 方法。如果存在，则会先调用 </strong>wakeup 方法，预先准备对象需要的资源。<br>__wakeup() 经常用在反序列化操作中。</p>
-<p>7、<code>__toString()</code> 方法用于一个类被当成字符串时应怎样回应。例如 echo $obj; 应该显示些什么。此方法必须返回一个字符串，否则将发出一条 E_RECOVERABLE_ERROR 级别的致命错误</p>
-<p>注意！！！！不能在 __toString() 方法中抛出异常。这么做会导致致命错误。</p>
-<p>8、<code>__invoke()</code>当尝试以调用函数的方式调用一个对象时，__invoke() 方法会被自动调用。<br>注意：在PHP5.3.0版本上才有效</p>
-<p>9、 <code>__set_state()</code>，自 PHP 5.1.0 起当调用 var_export() 导出类时，此静态 方法会被调用。</p>
-<p>10、<code>__clone()</code>,当使用__clone()复制一个对象时候调用。</p>
-<p>11、<code>__debugInfo (  ) :</code>，在转储对象以获取应该显示的属性时，var_dump()调用此方法。如果方法没有在对象上定义，那么将显示所有公共、受保护和私有属性。</p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2401,7 +2403,7 @@ sqlmap -u [url]http://192.168.159.1/news.php?id=1[/url] --sql-shell
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">31</span>
+                    <span class="site-state-item-count">34</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -2430,7 +2432,9 @@ sqlmap -u [url]http://192.168.159.1/news.php?id=1[/url] --sql-shell
                     
                       
                     
-                    <span class="site-state-item-count">8</span>
+                      
+                    
+                    <span class="site-state-item-count">9</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
