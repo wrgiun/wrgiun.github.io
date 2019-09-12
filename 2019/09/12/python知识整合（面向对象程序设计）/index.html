@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.0.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.0.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.0.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="1、面向对象概述1.1、对象（object）对象是一个抽象的概念，表示任意存在的事物 对象可以分为2部分，就是静态部分和动态部分。静态部分被称为“属性”，如人的性别；动态部分指的是对象的行为（对象执行的动作），如人可以走路 在python中，一切都是对象，即不仅把具体事物称为对象，字符串、函数等也是对象。（pyhton天生就是面向对象的） 1.2、类类是封装对象的属性和行为的载体，反过来说具有相同">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python知识整合（面向对象程序设计）">
+<meta property="og:url" content="https://wrgiun.github.io/2019/09/12/python知识整合（面向对象程序设计）/index.html">
+<meta property="og:site_name" content="giun">
+<meta property="og:description" content="1、面向对象概述1.1、对象（object）对象是一个抽象的概念，表示任意存在的事物 对象可以分为2部分，就是静态部分和动态部分。静态部分被称为“属性”，如人的性别；动态部分指的是对象的行为（对象执行的动作），如人可以走路 在python中，一切都是对象，即不仅把具体事物称为对象，字符串、函数等也是对象。（pyhton天生就是面向对象的） 1.2、类类是封装对象的属性和行为的载体，反过来说具有相同">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-09-12T12:45:50.162Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="python知识整合（面向对象程序设计）">
+<meta name="twitter:description" content="1、面向对象概述1.1、对象（object）对象是一个抽象的概念，表示任意存在的事物 对象可以分为2部分，就是静态部分和动态部分。静态部分被称为“属性”，如人的性别；动态部分指的是对象的行为（对象执行的动作），如人可以走路 在python中，一切都是对象，即不仅把具体事物称为对象，字符串、函数等也是对象。（pyhton天生就是面向对象的） 1.2、类类是封装对象的属性和行为的载体，反过来说具有相同">
+
+
+
+
+
+
+  <link rel="canonical" href="https://wrgiun.github.io/2019/09/12/python知识整合（面向对象程序设计）/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>python知识整合（面向对象程序设计） | giun</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">giun</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://wrgiun.github.io/2019/09/12/python知识整合（面向对象程序设计）/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wr">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="giun">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">python知识整合（面向对象程序设计）
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-09-12 20:44:30 / 修改时间：20:45:50" itemprop="dateCreated datePublished" datetime="2019-09-12T20:44:30+08:00">2019-09-12</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="1、面向对象概述"><a href="#1、面向对象概述" class="headerlink" title="1、面向对象概述"></a>1、面向对象概述</h1><h2 id="1-1、对象（object）"><a href="#1-1、对象（object）" class="headerlink" title="1.1、对象（object）"></a>1.1、对象（object）</h2><p>对象是一个抽象的概念，表示任意存在的事物</p>
+<p>对象可以分为2部分，就是静态部分和动态部分。静态部分被称为“属性”，如人的性别；动态部分指的是对象的行为（对象执行的动作），如人可以走路</p>
+<p>在python中，一切都是对象，即不仅把具体事物称为对象，字符串、函数等也是对象。（pyhton天生就是面向对象的）</p>
+<h2 id="1-2、类"><a href="#1-2、类" class="headerlink" title="1.2、类"></a>1.2、类</h2><p>类是封装对象的属性和行为的载体，反过来说具有相同属性和行为的一类实体被称为类。<br>如定义一个鸟类，在该类中可以定义每个对象共有的属性和方法。而每一只鸟就是一个对象。<br>对象是类的实例</p>
+<h2 id="1-3、面向对象程序设计特点"><a href="#1-3、面向对象程序设计特点" class="headerlink" title="1.3、面向对象程序设计特点"></a>1.3、面向对象程序设计特点</h2><p>面向对象程序设计具有3大基本特征：封装，继承，多态。</p>
+<p><strong>1、封装</strong></p>
+<p>封装是面向对象编程的核心思想，将对象的属性和行为封装起来，载体是类。类通常会对客户隐藏其实现细节。如我们看一本书，只需要看书的内容就可以，而不需要知道书是这么制作的。</p>
+<p>封装思想保证了类内部数据结构的完整性，提高了程序的可维护性。</p>
+<p><strong>2、继承</strong><br>矩形是四边形的一种，矩形拥有四边形的全部特点，反之不然。<br>矩形类可以看为继承四边形类后产生的类，称为子类。而四边形类称为父类或者超类。<br>在python中子类的实例都是父类的实例，但是不能说父类的实例都是子类的实例。<br>继承是重复利用的重要手段，子类可以继承父类的属性的同时，又增加了子类特有的属性和行为。</p>
+<p><strong>3、多态</strong><br>将父类对象应用于子类的特征就是多态。<br>就是子类继承父类特征的同时，也具备了自己的特征，并且能够实现不同的效果，这就是多态化结构。</p>
+<h1 id="2、类的定义和使用"><a href="#2、类的定义和使用" class="headerlink" title="2、类的定义和使用"></a>2、类的定义和使用</h1><h2 id="2-1、定义类"><a href="#2-1、定义类" class="headerlink" title="2.1、定义类"></a>2.1、定义类</h2><p>使用class关键字来定义类<br>语法格式</p>
+<pre><code>class ClassName:
+    &apos;&apos;&apos;类的帮助信息&apos;&apos;&apos;        # 类文档字符串
+    statement               # 类体 ,如果没有想好类的功能，可以使用pass代替
+</code></pre><h2 id="2-2、创建类的实例对象"><a href="#2-2、创建类的实例对象" class="headerlink" title="2.2、创建类的实例对象"></a>2.2、创建类的实例对象</h2><p>创建类的实例的语法：</p>
+<pre><code>ClassName(parameterlist)
+</code></pre><p>注意在python中创建实例不使用new关键字，这是它与其他面向对象语言的区别。</p>
+<h2 id="2-3、创建-int-方法"><a href="#2-3、创建-int-方法" class="headerlink" title="2.3、创建 int ()方法"></a>2.3、创建 <strong>int </strong>()方法</h2><p> <strong>int </strong>()方法是一个特殊的方法，每当创建一个类的新实例时，Python会自动执行它。</p>
+<p> <strong>int </strong>()方法必须包含一个self参数,且必须是第一个参数。self参数是一个指向实例本身的引用，用于访问类中的属性和方法。在方法调用时会自动传递实际参数self</p>
+<p>如</p>
+<pre><code>class Apple:
+    &quot;&quot;&quot;苹果类&quot;&quot;&quot;
+    def __init__(self):
+        print(&quot;这是苹果类&quot;)
+</code></pre><p>​<br>    wildApple = Apple()</p>
+<p>可以看出，在创建苹果类的实例时，虽然没有为 <strong>int </strong>()方法指定参数，但是该方法会自动执行</p>
+<p>当然 <strong>int </strong>()方法出了self参数外，还可以自定义一些参数。<br>例子</p>
+<pre><code>class Apple:
+    &quot;&quot;&quot;苹果类&quot;&quot;&quot;
+    def __init__(self, size, color):      # 构造方法
+        print(&quot;这是苹果&quot;)
+        print(size)
+        print(color)
+</code></pre><p>​<br>    size_1 = “个大”<br>    color_1 = “又红”<br>    wildApple = Apple(size_1, color_1)    # 创建苹果类的实例</p>
+<h2 id="2-4、创建类的成员并访问"><a href="#2-4、创建类的成员并访问" class="headerlink" title="2.4、创建类的成员并访问"></a>2.4、创建类的成员并访问</h2><p>类的成员主要由实例的方法和数据成员组成。创建了类的成员后，可以通过类的实例进行访问</p>
+<p><strong>1、创建实例方法并访问</strong></p>
+<p>实例方法其实就是在类中定义函数</p>
+<p>与<strong>int</strong>()方法类似<br>语法格式如下</p>
+<pre><code>def  functionName(self,parameterlist):
+    block
+</code></pre><p>参数说明：<br>functionName：用于指定方法名，一般小写字母开头</p>
+<p>self : 必要参数，其名称要是self以外的单词，用self只是个习惯</p>
+<p>parameterlist: 用于指定除self以外的参数</p>
+<p>block: 方法体，实现具体功能</p>
+<p>实例方法创建完成之后，可以通过类的实例名称名称和“.”来访问。<br>语法格式</p>
+<pre><code>instanceName.functionName(parametervalue)
+</code></pre><p><strong>2、创建数据成员并访问</strong><br>数据成员是指类中定义的变量（属性），根据定义的位置可以分为类属性和实例属性。</p>
+<p>类属性：定义在类中且在函数体外的属性。可以在使用实例化的对象中公用。</p>
+<p>实例属性定义在类的方法（实例方法）中的属性，只作用于当前的实例。<br>如</p>
+<pre><code>class Apple:
+    &quot;&quot;&quot;苹果类&quot;&quot;&quot;
+    size = &quot;个大&quot;             # 定义类属性
+    color = &quot;又红&quot;            # 定义类属性
+
+    def __init__(self):       # 构造方法
+        self.weight = &quot;又重&quot;
+        print(&quot;这是苹果&quot;)
+        print(Apple.size)
+        print(Apple.color)
+        print(self.weight)     # 定义实例属性
+</code></pre><p>​<br>    apple = Apple()    # 创建苹果类的实例</p>
+<p>注意实例属性只能通过实例名访问。当然实例属性也可以通过实例名称修改，修改后不影响该类的其他的实例中相应的实例属性的值<br>如</p>
+<pre><code>class Apple:
+    &quot;&quot;&quot;苹果类&quot;&quot;&quot;
+
+    def __init__(self):       # 构造方法
+        self.weight = &quot;又重&quot;
+        print(self.weight)     # 定义实例属性
+</code></pre><p>​<br>    apple1 = Apple()<br>    apple2 = Apple()<br>    apple1.weight = “太轻了”<br>    print(apple1.weight)<br>    print(apple2.weight)</p>
+<h2 id="2-5、访问限制"><a href="#2-5、访问限制" class="headerlink" title="2.5、访问限制"></a>2.5、访问限制</h2><p>访问限制有3种方式。可以在属性或者方法前加个单下划线，双下划线，或者首尾加双下划线</p>
+<p>1、首尾加双下划线：表示定义的特殊方法，一般是系统定义的名字如<strong>int</strong>()</p>
+<p>2、单下划线：表示保护（protected）类型的成员，只允许类本身或者子类访问，但不可以使用“from module import*”语句导入</p>
+<p>如：</p>
+<pre><code>class Apple:
+    &quot;&quot;&quot;苹果类&quot;&quot;&quot;
+    _weight_apple = &quot;又重&quot;   # 定义保护属性
+
+    def __init__(self):       # 实例方法
+        print(Apple._weight_apple)     # 在实例方法中访问保护属性
+</code></pre><p>​<br>    apple1 = Apple()<br>    print(apple1._weight_apple)</p>
+<p>保护属性可以通过实例名进行访问</p>
+<p>3、双下划线：表示私有（private）类型成员，只允许定义该方法的类的本身进行访问，而且不能通过类的实例进行访问。但是可以通过”类的实例名._类名__xxx”进行访问</p>
+<p>如</p>
+<pre><code>class Apple:
+    &quot;&quot;&quot;苹果类&quot;&quot;&quot;
+    __weight_apple = &quot;又重&quot;   # 定义私有属性
+
+    def __init__(self):       # 实例方法
+        print(Apple.__weight_apple)     # 在实例方法中访问私有属性
+</code></pre><p>​<br>    apple1 = Apple()<br>    print(apple1._Apple__weight_apple)</p>
+<h1 id="3、属性（property）"><a href="#3、属性（property）" class="headerlink" title="3、属性（property）"></a>3、属性（property）</h1><h2 id="3-1、创建用于计算的属性"><a href="#3-1、创建用于计算的属性" class="headerlink" title="3.1、创建用于计算的属性"></a>3.1、创建用于计算的属性</h2><p>可以通过@property(装饰器)把一个方法转化为属性，从而实现用于计算的属性。可以直接通过方法名来访问。<br>语法格式</p>
+<pre><code>@property
+def methodname(self)
+    block
+</code></pre><p>如</p>
+<pre><code>class Rect:
+    def __init__(self, width, height):
+        self.width = width           # 矩形的宽
+        self.height = height         # 矩形的高
+
+    @property                        # 将方法转化为属性
+    def area(self):
+        return self.width*self.height    # 返回矩形的面积
+</code></pre><p>​<br>    rect = Rect(5, 4)       # 创建类的实例<br>    print(rect.area)        # 输出属性的值</p>
+<h2 id="3-2、为属性添加安全的保护机制"><a href="#3-2、为属性添加安全的保护机制" class="headerlink" title="3.2、为属性添加安全的保护机制"></a>3.2、为属性添加安全的保护机制</h2><p>如果想要创建一个可读不能修改的属性，那么可以使用@property(装饰器)实现该效果</p>
+<p>例子：</p>
+<pre><code>class Rect:
+    def __init__(self, width):
+        self.width = width           # 矩形的宽
+
+    @property                        # 将方法转化为属性
+    def area(self):
+        return self.width
+</code></pre><p>​<br>    rect = Rect(5)       # 创建类的实例<br>    print(rect.area)        # 输出属性的值<br>    rect.area = 6     # 修改属性值<br>    print(rect.area)    # 获取属性值，会抛出AttributeError</p>
+<h1 id="4、继承"><a href="#4、继承" class="headerlink" title="4、继承"></a>4、继承</h1><h2 id="4-1、继承的基本语法："><a href="#4-1、继承的基本语法：" class="headerlink" title="4.1、继承的基本语法："></a>4.1、继承的基本语法：</h2><p>语法格式：</p>
+<pre><code>class ClassName(baseclasslist):
+    &quot;&quot;&quot;类的帮助信息&quot;&quot;&quot;                   # 类文档字符串
+    statement                          # 类体
+</code></pre><p>部分参数说明：<br>baseclasslist:用于指定要继承的基类（父类），可以多个。类名之间用逗号隔开。如果不指定，将使用所以python对象的根类object.</p>
+<h2 id="4-2、方法重写"><a href="#4-2、方法重写" class="headerlink" title="4.2、方法重写"></a>4.2、方法重写</h2><p>基类（父类）的成员都会被派生类（子类）继承，当基类中的某个方法不完全适用于派生类时，就需要在派生类中重写基类的这个方法。<br>例子：重写基类中的harvest方法</p>
+<pre><code>class Fruit:
+    def __init__(self, color = &quot;绿色&quot;):
+        Fruit.color = color             # 定义类的属性
+
+    def harvest(self):
+        print(&quot;水果……&quot;)
+</code></pre><p>​<br>    class Orange(Fruit):<br>        color = “橙色”</p>
+<pre><code>def __init__(self):
+    print(&quot;\n我是橘子&quot;)
+    super().__init__()                   # 调用基类的__init__()方法
+
+def harvest(self, color):
+    print(&quot;橘子是：&quot; + color + &quot;的&quot;)      # 输出参数形式color
+    print(&quot;橘子已经收获了&quot;)
+    print(&quot;橘子原来是：&quot; + Fruit.color + &quot;的&quot;)   #输出类属性color
+</code></pre><p>​<br>    orange = Orange()<br>    orange.harvest(“橙色”)</p>
+<p>这边有一点要注意，在派生类中定义<strong>init</strong>()方法时，不会自动调用基类的<strong>init</strong>()方法。故需要对派生类的<strong>init</strong>()方法进行初始化，就是在派生类中只有super()函数进行调用基类的<strong>init</strong>()方法，如下代码</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">super().__init__()</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+      <div>
+        
+
+
+
+  
+
+
+
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>wr</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    
+    <a href="https://wrgiun.github.io/2019/09/12/python知识整合（面向对象程序设计）/" title="python知识整合（面向对象程序设计）">https://wrgiun.github.io/2019/09/12/python知识整合（面向对象程序设计）/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/09/12/python知识整合（函数）/" rel="next" title="python知识整合（函数）">
+                <i class="fa fa-chevron-left"></i> python知识整合（函数）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/09/12/python知识整合（模块）/" rel="prev" title="python知识整合（模块）">
+                python知识整合（模块） <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="wr">
+            
+              <p class="site-author-name" itemprop="name">wr</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">46</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">10</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1、面向对象概述"><span class="nav-number">1.</span> <span class="nav-text">1、面向对象概述</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1、对象（object）"><span class="nav-number">1.1.</span> <span class="nav-text">1.1、对象（object）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2、类"><span class="nav-number">1.2.</span> <span class="nav-text">1.2、类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-3、面向对象程序设计特点"><span class="nav-number">1.3.</span> <span class="nav-text">1.3、面向对象程序设计特点</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2、类的定义和使用"><span class="nav-number">2.</span> <span class="nav-text">2、类的定义和使用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1、定义类"><span class="nav-number">2.1.</span> <span class="nav-text">2.1、定义类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2、创建类的实例对象"><span class="nav-number">2.2.</span> <span class="nav-text">2.2、创建类的实例对象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3、创建-int-方法"><span class="nav-number">2.3.</span> <span class="nav-text">2.3、创建 int ()方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-4、创建类的成员并访问"><span class="nav-number">2.4.</span> <span class="nav-text">2.4、创建类的成员并访问</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-5、访问限制"><span class="nav-number">2.5.</span> <span class="nav-text">2.5、访问限制</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3、属性（property）"><span class="nav-number">3.</span> <span class="nav-text">3、属性（property）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1、创建用于计算的属性"><span class="nav-number">3.1.</span> <span class="nav-text">3.1、创建用于计算的属性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2、为属性添加安全的保护机制"><span class="nav-number">3.2.</span> <span class="nav-text">3.2、为属性添加安全的保护机制</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4、继承"><span class="nav-number">4.</span> <span class="nav-text">4、继承</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1、继承的基本语法："><span class="nav-number">4.1.</span> <span class="nav-text">4.1、继承的基本语法：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2、方法重写"><span class="nav-number">4.2.</span> <span class="nav-text">4.2、方法重写</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">wr</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.0.0</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+  
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.0"></script>
+
+  <script src="/js/src/motion.js?v=7.0.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=7.0.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=7.0.0"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.0"></script>
+<script src="/js/src/post-details.js?v=7.0.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=7.0.0"></script>
+
+
+
+  
+
+
+  
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  <style>
+    .copy-btn {
+      display: inline-block;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 20px;
+      color: #333;
+      white-space: nowrap;
+      vertical-align: middle;
+      cursor: pointer;
+      background-color: #eee;
+      background-image: linear-gradient(#fcfcfc, #eee);
+      border: 1px solid #d5d5d5;
+      border-radius: 3px;
+      user-select: none;
+      outline: 0;
+    }
+
+    .highlight-wrap .copy-btn {
+      transition: opacity .3s ease-in-out;
+      opacity: 0;
+      padding: 2px 6px;
+      position: absolute;
+      right: 4px;
+      top: 8px;
+    }
+
+    .highlight-wrap:hover .copy-btn,
+    .highlight-wrap .copy-btn:focus {
+      opacity: 1
+    }
+
+    .highlight-wrap {
+      position: relative;
+    }
+  </style>
+  <script>
+    $('.highlight').each(function(i, e) {
+      var $wrap = $('<div>').addClass('highlight-wrap');
+      $(e).after($wrap);
+      $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function(e) {
+        var code = $(this).parent().find('.code').find('.line').map(function(i, e) {
+          return $(e).text();
+        }).toArray().join('\n');
+        var ta = document.createElement('textarea');
+        var range = document.createRange(); //For Chrome
+        var sel = window.getSelection(); //For Chrome
+        var yPosition = window.pageYOffset || document.documentElement.scrollTop;
+        ta.style.top = yPosition + 'px'; //Prevent page scroll
+        ta.style.position = 'absolute';
+        ta.style.opacity = '0';
+        ta.value = code;
+        ta.textContent = code; //For FireFox
+        ta.contentEditable = true;
+        ta.readOnly = false;
+        document.body.appendChild(ta);
+        range.selectNode(ta);
+        sel.removeAllRanges();
+        sel.addRange(range);
+        ta.setSelectionRange(0, code.length);
+        var result = document.execCommand('copy');
+        
+          if (result) $(this).text('复制成功');
+          else $(this).text('复制失败');
+        
+        ta.blur(); //For iOS
+        $(this).blur();
+      })).on('mouseleave', function(e) {
+        var $b = $(this).find('.copy-btn');
+        setTimeout(function() {
+          $b.text('复制');
+        }, 300);
+      }).append(e);
+    })
+  </script>
+
+
+  
+
+</body>
+</html>

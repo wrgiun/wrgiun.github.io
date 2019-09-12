@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.0.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.0.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.0.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="1、自定义模块在Python中一个.py文件就是一个模块。 在python中自定义模块有2个作用。一个是规范代码，让代码更易于阅读。另一个是方便其他程序使用已经编写好的代码，提高开发效率、 要实现自定义模块主要分为创建模块和导入模块2部分。 1.1、创建模块就是将模块中的相关代码编写在单独的文件中，文件名为模块名.py要注意的是设置的模块名不能与python自带的标准库名称一样。如果一样的话。先导">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python知识整合（模块）">
+<meta property="og:url" content="https://wrgiun.github.io/2019/09/12/python知识整合（模块）/index.html">
+<meta property="og:site_name" content="giun">
+<meta property="og:description" content="1、自定义模块在Python中一个.py文件就是一个模块。 在python中自定义模块有2个作用。一个是规范代码，让代码更易于阅读。另一个是方便其他程序使用已经编写好的代码，提高开发效率、 要实现自定义模块主要分为创建模块和导入模块2部分。 1.1、创建模块就是将模块中的相关代码编写在单独的文件中，文件名为模块名.py要注意的是设置的模块名不能与python自带的标准库名称一样。如果一样的话。先导">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-09-12T12:46:42.011Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="python知识整合（模块）">
+<meta name="twitter:description" content="1、自定义模块在Python中一个.py文件就是一个模块。 在python中自定义模块有2个作用。一个是规范代码，让代码更易于阅读。另一个是方便其他程序使用已经编写好的代码，提高开发效率、 要实现自定义模块主要分为创建模块和导入模块2部分。 1.1、创建模块就是将模块中的相关代码编写在单独的文件中，文件名为模块名.py要注意的是设置的模块名不能与python自带的标准库名称一样。如果一样的话。先导">
+
+
+
+
+
+
+  <link rel="canonical" href="https://wrgiun.github.io/2019/09/12/python知识整合（模块）/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>python知识整合（模块） | giun</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">giun</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://wrgiun.github.io/2019/09/12/python知识整合（模块）/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wr">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="giun">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">python知识整合（模块）
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-09-12 20:45:30 / 修改时间：20:46:42" itemprop="dateCreated datePublished" datetime="2019-09-12T20:45:30+08:00">2019-09-12</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="1、自定义模块"><a href="#1、自定义模块" class="headerlink" title="1、自定义模块"></a>1、自定义模块</h1><p>在Python中一个.py文件就是一个模块。</p>
+<p>在python中自定义模块有2个作用。一个是规范代码，让代码更易于阅读。另一个是方便其他程序使用已经编写好的代码，提高开发效率、</p>
+<p>要实现自定义模块主要分为创建模块和导入模块2部分。</p>
+<h2 id="1-1、创建模块"><a href="#1-1、创建模块" class="headerlink" title="1.1、创建模块"></a>1.1、创建模块</h2><p>就是将模块中的相关代码编写在单独的文件中，文件名为模块名.py<br>要注意的是设置的模块名不能与python自带的标准库名称一样。如果一样的话。先导入了我们自定义的模块后，就不能再导入python自带的标准库</p>
+<h2 id="1-2、使用import语句导入模块"><a href="#1-2、使用import语句导入模块" class="headerlink" title="1.2、使用import语句导入模块"></a>1.2、使用import语句导入模块</h2><p>使用import导入<br>语法格式</p>
+<pre><code>import modulename [as alias]
+</code></pre><p>部分参数说明：<br> [as alias] 给模块起的别名，可以通过该别名使用模块</p>
+<p>在调用模块中的变量、函数或者类等时，需要在变量、函数或者类名前面添加“模块名.”</p>
+<p>使用import语句也可以一次导入多个模块<br>如</p>
+<pre><code>import re,requests,os
+</code></pre><p>1.3、使用from…import语句导入模块<br>在使用import语句导入模块时，每执行一条import语句就会创建一个新的命名空间，且在调用模块中的变量、函数或者类时，需要在变量、函数或者类名前面添加“模块名.”。</p>
+<p>使用from…import语句导入模块是把具体的定义导入到当前的命名空间，不需要添加前缀，直接通过具体的变量、函数或者类等访问即可。</p>
+<p>语法格式:</p>
+<pre><code>from modelname import member
+</code></pre><p>参数说明：<br>modelname：模块名区分大小写<br>member：用于指定要导入的变量、函数或者类等，可以同时导入多个定义，如果要想导入全部定义使用“*”代替。</p>
+<p>注意：在导入模块时，如果使用了通配符*导入全部定义之后，可以使用dir()来查看具体导入了哪些定义。</p>
+<h2 id="1-3、模块搜索的目录"><a href="#1-3、模块搜索的目录" class="headerlink" title="1.3、模块搜索的目录"></a>1.3、模块搜索的目录</h2><p>当使用import语句导入模块时，在默认的情况下，按一下顺序进行查找<br>1、在当前目录进行查找<br>2、在python环境变量下的每个目录查找<br>3、到python的默认安装目录下查找</p>
+<p>说明的各个目录的具体位置都是保存在标准模块sys的sys.path变量中。可以通过一下代码输出具体的目录</p>
+<pre><code>import sys
+print(sys.path)
+</code></pre><p>如果要导入的模块不在标准模块sys的sys.path变量中，会报错。（注意模块名区分大小写）</p>
+<p>这时有3种方式可以将指定的目录添加到sys.path中</p>
+<p><strong>1、临时添加</strong><br>通过该方法添加的目录只在执行当前文件的窗口有效，窗口关闭后就失效。<br>语法格式</p>
+<pre><code>import sys
+sys.path.append(&quot;要添加的指定目录&quot;)
+</code></pre><p><strong>2、增加.pth文件（推荐）</strong></p>
+<p>在python安装目录的子目录Lib\site-packages子目录中，创建一个扩展名为.pth的文件，文件名任意，在该文件中添加要导入模块所在的目录。然后重新打开要执行导入模块的python文件，使得新添加的目录生效。</p>
+<p>通过该方法添加的目录只在当前版本的python中有效</p>
+<p><strong>3、在PYTHONPATH环境变量中添加</strong><br>在系统的环境变量对话框中，查找在PYTHONPATH环境变量，如果没有就创一个，然后添加所要导入的模块的目录。然后重新打开要执行导入模块的python文件，使得新添加的目录生效。</p>
+<p>通过该方法添加的目录在不同版本的python中都有效</p>
+<h1 id="2、以主程序的形式执行"><a href="#2、以主程序的形式执行" class="headerlink" title="2、以主程序的形式执行"></a>2、以主程序的形式执行</h1><p>创建一个aaa模块</p>
+<pre><code>p = &quot;苹果&quot;
+def fun_c():
+    p = &quot;一个烂苹果&quot;
+    print(p)
+if __name__==&quot;__main__&quot;:
+    print(&quot;哈哈哈哈&quot;)
+</code></pre><p>在text中导入该模块</p>
+<pre><code>import aaa
+print(aaa.p)
+</code></pre><p>输出</p>
+<pre><code>苹果
+</code></pre><p>说明：如果在aaa模块中没有if语句的话，会把下面的测试语句（    print(“哈哈哈哈”)）也一块执行。但是我们只想要输出变量p。故将测试语句放入if语句。</p>
+<h1 id="3、python中的包"><a href="#3、python中的包" class="headerlink" title="3、python中的包"></a>3、python中的包</h1><p>python中的包是一个分层的目录结构，它将一组功能相近的模块组织在一个目录下，这样就可以起到代码规范的作用，又可以避免模块重名引起的冲突</p>
+<p>简单来说python的包就是一个含义<strong>init</strong>.py的文件的文件夹</p>
+<h2 id="3-1、创建"><a href="#3-1、创建" class="headerlink" title="3.1、创建"></a>3.1、创建</h2><p>1、创建包就是创建一个文件夹，并在文件里创建一个名称为<strong>init</strong>.py的文件。在<strong>init</strong>.py文件里可以不编写代码，也可以编写代码，在导入包时会自动执行。</p>
+<p>注意：<strong>init</strong>.py文件是一个模块文件，模块名为包名。在a包中创建的<strong>init</strong>.py文件，对应的模块名为a</p>
+<h2 id="3-2、使用包"><a href="#3-2、使用包" class="headerlink" title="3.2、使用包"></a>3.2、使用包</h2><p>创建包，然后在包中创建相应的模块，然后再使用import语句从包中加载模块。<br>从包中加载模块有以下3种方式。</p>
+<p><strong>1、通过”import+完整包名+模块名”的方式加载指定模块</strong><br>语法格式</p>
+<pre><code>import 完整包名.模块名
+</code></pre><p>通过该方式，访问模块中的变量时，语法格式如下</p>
+<pre><code>完整包名.模块名.变量名
+</code></pre><p><strong>2、通过”from+完整包名+import+模块名”的方式加载指定模块</strong><br>语法格式：</p>
+<pre><code>from 完整包名 import 模块名
+</code></pre><p>通过该方式，访问模块中的变量时，语法格式如下</p>
+<pre><code>模块名.变量名
+</code></pre><p><strong>3、通过通过”from+完整包名+import+模块名+定义名”的方式加载指定模块</strong><br>语法格式</p>
+<pre><code>from 完整包名.模块名  import 定义名1，定义名2，....
+</code></pre><p>定义名可以是函数、类、变量名等</p>
+<p>通过该方式，访问模块中的函数、类、变量等，语法格式如下</p>
+<pre><code>定义名
+</code></pre><p>如果使用*号则表示加载该模块下的所有定义</p>
+<h1 id="4、引用其他模块"><a href="#4、引用其他模块" class="headerlink" title="4、引用其他模块"></a>4、引用其他模块</h1><p>在python中除了自定义模块，还有其他模块，主要包括标准模块和第三方模块。</p>
+<p>下表为python中常用的内置的标准模块<br>| 模块名   | 概述                                                         |<br>| ——– | ———————————————————— |<br>| sys      | 与python解释器及其环境操作相关的标准库                       |<br>| time     | 提供与时间相关的各种函数的标准库                             |<br>| os       | 提供了访问操作系统服务功能的标准库                           |<br>| calendar | 提供了与日期相关的各种函数的标准库                           |<br>| urllib   | 用于读取来自网上（服务器上）的数据的标准库                   |<br>| json     | 用于使用JSON序列化和反序列化                                 |<br>| re       | 用于在字符串中执行正则表达式匹配和替换                       |<br>| math     | 提供标准算术运算函数的标准库                                 |<br>| decimal  | 用于进行精确控制运算精度、有效位数和四舍五入操作的十进制运算 |<br>| shutil   | 用于进行高级文件操作，如复制等                               |<br>| logging  | 提高了灵活的记录事件、错误、警告和调试信息等日志信息的功能   |<br>| thinker  | 使用python进行GUI编程的标准库                                |<br>当然python有许多标准库,可以在python的安装目录下，的DOC目录下的扩展名为.chm文件（就是python的帮助文档）打开文件，文件里的The Python Standard Library下面的Python Runtime Services里进行查看，当然也可以上网查找。</p>
+<h1 id="5、牛刀小试"><a href="#5、牛刀小试" class="headerlink" title="5、牛刀小试"></a>5、牛刀小试</h1><h2 id="5-1、输出6位数的验证码"><a href="#5-1、输出6位数的验证码" class="headerlink" title="5.1、输出6位数的验证码"></a>5.1、输出6位数的验证码</h2><p>要求确保6位数中有一位大写字母，一位小写字母，一位数字</p>
+<pre><code>import random, string
+code_li = []
+&quot;&quot;&quot;确保6位数中有一位大写字母，一位小写字母，一位数字&quot;&quot;&quot;
+code_li.append(random.choice(string.ascii_lowercase))    # 随机添加小写字母
+code_li.append(random.choice(string.digits))             # 随机添加
+code_li.append(random.choice(string.ascii_uppercase))    # 随机添加大写字母
+while len(code_li)&lt;6:
+    code_li.append(random.choice(string.ascii_lowercase+string.digits+string.ascii_uppercase))
+    print(code_li)
+q_code = &quot;&quot;.join(code_li)
+&quot;&quot;&quot;
+join()函数
+语法：  &apos;sep&apos;.join(seq)
+参数说明
+sep：分隔符。可以为空
+seq：要连接的元素序列、字符串、元组、字典
+上面的语法即：以sep作为分隔符，将seq所有的元素合并成一个新的字符串
+返回值：返回一个以分隔符sep连接各个元素后生成的字符串
+&quot;&quot;&quot;
+print(q_code)
+</code></pre><h2 id="5-2、转化为时间戳"><a href="#5-2、转化为时间戳" class="headerlink" title="5.2、转化为时间戳"></a>5.2、转化为时间戳</h2><p>把2019-01-02 20:12:54转化为时间戳</p>
+<pre><code>import time
+dt = &quot;2019-01-02 20:12:54&quot;
+timeArray = time.strptime(dt,&quot;%Y-%m-%d %H:%M:%S&quot;)  # 根据指定的格式把一个时间字符串解析为时间元组。(转化为时间戳)
+# timestamp = time.mktime(timeArray)   # 返回用秒数来表示时间的浮点数
+# print(timestamp)
+print(timeArray)
+</code></pre>
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+      <div>
+        
+
+
+
+  
+
+
+
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>wr</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    
+    <a href="https://wrgiun.github.io/2019/09/12/python知识整合（模块）/" title="python知识整合（模块）">https://wrgiun.github.io/2019/09/12/python知识整合（模块）/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/09/12/python知识整合（面向对象程序设计）/" rel="next" title="python知识整合（面向对象程序设计）">
+                <i class="fa fa-chevron-left"></i> python知识整合（面向对象程序设计）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/09/12/python知识整合（文件及目录操作）/" rel="prev" title="python知识整合（文件及目录操作）">
+                python知识整合（文件及目录操作） <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="wr">
+            
+              <p class="site-author-name" itemprop="name">wr</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">46</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">10</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1、自定义模块"><span class="nav-number">1.</span> <span class="nav-text">1、自定义模块</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1、创建模块"><span class="nav-number">1.1.</span> <span class="nav-text">1.1、创建模块</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2、使用import语句导入模块"><span class="nav-number">1.2.</span> <span class="nav-text">1.2、使用import语句导入模块</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-3、模块搜索的目录"><span class="nav-number">1.3.</span> <span class="nav-text">1.3、模块搜索的目录</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2、以主程序的形式执行"><span class="nav-number">2.</span> <span class="nav-text">2、以主程序的形式执行</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3、python中的包"><span class="nav-number">3.</span> <span class="nav-text">3、python中的包</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1、创建"><span class="nav-number">3.1.</span> <span class="nav-text">3.1、创建</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2、使用包"><span class="nav-number">3.2.</span> <span class="nav-text">3.2、使用包</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4、引用其他模块"><span class="nav-number">4.</span> <span class="nav-text">4、引用其他模块</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5、牛刀小试"><span class="nav-number">5.</span> <span class="nav-text">5、牛刀小试</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#5-1、输出6位数的验证码"><span class="nav-number">5.1.</span> <span class="nav-text">5.1、输出6位数的验证码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-2、转化为时间戳"><span class="nav-number">5.2.</span> <span class="nav-text">5.2、转化为时间戳</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">wr</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.0.0</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+  
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.0"></script>
+
+  <script src="/js/src/motion.js?v=7.0.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=7.0.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=7.0.0"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.0"></script>
+<script src="/js/src/post-details.js?v=7.0.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=7.0.0"></script>
+
+
+
+  
+
+
+  
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  <style>
+    .copy-btn {
+      display: inline-block;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 20px;
+      color: #333;
+      white-space: nowrap;
+      vertical-align: middle;
+      cursor: pointer;
+      background-color: #eee;
+      background-image: linear-gradient(#fcfcfc, #eee);
+      border: 1px solid #d5d5d5;
+      border-radius: 3px;
+      user-select: none;
+      outline: 0;
+    }
+
+    .highlight-wrap .copy-btn {
+      transition: opacity .3s ease-in-out;
+      opacity: 0;
+      padding: 2px 6px;
+      position: absolute;
+      right: 4px;
+      top: 8px;
+    }
+
+    .highlight-wrap:hover .copy-btn,
+    .highlight-wrap .copy-btn:focus {
+      opacity: 1
+    }
+
+    .highlight-wrap {
+      position: relative;
+    }
+  </style>
+  <script>
+    $('.highlight').each(function(i, e) {
+      var $wrap = $('<div>').addClass('highlight-wrap');
+      $(e).after($wrap);
+      $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function(e) {
+        var code = $(this).parent().find('.code').find('.line').map(function(i, e) {
+          return $(e).text();
+        }).toArray().join('\n');
+        var ta = document.createElement('textarea');
+        var range = document.createRange(); //For Chrome
+        var sel = window.getSelection(); //For Chrome
+        var yPosition = window.pageYOffset || document.documentElement.scrollTop;
+        ta.style.top = yPosition + 'px'; //Prevent page scroll
+        ta.style.position = 'absolute';
+        ta.style.opacity = '0';
+        ta.value = code;
+        ta.textContent = code; //For FireFox
+        ta.contentEditable = true;
+        ta.readOnly = false;
+        document.body.appendChild(ta);
+        range.selectNode(ta);
+        sel.removeAllRanges();
+        sel.addRange(range);
+        ta.setSelectionRange(0, code.length);
+        var result = document.execCommand('copy');
+        
+          if (result) $(this).text('复制成功');
+          else $(this).text('复制失败');
+        
+        ta.blur(); //For iOS
+        $(this).blur();
+      })).on('mouseleave', function(e) {
+        var $b = $(this).find('.copy-btn');
+        setTimeout(function() {
+          $b.text('复制');
+        }, 300);
+      }).append(e);
+    })
+  </script>
+
+
+  
+
+</body>
+</html>

@@ -1,0 +1,1359 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.0.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.0.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.0.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="本文章内容的python版本默认为python3.x 1、注释注释包括单行注释，多行注释，中文声明注释 1.1、单行注释注释内容从#号到换行为止结束语法格式： # 注释内容 注释格式：第一种 #请输入你的年龄 age=int(input(&amp;quot;请输入你的年龄&amp;quot;)) 第二种 age=int(input(&amp;quot;请输入你的年龄&amp;quot;))        #请输入你的年龄 1.2">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python知识整合（基础）">
+<meta property="og:url" content="https://wrgiun.github.io/2019/09/12/python知识整合（基础）/index.html">
+<meta property="og:site_name" content="giun">
+<meta property="og:description" content="本文章内容的python版本默认为python3.x 1、注释注释包括单行注释，多行注释，中文声明注释 1.1、单行注释注释内容从#号到换行为止结束语法格式： # 注释内容 注释格式：第一种 #请输入你的年龄 age=int(input(&amp;quot;请输入你的年龄&amp;quot;)) 第二种 age=int(input(&amp;quot;请输入你的年龄&amp;quot;))        #请输入你的年龄 1.2">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-09-12T12:39:39.239Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="python知识整合（基础）">
+<meta name="twitter:description" content="本文章内容的python版本默认为python3.x 1、注释注释包括单行注释，多行注释，中文声明注释 1.1、单行注释注释内容从#号到换行为止结束语法格式： # 注释内容 注释格式：第一种 #请输入你的年龄 age=int(input(&amp;quot;请输入你的年龄&amp;quot;)) 第二种 age=int(input(&amp;quot;请输入你的年龄&amp;quot;))        #请输入你的年龄 1.2">
+
+
+
+
+
+
+  <link rel="canonical" href="https://wrgiun.github.io/2019/09/12/python知识整合（基础）/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>python知识整合（基础） | giun</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">giun</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://wrgiun.github.io/2019/09/12/python知识整合（基础）/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wr">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="giun">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">python知识整合（基础）
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-09-12 20:38:07 / 修改时间：20:39:39" itemprop="dateCreated datePublished" datetime="2019-09-12T20:38:07+08:00">2019-09-12</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>本文章内容的python版本默认为python3.x</p>
+<h1 id="1、注释"><a href="#1、注释" class="headerlink" title="1、注释"></a>1、注释</h1><p>注释包括单行注释，多行注释，中文声明注释</p>
+<h2 id="1-1、单行注释"><a href="#1-1、单行注释" class="headerlink" title="1.1、单行注释"></a>1.1、单行注释</h2><p>注释内容从#号到换行为止结束<br><strong>语法格式：</strong></p>
+<pre><code># 注释内容
+</code></pre><p><strong>注释格式：</strong><br><strong>第一种</strong></p>
+<pre><code>#请输入你的年龄
+age=int(input(&quot;请输入你的年龄&quot;))
+</code></pre><p><strong>第二种</strong></p>
+<pre><code>age=int(input(&quot;请输入你的年龄&quot;))        #请输入你的年龄
+</code></pre><h2 id="1-2、多行注释"><a href="#1-2、多行注释" class="headerlink" title="1.2、多行注释"></a>1.2、多行注释</h2><p>在python中没有一个单独的多行注释标记，而是将注释内容包含在一对(‘’’…..’’’’)或者（”””…”””）<br><strong>语法格式：</strong></p>
+<pre><code>&apos;&apos;&apos;
+注释内容1
+注释内容2
+......
+&apos;&apos;&apos;
+
+或者
+
+&quot;&quot;&quot;
+注释内容1
+注释内容2
+......
+&quot;&quot;&quot;
+</code></pre><p>当然可以利用单行注释实现多行注释，如</p>
+<pre><code>#注释内容1
+#注释内容2
+#....
+</code></pre><h2 id="1-3、中文编码声明注释"><a href="#1-3、中文编码声明注释" class="headerlink" title="1.3、中文编码声明注释"></a>1.3、中文编码声明注释</h2><p>在python编写时，如果要指定字符编码，那么就需要在文件开头加上中文编码声明注释，来指定我们所需要的字符编码类型的中文编码，可以避免输出乱码<br><strong>语法格式：</strong></p>
+<pre><code>#-*- coding:编码-*-
+</code></pre><p>或者</p>
+<pre><code>#  coding=编码
+</code></pre><p>如</p>
+<pre><code># coding=utf-8
+</code></pre><p>==值得注意的是==，上面代码中的-*-是为了美观才加上的，没有任务特殊作用，故也可写为 <code># coding:编码</code></p>
+<h1 id="2、代码缩进"><a href="#2、代码缩进" class="headerlink" title="2、代码缩进"></a>2、代码缩进</h1><p>python中使用代码缩进来区分代码的层次感，这点与c等一些语言不一样。</p>
+<p>缩进可以使用空格键或者tap键，通常一个缩进量默认为为4个空格（可以修改），一个tap键为4个空格，不过，建议使用空格进行缩进。</p>
+<p>注意：python中对代码缩进的要求非常严格，同一个级别的代码块的缩进量必须是相同的，否则将出现语法错误（SyntaxError）</p>
+<h1 id="3、代码规范"><a href="#3、代码规范" class="headerlink" title="3、代码规范"></a>3、代码规范</h1><h2 id="3-1、编写规则"><a href="#3-1、编写规则" class="headerlink" title="3.1、编写规则"></a>3.1、编写规则</h2><p>pthon采用的是PEP8的编码规范，PEP是python Enhancement Proposal的缩写，8为版本</p>
+<p>使用import进行导入模块时，注意，一次只导入一个模块。<br><strong>推荐写法：</strong></p>
+<pre><code>import os
+import request
+</code></pre><p><strong>不推荐写法：</strong></p>
+<pre><code>import os , request
+</code></pre><p>不要在行尾添加“；”，也不用将2条命令放在同一行，然后用“；”隔开。python中换行代表中一个语句的结束。</p>
+<p>建议每行不超过80个字，如果超过用（）连接，不推荐”\”<br>如,<strong>推荐</strong></p>
+<pre><code>print(&quot;是多少级看过的力合股份客户广泛空间看过空间看过很快就卡。&quot;
+            &quot;夫卡的风格看看吃饭大概开发地方&quot;)
+</code></pre><p><strong>不推荐</strong></p>
+<pre><code>print(&quot;是多少级看过的力合股份客户广泛空间看过空间看过很快就卡。\
+            &quot;夫卡的风格看看吃饭大概开发地方&quot;)
+</code></pre><p><strong>特殊情况除外</strong><br>1.导入模块语句过长<br>2.注释里的URL</p>
+<p>可以使用空行增加代码的可读性，如·在定义方法之间空一行等等。</p>
+<h2 id="3-2-命名规范"><a href="#3-2-命名规范" class="headerlink" title="3.2.命名规范"></a>3.2.命名规范</h2><p>1、模块名尽量短小，且全部小写，可以使用下划线，如</p>
+<pre><code>game_age
+</code></pre><p>2、包名尽量短小，且全部小写，不推荐使用下划线，如</p>
+<pre><code>com.book
+</code></pre><p>3、类名采用单词首写字母大即是Pascal风格。如</p>
+<pre><code>BorrowBook
+</code></pre><p>4、内部模块采用下划线加Pascal风格命名，如</p>
+<pre><code>_BorrowBook
+</code></pre><p>5、函数、类的属性和方法的命令规则和模块类似</p>
+<p>6、常量命名时全部大写，使用可以使用下划线</p>
+<p><strong>注意：</strong><br>使用单下划线开头的模块变量或函数是受保护的，在使用import*from语句从模块中不能导入。<br>使用双下划线开头的实例变量或方法是类私有的。</p>
+<h1 id="4、基本的输入与输出"><a href="#4、基本的输入与输出" class="headerlink" title="4、基本的输入与输出"></a>4、基本的输入与输出</h1><h2 id="4-1、print（）函数"><a href="#4-1、print（）函数" class="headerlink" title="4.1、print（）函数"></a>4.1、print（）函数</h2><p><strong>print（）基础语法：</strong></p>
+<pre><code>print(&quot;输出内容&quot;)
+</code></pre><p>注意print（）语句输出后会自动换行，如果要一次输出多个内容，且不换行，可以用英文的半角逗号进行分开。如</p>
+<pre><code>print(&quot;a&quot;,&quot;b&quot;)
+
+输出结果为a b
+</code></pre><p><strong>输出时间</strong><br>如</p>
+<pre><code>import datetime                          # 调用时间模块datetime
+d=datetime.datetime.now()
+print(d)                                 # 输出当前日期和时间
+print(d.strftime(&apos;%Y-%m-%d %H:%M:%S&apos;))   # 按格式输出当前时间
+print(d.strftime(&apos;%I:%M %p&apos;))      
+</code></pre><p>print（）不仅仅可以输出内容到屏幕还可以输出到指定文件<br>如</p>
+<pre><code>fp = open(r&apos;F:\my.txt&apos;,&apos;a+&apos;)    # 打开文件，如果没有该文件将自动创建文件
+print(&quot;hello world&quot;,file=fp)    # 输出到文件中
+fp.close()                      # 关闭文件
+</code></pre><h2 id="4-2、input（）函数"><a href="#4-2、input（）函数" class="headerlink" title="4.2、input（）函数"></a>4.2、input（）函数</h2><p><strong>作用</strong>：input（）在python中可以用来接收用户键盘输入的内容</p>
+<p>如：</p>
+<pre><code>b = input(&quot;输入字符:&quot;)
+print(b+&quot;的ASCII码为&quot;,ord(b))
+</code></pre><p>输出结果为：</p>
+<pre><code>输入字符:b            # b为我们输入的字符
+b的ASCII码为 98
+</code></pre><p><strong>例子：根据输入的年份计算年龄</strong></p>
+<pre><code>import datetime                                 # 调入时间模块datetime
+imyear = input(&quot;请输入你的出生年份&quot;)               # 输入四位数的出生年份
+nowyear = datetime.datetime.now().year          # 获取当前的年份
+age = int(nowyear) - int(imyear)                # 计算年龄
+print(&quot;你的年龄为&quot;+str(age))
+</code></pre><p><strong>注意</strong>判断一个变量的类型可以使用type()函数</p>
+<p><strong>例子：查单个字符的ACSII码器</strong></p>
+<pre><code>b = 12
+while b&gt;0:
+    a = input(&quot;请输入字符：&quot;)
+    print(a + &quot;的ASCII码为&quot;, +ord(a))
+</code></pre><h1 id="5、保留字与标识符"><a href="#5、保留字与标识符" class="headerlink" title="5、保留字与标识符"></a>5、保留字与标识符</h1><h2 id="5-1、保留字"><a href="#5-1、保留字" class="headerlink" title="5.1、保留字"></a>5.1、保留字</h2><p>保留字就是被赋予特定意义的一些单词，这些单词不能被当作变量、函数、类、模块和其他对象的名称来使用（否则会报invalid syntax错误），python中保留字是区分大小写的，</p>
+<p>python中的保留字，这边全部列出<br>| and      | as     | assert | break | class  |<br>| ——– | —— | —— | —– | —— |<br>| continue | def    | del    | elif  | except |<br>| finally  | for    | from   | False | global |<br>| if       | import | in     | is    | lambda |<br>| nonlocal | or     | pass   | raise | return |<br>| try      | True   | while  | with  | yield  |</p>
+<p>当然如果我们忘记了也不用紧，可以通过2行代码查看保留字</p>
+<pre><code>import keyword
+print(keyword.kwlist)
+</code></pre><h2 id="5-2、标识符"><a href="#5-2、标识符" class="headerlink" title="5.2、标识符"></a>5.2、标识符</h2><p>简单说标识符就是一个名字，用来识别变量、函数、类、模块和其他对象的名称。</p>
+<p><strong>命名规则</strong><br>1、由字母、下划线和数字组成，并且第一个字母不能是数字。目前python中只允许使用ISO-Latin字符集中的字符A-Z和a~z.<br>2、不能使用Python中的保留字<br>例如，合法标识符</p>
+<pre><code>USSSS
+name
+name123
+name_age
+</code></pre><p>不合法标识符</p>
+<pre><code>4name             # 不能以数字开头
+if                # 不能以保留字当作标识符
+$name              #  不能使用特殊字符 空格、$、@、%等
+</code></pre><p>3、区分字母大小写</p>
+<p>4、以下划线开头的标识符具有特殊意义，要避免使用类似的标识符</p>
+<p>以单下划线开头的标识符表示不能直接访问的类的属性，也不能太过from xxx import *导入</p>
+<p>以双下划线开头的标识符表示类的私有成员</p>
+<p>以双下划线开头和结尾的标识符是python中专用的标识，如<strong>int</strong>（）表示构造函数</p>
+<p>5、尽量避免使用汉字作为标识符，尽管这是被允许的。</p>
+<h1 id="6、变量"><a href="#6、变量" class="headerlink" title="6、变量"></a>6、变量</h1><h2 id="6-1、变量的命名规则与语法格式"><a href="#6-1、变量的命名规则与语法格式" class="headerlink" title="6.1、变量的命名规则与语法格式"></a>6.1、变量的命名规则与语法格式</h2><p><strong>变量的命名规则</strong></p>
+<p>1、变量名必须是一个有效的标识符</p>
+<p>2、变量名不能使用python中的保留字</p>
+<p>3、慎用小写字母 l 和大写字母O</p>
+<p>4、应该选择有意义的单词作为变量名</p>
+<p><strong>语法格式</strong></p>
+<pre><code>变量名 = value     #变量赋值
+如
+name = 12         # 创建变量name并赋值为12，类型为int
+name = &quot;John&quot;     # 创建变量name并赋值为John，类型为str
+</code></pre><p>注意，python中允许多个变量指向同一个值，但是他们对于的内存地址是否相同呢同，我们可以是内置函数id()来查看</p>
+<p>例如</p>
+<pre><code>a = 2014
+b = 2014
+print(&quot;a的地址为&quot;,+id(a))
+print(&quot;b的地址为&quot;,+id(b))
+</code></pre><p>输出</p>
+<pre><code>a的地址为 2316677533424
+b的地址为 2316677533424
+</code></pre><h1 id="7、基本数据类型"><a href="#7、基本数据类型" class="headerlink" title="7、基本数据类型"></a>7、基本数据类型</h1><h2 id="7-1、数字类型"><a href="#7-1、数字类型" class="headerlink" title="7.1、数字类型"></a>7.1、数字类型</h2><p><strong>1、整数</strong><br>整数包括，十进制、八进制、十六进制</p>
+<p>十进制不能以0开头</p>
+<p>八进制在python3.x中必须以0o或0O开头，python2.x可以以0开头</p>
+<p>十六进制必须以0x或0X开头</p>
+<p><strong>2、浮点数</strong><br>浮点数表现形式，如2.7e2(科学计数法)，1.1414</p>
+<p><strong>值得注意的是</strong>在使用浮点数进行计算时，可能会出现小数位数不确定的情况，如</p>
+<pre><code>a = 0.2
+b = 0.1
+c= a + b
+print(c)
+</code></pre><p>我们觉得输出0.3，但是实际输出0.30000000000000004，<br>所有语言都有这个问题，可以忽略对于的小数位</p>
+<p><strong>3、复数</strong><br>在python中复数与数学中的复数在形式上完全一样</p>
+<h2 id="7-2、字符串类型"><a href="#7-2、字符串类型" class="headerlink" title="7.2、字符串类型"></a>7.2、字符串类型</h2><p>在python中字符串属于不可变序列<br>通常用单引号，双引号，三引号括起来。其中三引号内的字符序列可以分布在连续的多行中，而单引号，双引号内的字符序列必须在一行中。</p>
+<p>注意如果需要表示复杂的字符串时可以进行引号的嵌套<br>如;</p>
+<pre><code>print(&apos;&apos;&apos;&apos;___&apos; &quot;_&quot;***&apos;&apos;&apos;)
+</code></pre><p>输出</p>
+<pre><code>&apos;___&apos; &quot;_&quot;***
+</code></pre><p>python中的字符串还支持转义字符<br>常见的转义字符如下表<br>| \    | 续行符                               |<br>| —- | ———————————— |<br>| \n   | 换行符                               |<br>| \r   | 回车符                               |<br>| \0   | 空                                   |<br>| \t   | 水平制表，用于横向跳到下一制表位     |<br>| \ “  | 双引号                               |<br>| \ ‘  | 单引号                               |<br>| \   | 一个反斜杠                           |<br>| \f   | 换页                                 |<br>| \0dd | 八进制数，dd表示字符，如\012代表换行 |<br>| \xhh | 十六进制，hh表示字符，如\x0a代表换行 |</p>
+<p>注意在字符串定界符引号的前面加上R或r，将无视转义字符的存在。<br>如</p>
+<pre><code>print(r&quot;hello\nworld&quot;)
+print(&quot;hello\nworld&quot;)
+</code></pre><p>输出</p>
+<pre><code>hello\nworld
+hello
+world
+</code></pre><h2 id="7-3、布尔类型"><a href="#7-3、布尔类型" class="headerlink" title="7.3、布尔类型"></a>7.3、布尔类型</h2><p>标识符True和False为布尔类型<br>True表示1，False表示0</p>
+<p>注意布尔类型可以进行运算但是不建议进行运算</p>
+<p>在python中所有对象都可以进行真假测试，只有以下几种情况为假其他都为真。<br>1、False或None</p>
+<p>2、数值中的零，包括0、0.0、序数0</p>
+<p>3、空序列，包括字符串，空元组、空列表、空字典</p>
+<p>4、自定义对象的实例，对象的<strong>bool</strong>方法返回False或者<strong>len</strong>方法返回0.</p>
+<h2 id="7-4、数据类型转换"><a href="#7-4、数据类型转换" class="headerlink" title="7.4、数据类型转换"></a>7.4、数据类型转换</h2><p>python是动态类型语言（也就是弱类型语言），不需要先声明变量类型，但在对变量进行操作时可能用到类型转换。</p>
+<p> <strong>常用的类型转换函数</strong><br>| 函数                 | 作用                                               |<br>| ——————– | ————————————————– |<br>| int(x)               | 将x转为整型                                        |<br>| float（x）           | 将x转为浮点型                                      |<br>| complex(real[,imag]) | 创建一个复数                                       |<br>| str(x)               | 将x转为字符串                                      |<br>| repr(x)              | 将x转为表达式字符型                                |<br>| eval(str)            | 计算在字符串中的有效的python表达式，并返回一个对象 |<br>| chr(x)               | 将整数x转为字符                                    |<br>| ord(x)               | 将一个字符返回其所对应的整数值                     |<br>| hex(x)               | 将一个整数转化为一个16进制字符串                   |<br>| oct(x)               | 将一个整数转化为一个8进制字符串                    |</p>
+<h1 id="8、运算符"><a href="#8、运算符" class="headerlink" title="8、运算符"></a>8、运算符</h1><h2 id="8-1、算术运算符"><a href="#8-1、算术运算符" class="headerlink" title="8.1、算术运算符"></a>8.1、算术运算符</h2><p>加（+）、减（-）、乘（*）、除（/）、取余数（%）、取整除（//）、幂（**）</p>
+<p><strong>注意</strong><br>1、在%中如果除数（第二个操作数）是负数，那么得到的结果也是负数</p>
+<p>2、使用/或//时，除数不能为0，不然会出现错误</p>
+<p>3、在python2.x中/符号计算的结果为整数，而在python3.x中为浮点数，如<br>3/2，在python2.x中为1，在在python3.x中为1.5</p>
+<h2 id="8-2、赋值运算符"><a href="#8-2、赋值运算符" class="headerlink" title="8.2、赋值运算符"></a>8.2、赋值运算符</h2><p>常见的赋值运算符有=、+=、-=、*=、/=、%=、**=、//=等<br>在使用时，就是把=号右边的值赋值给左边的变量，也可以进行某些运算后再赋值给左边的变量。<br>如x-=y,就是等于x=x-y,<br>例子如下</p>
+<pre><code>x = 1
+y = 2
+x -= y
+print(x)
+</code></pre><p><strong>输出x=-1</strong></p>
+<h2 id="8-3、比较（关系运算符）"><a href="#8-3、比较（关系运算符）" class="headerlink" title="8.3、比较（关系运算符）"></a>8.3、比较（关系运算符）</h2><p>对表达式或者变量的结果进行大小、真假等比较，如果比较结果为真返回True,否则为False</p>
+<p>比较运算符有：</p>
+<pre><code>&gt;、 &lt; 、==、!=、&gt;=、&lt;=
+</code></pre><p>如果要判断一个变量是否在一个范围内可以使用 “ 值1&lt;变量a&lt;值2 ”</p>
+<h2 id="8-4、逻辑运算符"><a href="#8-4、逻辑运算符" class="headerlink" title="8.4、逻辑运算符"></a>8.4、逻辑运算符</h2><p>主要包括 and（逻辑与） or（逻辑或） not（逻辑非）<br>and和or 的结合方向是从左到右<br>not的不一样是从右到左</p>
+<h2 id="8-5、位运算符"><a href="#8-5、位运算符" class="headerlink" title="8.5、位运算符"></a>8.5、位运算符</h2><p>位运算符是对二进制进行计算的，所以需要把要执行的数据转化为二进制数，然后再进行位操作。<br>python中位运算符有位与（&amp;）、位或（|）、位异或（^）、位取反（~）、位左移（&lt;&lt;）、位右移（&gt;&gt;），</p>
+<table>
+<thead>
+<tr>
+<th>位运算符名称</th>
+<th>算法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>位与（&amp;）</td>
+<td>2个二进制数的对位都为1时才为1，否则为0 ，若2个操作数精度不同，则结果的精度与精度高的操作数相同</td>
+</tr>
+<tr>
+<td>位或</td>
+<td>2个二进制数的对位都为0时才为0，否则为1，若2个操作数精度不同，则结果的精度与精度高的操作数相同</td>
+</tr>
+<tr>
+<td>位异或（^）</td>
+<td>2个二进制数的对位相同时才为0，否则为1 ，若2个操作数精度不同，则结果的精度与精度高的操作数相同</td>
+</tr>
+<tr>
+<td>位取反（~）</td>
+<td>操作数中的1改为0,0改为1</td>
+</tr>
+<tr>
+<td>位左移（&lt;&lt;）</td>
+<td>将一个二进制操作数左移指定的位数，左边（高位段）溢出的位丢低，右边（低位段）的空位用0补充，位左移运算相当于乘以2的n次幂</td>
+</tr>
+<tr>
+<td>右移（&gt;&gt;）</td>
+<td>将一个二进制操作数右移指定的位数，右边（低位段）溢出的位用丢低，而在左边（高位段）的空位补充时，如果最高位为0，则在左侧补0，否则补1。位右移运算相当于除以2的n次幂</td>
+</tr>
+</tbody>
+</table>
+<p><strong>注意：</strong><br>由于移位运算符运算速度很快，所有在程序中遇到表达式乘以或除以2的n次幂时可以用移位运算符来代替</p>
+<h2 id="8-6、运算符的优先级"><a href="#8-6、运算符的优先级" class="headerlink" title="8.6、运算符的优先级"></a>8.6、运算符的优先级</h2><p>python中运算符的运算规则是，优先级高的先执行，低的后执行，同一级的按从左往右进行操作。当然如果有括号，括号内的运算最先执行。在编写程序时尽量使用括号（）来限定运算次序，以免运算次序出错<br><strong>运算符的优先级（从高到低）</strong><br>| 类型                               |<br>| ———————————- |<br>| *<em>                                 |<br>| ~、+、-                            |<br>| </em>、/、%、//                        |<br>| +、-                               |<br>| &lt;&lt;、&gt;&gt;                             |<br>| ^                                  |<br>| 位或                               |<br>| &lt;、&lt;=、&gt;&gt;、=!、=、==（比较运算符） |</p>
+<h1 id="9、流程控制语句"><a href="#9、流程控制语句" class="headerlink" title="9、流程控制语句"></a>9、流程控制语句</h1><h2 id="9-1、选择语句"><a href="#9-1、选择语句" class="headerlink" title="9.1、选择语句"></a>9.1、选择语句</h2><p><strong>1、最简单的if语句</strong><br>语法结构如下：</p>
+<pre><code>if 表达式：
+    语句块
+</code></pre><p>注意在python中，当表达式的值为非零或者非空的字符串时。if语句也认为是条件成立（为真值）<br><strong>2、if…else语句</strong><br>语法结构如下：</p>
+<pre><code>if 表达式：
+    语句块1
+else:
+    语句块2
+</code></pre><p><strong>技巧：</strong><br>if…else语句可以使用条件语句进行简化，如</p>
+<pre><code>a = 1
+if a &gt; 0:
+    b =a
+else:
+    b = -a
+print(b)
+</code></pre><p>可以简化为（就是使用条件表达式）</p>
+<pre><code>a = 1
+b = a if a &gt; 0 else -a
+print(b)
+</code></pre><p><strong>3、if…elif…else语句</strong><br>语法结构</p>
+<pre><code>if  表达式1：
+    语句块1
+elif 表达式2：
+    语句块2
+elif 表达式3：
+    语句块3
+...
+else:
+    语句块n
+</code></pre><p>注意:if与elif都需要进行判断真假，而else不需要判断；else和elif都需要与if一起使用，不能单独使用</p>
+<p>4、if语句的嵌套<br>if选择语句可以有多种嵌套方式，根据需要灵活运用。<br>如</p>
+<pre><code>if 表达式1：
+    if 表达式2：
+        语句块1
+    else:
+        语句块2
+</code></pre><h2 id="9-2、循环语句"><a href="#9-2、循环语句" class="headerlink" title="9.2、循环语句"></a>9.2、循环语句</h2><p>循环体就是一组被重复执行的语句。<br><strong>1、whie循环</strong><br>while循环结构</p>
+<pre><code>while 条件表达式：
+    循环体
+</code></pre><p><strong>值得注意</strong>的是Python<strong>不支持do〜while语法</strong>、while（无限循环）和break组合起来替换 do ~ while<br>如</p>
+<pre><code>n = 0
+while True:         #无限循环...     
+      print n
+      n += 1
+      if n == 10:
+             break     #结束循环    
+</code></pre><p><strong>2、for循环</strong><br>for循环结构</p>
+<pre><code>for 迭代变量 in 对象：
+    循环体
+</code></pre><p>如：</p>
+<pre><code>print(&quot;技术1+2+3+...+100结果为：&quot;)
+result = 0
+for i in range(101):
+    result += i
+print(result)
+</code></pre><p>对<strong>range()这个函数进行</strong>简单的说明</p>
+<p>range(start,end,step)</p>
+<p>start为计数的起始值，可以省略，省略就从0开始</p>
+<p>end为计数的结束值，但是不包括该值，如range(5),会输出0,1,2,3,4，不可省略</p>
+<p>step为计数的步长，就是2个参数之间的间隔，可以省略，省略就默认为1</p>
+<p><strong>小技巧</strong><br>在python3.x中，如果让print语句输出的内容在一行上可以使用下面这个语句</p>
+<pre><code>print(result,end=&apos; 分隔符 &apos;)
+</code></pre><p>for语句不仅可以循环数值，还可以逐个遍历字符串。</p>
+<p>当然可以进行循环嵌套</p>
+<h2 id="9-3、跳转语句和pass空语句"><a href="#9-3、跳转语句和pass空语句" class="headerlink" title="9.3、跳转语句和pass空语句"></a>9.3、跳转语句和pass空语句</h2><p><strong>1.break语句</strong><br>break语句通常会结合if语句使用，在某种条件下跳出循环。如果是嵌套循环，那么break语句将跳出最内层的循环</p>
+<p>如while语句中使用break语句</p>
+<pre><code>while 条件表达式1：
+    执行代码
+    if 条件表达式2：
+        break
+</code></pre><p>for语句中使用break语句</p>
+<pre><code>for 迭代变量 in 变量
+    if 条件表达式：
+        break
+</code></pre><p><strong>2.continue语句</strong><br>break语句通常会结合if语句使用，在某种条件下跳出当次循环，进行下一次循环。如果是嵌套循环，那么break语句将跳出最内层的当次循环</p>
+<p>如while语句中使用break语句</p>
+<pre><code>while 条件表达式1：
+    执行代码
+    if 条件表达式2：
+        continue
+</code></pre><p>for语句中使用break语句</p>
+<pre><code>for 迭代变量 in 变量
+    if 条件表达式：
+        continue
+</code></pre><p>3、pass空语句<br>不做任何事，一般起到占位作用，为得是方便以后进行处理</p>
+<pre><code>for 迭代变量 in 变量
+       if 条件表达式：
+           语句块
+       else:
+           pass
+</code></pre><h1 id="10、数字运算类内置函数"><a href="#10、数字运算类内置函数" class="headerlink" title="10、数字运算类内置函数"></a>10、数字运算类内置函数</h1><table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>abs(x)</td>
+<td>求绝对值，参数可以是整数，也可以是复数，复数就输出复数的模</td>
+</tr>
+<tr>
+<td>oct(x)</td>
+<td>将一个数字转为8进制字符串</td>
+</tr>
+<tr>
+<td>hex(x)</td>
+<td>将一个数字转为16进制字符串</td>
+</tr>
+<tr>
+<td>chr(x)</td>
+<td>返回整数x对应的ASCII的字符</td>
+</tr>
+<tr>
+<td>ord(x)</td>
+<td>返回x对应的ASCII的值</td>
+</tr>
+<tr>
+<td>complex([real[,image]])</td>
+<td>创建一个复数</td>
+</tr>
+<tr>
+<td>divmod(a,b)</td>
+<td>分别取商和余数，整数和浮点数都可以</td>
+</tr>
+<tr>
+<td>float(x)</td>
+<td>将x转化为浮点数，如果没有参数返回0.0</td>
+</tr>
+<tr>
+<td>int([x[,base]])</td>
+<td>将x转化为int型，base为进制</td>
+</tr>
+<tr>
+<td>long([x[,base]])</td>
+<td>将x转化为long型，base为进制</td>
+</tr>
+<tr>
+<td>pow(x,y[,z])</td>
+<td>返回x的y次幂</td>
+</tr>
+<tr>
+<td>range(strat,stop[,step])</td>
+<td>产生一个序列，默认从零开始</td>
+</tr>
+<tr>
+<td>round（x[,n]）</td>
+<td>四舍五如=入</td>
+</tr>
+<tr>
+<td>sum(iterable[,start])</td>
+<td>对集合求和</td>
+</tr>
+<tr>
+<td>bin(x)</td>
+<td>将整数x转化为二进制字符串</td>
+</tr>
+<tr>
+<td>bool([x])</td>
+<td>将x转化为布尔类型</td>
+</tr>
+</tbody>
+</table>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+      <div>
+        
+
+
+
+  
+
+
+
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>wr</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    
+    <a href="https://wrgiun.github.io/2019/09/12/python知识整合（基础）/" title="python知识整合（基础）">https://wrgiun.github.io/2019/09/12/python知识整合（基础）/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/08/02/bugku-16-26-writeup-misc/" rel="next" title="bugku 16-31 writeup(misc)">
+                <i class="fa fa-chevron-left"></i> bugku 16-31 writeup(misc)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/09/12/python知识整合（序列）/" rel="prev" title="python知识整合（序列）">
+                python知识整合（序列） <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="wr">
+            
+              <p class="site-author-name" itemprop="name">wr</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">46</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">10</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1、注释"><span class="nav-number">1.</span> <span class="nav-text">1、注释</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1、单行注释"><span class="nav-number">1.1.</span> <span class="nav-text">1.1、单行注释</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2、多行注释"><span class="nav-number">1.2.</span> <span class="nav-text">1.2、多行注释</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-3、中文编码声明注释"><span class="nav-number">1.3.</span> <span class="nav-text">1.3、中文编码声明注释</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2、代码缩进"><span class="nav-number">2.</span> <span class="nav-text">2、代码缩进</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3、代码规范"><span class="nav-number">3.</span> <span class="nav-text">3、代码规范</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1、编写规则"><span class="nav-number">3.1.</span> <span class="nav-text">3.1、编写规则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-命名规范"><span class="nav-number">3.2.</span> <span class="nav-text">3.2.命名规范</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4、基本的输入与输出"><span class="nav-number">4.</span> <span class="nav-text">4、基本的输入与输出</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1、print（）函数"><span class="nav-number">4.1.</span> <span class="nav-text">4.1、print（）函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2、input（）函数"><span class="nav-number">4.2.</span> <span class="nav-text">4.2、input（）函数</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5、保留字与标识符"><span class="nav-number">5.</span> <span class="nav-text">5、保留字与标识符</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#5-1、保留字"><span class="nav-number">5.1.</span> <span class="nav-text">5.1、保留字</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-2、标识符"><span class="nav-number">5.2.</span> <span class="nav-text">5.2、标识符</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6、变量"><span class="nav-number">6.</span> <span class="nav-text">6、变量</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#6-1、变量的命名规则与语法格式"><span class="nav-number">6.1.</span> <span class="nav-text">6.1、变量的命名规则与语法格式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#7、基本数据类型"><span class="nav-number">7.</span> <span class="nav-text">7、基本数据类型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#7-1、数字类型"><span class="nav-number">7.1.</span> <span class="nav-text">7.1、数字类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-2、字符串类型"><span class="nav-number">7.2.</span> <span class="nav-text">7.2、字符串类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-3、布尔类型"><span class="nav-number">7.3.</span> <span class="nav-text">7.3、布尔类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-4、数据类型转换"><span class="nav-number">7.4.</span> <span class="nav-text">7.4、数据类型转换</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#8、运算符"><span class="nav-number">8.</span> <span class="nav-text">8、运算符</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#8-1、算术运算符"><span class="nav-number">8.1.</span> <span class="nav-text">8.1、算术运算符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-2、赋值运算符"><span class="nav-number">8.2.</span> <span class="nav-text">8.2、赋值运算符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-3、比较（关系运算符）"><span class="nav-number">8.3.</span> <span class="nav-text">8.3、比较（关系运算符）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-4、逻辑运算符"><span class="nav-number">8.4.</span> <span class="nav-text">8.4、逻辑运算符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-5、位运算符"><span class="nav-number">8.5.</span> <span class="nav-text">8.5、位运算符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-6、运算符的优先级"><span class="nav-number">8.6.</span> <span class="nav-text">8.6、运算符的优先级</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#9、流程控制语句"><span class="nav-number">9.</span> <span class="nav-text">9、流程控制语句</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#9-1、选择语句"><span class="nav-number">9.1.</span> <span class="nav-text">9.1、选择语句</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-2、循环语句"><span class="nav-number">9.2.</span> <span class="nav-text">9.2、循环语句</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-3、跳转语句和pass空语句"><span class="nav-number">9.3.</span> <span class="nav-text">9.3、跳转语句和pass空语句</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#10、数字运算类内置函数"><span class="nav-number">10.</span> <span class="nav-text">10、数字运算类内置函数</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">wr</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.0.0</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+  
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.0"></script>
+
+  <script src="/js/src/motion.js?v=7.0.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=7.0.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=7.0.0"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.0"></script>
+<script src="/js/src/post-details.js?v=7.0.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=7.0.0"></script>
+
+
+
+  
+
+
+  
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  <style>
+    .copy-btn {
+      display: inline-block;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 20px;
+      color: #333;
+      white-space: nowrap;
+      vertical-align: middle;
+      cursor: pointer;
+      background-color: #eee;
+      background-image: linear-gradient(#fcfcfc, #eee);
+      border: 1px solid #d5d5d5;
+      border-radius: 3px;
+      user-select: none;
+      outline: 0;
+    }
+
+    .highlight-wrap .copy-btn {
+      transition: opacity .3s ease-in-out;
+      opacity: 0;
+      padding: 2px 6px;
+      position: absolute;
+      right: 4px;
+      top: 8px;
+    }
+
+    .highlight-wrap:hover .copy-btn,
+    .highlight-wrap .copy-btn:focus {
+      opacity: 1
+    }
+
+    .highlight-wrap {
+      position: relative;
+    }
+  </style>
+  <script>
+    $('.highlight').each(function(i, e) {
+      var $wrap = $('<div>').addClass('highlight-wrap');
+      $(e).after($wrap);
+      $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function(e) {
+        var code = $(this).parent().find('.code').find('.line').map(function(i, e) {
+          return $(e).text();
+        }).toArray().join('\n');
+        var ta = document.createElement('textarea');
+        var range = document.createRange(); //For Chrome
+        var sel = window.getSelection(); //For Chrome
+        var yPosition = window.pageYOffset || document.documentElement.scrollTop;
+        ta.style.top = yPosition + 'px'; //Prevent page scroll
+        ta.style.position = 'absolute';
+        ta.style.opacity = '0';
+        ta.value = code;
+        ta.textContent = code; //For FireFox
+        ta.contentEditable = true;
+        ta.readOnly = false;
+        document.body.appendChild(ta);
+        range.selectNode(ta);
+        sel.removeAllRanges();
+        sel.addRange(range);
+        ta.setSelectionRange(0, code.length);
+        var result = document.execCommand('copy');
+        
+          if (result) $(this).text('复制成功');
+          else $(this).text('复制失败');
+        
+        ta.blur(); //For iOS
+        $(this).blur();
+      })).on('mouseleave', function(e) {
+        var $b = $(this).find('.copy-btn');
+        setTimeout(function() {
+          $b.text('复制');
+        }, 300);
+      }).append(e);
+    })
+  </script>
+
+
+  
+
+</body>
+</html>

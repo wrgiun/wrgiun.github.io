@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.0.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.0.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.0.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="1、函数的创建与调用函数出了python中的内置函数外，我们也也可以根据需求，自己创建函数创建函数语法格式 def functionname([parameterlist])     [&amp;apos;&amp;apos;&amp;apos;comments&amp;apos;&amp;apos;&amp;apos;]     [functionbody]  调用函数语法格式 functionname([parameterlist]) 小技">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python知识整合（函数）">
+<meta property="og:url" content="https://wrgiun.github.io/2019/09/12/python知识整合（函数）/index.html">
+<meta property="og:site_name" content="giun">
+<meta property="og:description" content="1、函数的创建与调用函数出了python中的内置函数外，我们也也可以根据需求，自己创建函数创建函数语法格式 def functionname([parameterlist])     [&amp;apos;&amp;apos;&amp;apos;comments&amp;apos;&amp;apos;&amp;apos;]     [functionbody]  调用函数语法格式 functionname([parameterlist]) 小技">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-09-12T12:44:03.683Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="python知识整合（函数）">
+<meta name="twitter:description" content="1、函数的创建与调用函数出了python中的内置函数外，我们也也可以根据需求，自己创建函数创建函数语法格式 def functionname([parameterlist])     [&amp;apos;&amp;apos;&amp;apos;comments&amp;apos;&amp;apos;&amp;apos;]     [functionbody]  调用函数语法格式 functionname([parameterlist]) 小技">
+
+
+
+
+
+
+  <link rel="canonical" href="https://wrgiun.github.io/2019/09/12/python知识整合（函数）/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>python知识整合（函数） | giun</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">giun</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://wrgiun.github.io/2019/09/12/python知识整合（函数）/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wr">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="giun">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">python知识整合（函数）
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-09-12 20:43:24 / 修改时间：20:44:03" itemprop="dateCreated datePublished" datetime="2019-09-12T20:43:24+08:00">2019-09-12</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="1、函数的创建与调用"><a href="#1、函数的创建与调用" class="headerlink" title="1、函数的创建与调用"></a>1、函数的创建与调用</h1><p>函数出了python中的内置函数外，我们也也可以根据需求，自己创建函数<br><strong>创建函数语法格式</strong></p>
+<pre><code>def functionname([parameterlist])
+    [&apos;&apos;&apos;comments&apos;&apos;&apos;]
+    [functionbody]
+</code></pre><p> <strong>调用函数语法格式</strong></p>
+<pre><code>functionname([parameterlist])
+</code></pre><p>小技巧：<br>在调用函数时，如果指定了“comment(注释)”参数，那么在调用函数时，输入函数名及其左侧小括号时，就会显示该函数的帮助信息（注释的内容）</p>
+<p>例子：</p>
+<pre><code>def filterchar(string):
+    &apos;&apos;&apos;
+    功能：过滤危险字符，并将过滤后的结果输出
+    about:要过滤的字符串
+    没有返回值
+    &apos;&apos;&apos;
+    import re
+    pattern = r&apos;(黑客)|(抓包)|(监听)|(trojan)&apos;
+    sub = re.sub(pattern, &quot;@_@&quot;, string)
+    print(sub)
+filterchar(&quot;黑客&quot;)
+</code></pre><h1 id="2、参数传递"><a href="#2、参数传递" class="headerlink" title="2、参数传递"></a>2、参数传递</h1><h2 id="2-1、形式参数与实际参数（形参与实参）"><a href="#2-1、形式参数与实际参数（形参与实参）" class="headerlink" title="2.1、形式参数与实际参数（形参与实参）"></a>2.1、形式参数与实际参数（形参与实参）</h2><p>形式参数（形参）：在定义函数时，函数名后括号内的参数为形参<br>实际参数（实参）：在调用一个函数时，函数名后括号内的参数为实参，也就是调用函数时，我们给函数传入的参数。</p>
+<p>根据实践参数类型的不同，可以分为值传递和应用传递。当实际参数为不可变对象时，就是值传递：当实际参数为可变对象时就是引用传递。</p>
+<p>例子：<br><strong>定义函数</strong><br>def demo(obj):<br>    print(“元值：”, obj)<br>    obj += obj<br><strong>调用函数</strong></p>
+<pre><code>print(&quot;========值传递========&quot;)
+mot = &quot;唯有在被追赶的时候，你才能真正的奔跑。&quot;
+print(&quot;函数调用前：&quot;, mot)
+demo(mot)   # 采用不可变量字符串
+print(&quot;函数调用后：&quot;, mot)
+print(&quot;========引用传递========&quot;)
+list1 = [&apos;apple&apos;, &apos;banana&apos;, &apos;orange&apos;, &apos;pear&apos;]
+print(&quot;函数调用前：&quot;, list1)
+demo(list1)   # 采用可对象列表
+print(&quot;函数调用后：&quot;, list1)
+</code></pre><p>输出</p>
+<pre><code>========值传递========
+函数调用前： 唯有在被追赶的时候，你才能真正的奔跑。
+元值： 唯有在被追赶的时候，你才能真正的奔跑。
+函数调用后： 唯有在被追赶的时候，你才能真正的奔跑。
+========引用传递========
+函数调用前： [&apos;apple&apos;, &apos;banana&apos;, &apos;orange&apos;, &apos;pear&apos;]
+元值： [&apos;apple&apos;, &apos;banana&apos;, &apos;orange&apos;, &apos;pear&apos;]
+函数调用后： [&apos;apple&apos;, &apos;banana&apos;, &apos;orange&apos;, &apos;pear&apos;, &apos;apple&apos;, &apos;banana&apos;, &apos;orange&apos;, &apos;pear&apos;]
+</code></pre><p>可以看出，值传递改变形参的值，但是不改变实参的值。<br>引用传递改变形参的值，同时也改变实参的值。</p>
+<h2 id="2-2、位置参数"><a href="#2-2、位置参数" class="headerlink" title="2.2、位置参数"></a>2.2、位置参数</h2><p>位置参数也称必备参数，必须按照正确的顺序传入函数中</p>
+<p><strong>1、数量必须与定义时的一样</strong></p>
+<p>在调用函数时，指定的实际参数的数量必须与形式参数一样一样，否则会抛出TypeError异常，提示缺少的位置参数</p>
+<p><strong>2、位置必须与定义时的一致</strong></p>
+<p>不一致会产生下面2种异常<br>（1）、抛出TypeErro异常<br>该种异常主要是实参与形参类型不一致，且在函数中，2种类型无法转换<br>（2）、产生的结果与预期的不符<br>就是位置错了，但是他们的类型一致，比如身高和体重的参数位置反了。<br>这其实是一种bug</p>
+<h2 id="2-3、关键字参数"><a href="#2-3、关键字参数" class="headerlink" title="2.3、关键字参数"></a>2.3、关键字参数</h2><p>关键字参数是指使用形参的名字来确定输入的参数值，使用该方法，实参的位置不需要一致。<br>如调用fun_bmi(persion,height,weight)函数，可以通过关键字参数</p>
+<pre><code>fun_mbi(height = 1.58, persion = &apos;john&apos;, weight = &apos;50&apos;)
+</code></pre><h2 id="2-4、为参数设置默认值"><a href="#2-4、为参数设置默认值" class="headerlink" title="2.4、为参数设置默认值"></a>2.4、为参数设置默认值</h2><p>语法格式：</p>
+<pre><code>def functionname(…，[parameter1 = defaultvaluel]):
+    [functionbody]
+</code></pre><p>查看函数的默认值参数的语法</p>
+<pre><code>函数名.__defaults__
+</code></pre><p>使用可以变量作为参数的默认值时，多次调用，可能会产生意料之外的结果。<br>为了防止这种情况的产生，我们可以使用None作为可变对象的默认值，还要加上检验代码。</p>
+<p>在定义函数时，为形式参数设置默认值时，默认参数必须指向不可变对象</p>
+<h2 id="2-5、可变参数"><a href="#2-5、可变参数" class="headerlink" title="2.5、可变参数"></a>2.5、可变参数</h2><p>可变参数也称不定长参数。即传入函数的参数可以是0个，1个，2个等等。<br>主要有*parameter和**parameter 2种形式</p>
+<p><strong>1</strong>、*parameter<br>这种形式表示接收任意多个实际参数并将其放入一个元组中。<br>如</p>
+<pre><code>def printfruit(*fruitname):
+    print(&apos;\n我喜欢的水果有：&apos;)
+    for i in fruitname:
+        print(i)   # 输出水果名称
+
+printfruit(&apos;apple&apos;)
+printfruit(&apos;apple&apos;, &apos;banana&apos;, &apos;pear&apos;)
+</code></pre><p>输出</p>
+<pre><code>我喜欢的水果有：
+apple
+
+我喜欢的水果有：
+apple
+banana
+pear
+</code></pre><p>如果想要用一个已经存在的列表作为函数的可变参数，可以在列表名称前加个’*‘。<br>如</p>
+<pre><code>a = [&apos;apple&apos;, &apos;banana&apos;, &apos;pear&apos;]
+printfruit(*a)
+</code></pre><p><strong>2</strong>、**parameter<br>这种形式表示可以接收任意多个类似关键字一样的显示赋值的实际参数<br>如</p>
+<pre><code>def printsign(**sign):
+    print()
+    for key, value in sign.items():    # 遍历字典
+        print(key + &quot;的星座是：&quot; + value)
+printsign(a=&apos;水瓶&apos;)
+printsign(a=&apos;水瓶&apos;, b=&apos;狮子&apos;)
+</code></pre><p>输出</p>
+<pre><code>a的星座是：水瓶
+
+a的星座是：水瓶
+b的星座是：狮子
+</code></pre><p>如果想要用一个已经存在的字典作为函数的可变参数，可以在字典名称前加个’**‘。</p>
+<h1 id="3、返回值"><a href="#3、返回值" class="headerlink" title="3、返回值"></a>3、返回值</h1><p>在python中无论return语句在什么位置，只有得到执行，就会直接结束函数的执行<br>语法格式：</p>
+<pre><code>result =return [value]
+</code></pre><p>说明<br>value为一个可选参数，用于指定要返回的值（可以是一个值，也可以是多个值，值可以是任意类型）</p>
+<p>当函数中没有return语句，，或者省略return语句的参数时，将返回None(空值)</p>
+<h1 id="4、变量的作用域"><a href="#4、变量的作用域" class="headerlink" title="4、变量的作用域"></a>4、变量的作用域</h1><h2 id="4-1、局部变量"><a href="#4-1、局部变量" class="headerlink" title="4.1、局部变量"></a>4.1、局部变量</h2><p>局部变量就是在函数内部定义并使用的变量。（在函数外部使用会抛出NameError异常）</p>
+<h2 id="4-2、全部变量"><a href="#4-2、全部变量" class="headerlink" title="4.2、全部变量"></a>4.2、全部变量</h2><p><strong>1、在函数外部定义</strong><br>值得注意的事，当全局变量与局部变量重名时，对函数体内的变量进行赋值后，不影响函数体外的变量。</p>
+<p><strong>2、在函数内定义</strong><br>在函数体内定义全局变量，需要使用global关键字<br>语法格式</p>
+<pre><code>global 变量
+</code></pre><h1 id="5、匿名函数"><a href="#5、匿名函数" class="headerlink" title="5、匿名函数"></a>5、匿名函数</h1><p>匿名函数就是没有名字的函数，一般只使用一次。使用lambda关键字<br>语法格式</p>
+<pre><code>result = lambda [arg1 [,arg2,...,argn]]：expression
+</code></pre><p>参数说明：<br>result：用于调用lambda表达式<br>[arg1 [,arg2,…,argn]]：可选参数，用于指定的要传递的参数列表<br>expression: 必选参数，用于指定一个实现具体功能的表达式。</p>
+<p>注意：使用lambda关键字只能有一个返回值和出现其他非表达式语句（如for或while）<br>如：</p>
+<pre><code>import math
+r = 10
+result = lambda r: math.pi*r*r
+print(&quot;半径为&quot;, r, &quot;的圆的面积为&quot;, result(r))
+</code></pre><p>lambda的首页用途是指定短小的回调函数。</p>
+<h1 id="6、牛刀小试"><a href="#6、牛刀小试" class="headerlink" title="6、牛刀小试"></a>6、牛刀小试</h1><h2 id="6-1、输出第几天"><a href="#6-1、输出第几天" class="headerlink" title="6.1、输出第几天"></a>6.1、输出第几天</h2><p>请编写一个程序，实现输入任意的年月日就可以计算出是这一年的第几天，如输入20190203，就可以输出这是2019年的第34天。</p>
+<pre><code>def data(y, m, d):
+    if m &lt;= 2:
+        return &quot;这是&quot;+str(y)+&quot;年的第&quot;+str((m-1)*31+d)+&quot;天&quot;
+    elif m in (3, 5, 7, 9, 10, 11, 12):
+        return &quot;这是&quot; + str(y) + &quot;年的第&quot; + str((m - 1) * 31 + d - m//2 - 1 + y % 4 - 1) + &quot;天&quot;
+    elif m in (4, 6, 8):
+        return &quot;这是&quot; + str(y) + &quot;年的第&quot; + str((m - 1) * 31 + d - m//2 - 1 + y % 4) + &quot;天&quot;
+</code></pre><p>​<br>     if <strong>name</strong> == ‘<strong>main</strong>‘:<br>            a = data(2017, 1, 1)<br>            print(a)</p>
+<h2 id="6-2、找出重复IP"><a href="#6-2、找出重复IP" class="headerlink" title="6.2、找出重复IP"></a>6.2、找出重复IP</h2><p>下面list 中提供了几组IP地址，编写一个函数，将list中重复出现的IP地址找出来。<br>list=[‘192.168.1.1’,’10.192.66.72’,’10.199.88.132’, ‘192.168.1.1’,’1.192.168.163’]</p>
+<pre><code>def main():
+    a=[&apos;192.168.1.1&apos;,&apos;10.192.66.72&apos;,&apos;10.199.88.132&apos;, &apos;192.168.1.1&apos;,&apos;192.168.163&apos;]
+    b=[]
+    c=[]
+    for i in range (0,len(a)):
+        if a[i] not in b:
+            b.append(a[i])
+        else:
+            c.append(a[i])
+
+    print (c)
+if __name__ == &apos;__main__&apos;:
+    main()
+</code></pre><h2 id="6-3、大写模式"><a href="#6-3、大写模式" class="headerlink" title="6.3、大写模式"></a>6.3、大写模式</h2><p>编写-一个函数，把输入的字母统一成大写模式， 如输入“go big or go home”,输出为“60BIG OR G0 HOME”。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">demo</span><span class="params">(a)</span>:</span></span><br><span class="line">    a = a.upper()</span><br><span class="line">    <span class="keyword">return</span> a</span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    b = demo(<span class="string">'go big or go home'</span>)</span><br><span class="line">    print(b)</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+      <div>
+        
+
+
+
+  
+
+
+
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>wr</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    
+    <a href="https://wrgiun.github.io/2019/09/12/python知识整合（函数）/" title="python知识整合（函数）">https://wrgiun.github.io/2019/09/12/python知识整合（函数）/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/09/12/Python知识集合（异常处理和程序调试）/" rel="next" title="Python知识集合（异常处理和程序调试）">
+                <i class="fa fa-chevron-left"></i> Python知识集合（异常处理和程序调试）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/09/12/python知识整合（面向对象程序设计）/" rel="prev" title="python知识整合（面向对象程序设计）">
+                python知识整合（面向对象程序设计） <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="wr">
+            
+              <p class="site-author-name" itemprop="name">wr</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">46</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">10</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1、函数的创建与调用"><span class="nav-number">1.</span> <span class="nav-text">1、函数的创建与调用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2、参数传递"><span class="nav-number">2.</span> <span class="nav-text">2、参数传递</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1、形式参数与实际参数（形参与实参）"><span class="nav-number">2.1.</span> <span class="nav-text">2.1、形式参数与实际参数（形参与实参）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2、位置参数"><span class="nav-number">2.2.</span> <span class="nav-text">2.2、位置参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3、关键字参数"><span class="nav-number">2.3.</span> <span class="nav-text">2.3、关键字参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-4、为参数设置默认值"><span class="nav-number">2.4.</span> <span class="nav-text">2.4、为参数设置默认值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-5、可变参数"><span class="nav-number">2.5.</span> <span class="nav-text">2.5、可变参数</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3、返回值"><span class="nav-number">3.</span> <span class="nav-text">3、返回值</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4、变量的作用域"><span class="nav-number">4.</span> <span class="nav-text">4、变量的作用域</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1、局部变量"><span class="nav-number">4.1.</span> <span class="nav-text">4.1、局部变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2、全部变量"><span class="nav-number">4.2.</span> <span class="nav-text">4.2、全部变量</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5、匿名函数"><span class="nav-number">5.</span> <span class="nav-text">5、匿名函数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6、牛刀小试"><span class="nav-number">6.</span> <span class="nav-text">6、牛刀小试</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#6-1、输出第几天"><span class="nav-number">6.1.</span> <span class="nav-text">6.1、输出第几天</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-2、找出重复IP"><span class="nav-number">6.2.</span> <span class="nav-text">6.2、找出重复IP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-3、大写模式"><span class="nav-number">6.3.</span> <span class="nav-text">6.3、大写模式</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">wr</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.0.0</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+  
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.0"></script>
+
+  <script src="/js/src/motion.js?v=7.0.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=7.0.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=7.0.0"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.0"></script>
+<script src="/js/src/post-details.js?v=7.0.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=7.0.0"></script>
+
+
+
+  
+
+
+  
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  <style>
+    .copy-btn {
+      display: inline-block;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 20px;
+      color: #333;
+      white-space: nowrap;
+      vertical-align: middle;
+      cursor: pointer;
+      background-color: #eee;
+      background-image: linear-gradient(#fcfcfc, #eee);
+      border: 1px solid #d5d5d5;
+      border-radius: 3px;
+      user-select: none;
+      outline: 0;
+    }
+
+    .highlight-wrap .copy-btn {
+      transition: opacity .3s ease-in-out;
+      opacity: 0;
+      padding: 2px 6px;
+      position: absolute;
+      right: 4px;
+      top: 8px;
+    }
+
+    .highlight-wrap:hover .copy-btn,
+    .highlight-wrap .copy-btn:focus {
+      opacity: 1
+    }
+
+    .highlight-wrap {
+      position: relative;
+    }
+  </style>
+  <script>
+    $('.highlight').each(function(i, e) {
+      var $wrap = $('<div>').addClass('highlight-wrap');
+      $(e).after($wrap);
+      $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function(e) {
+        var code = $(this).parent().find('.code').find('.line').map(function(i, e) {
+          return $(e).text();
+        }).toArray().join('\n');
+        var ta = document.createElement('textarea');
+        var range = document.createRange(); //For Chrome
+        var sel = window.getSelection(); //For Chrome
+        var yPosition = window.pageYOffset || document.documentElement.scrollTop;
+        ta.style.top = yPosition + 'px'; //Prevent page scroll
+        ta.style.position = 'absolute';
+        ta.style.opacity = '0';
+        ta.value = code;
+        ta.textContent = code; //For FireFox
+        ta.contentEditable = true;
+        ta.readOnly = false;
+        document.body.appendChild(ta);
+        range.selectNode(ta);
+        sel.removeAllRanges();
+        sel.addRange(range);
+        ta.setSelectionRange(0, code.length);
+        var result = document.execCommand('copy');
+        
+          if (result) $(this).text('复制成功');
+          else $(this).text('复制失败');
+        
+        ta.blur(); //For iOS
+        $(this).blur();
+      })).on('mouseleave', function(e) {
+        var $b = $(this).find('.copy-btn');
+        setTimeout(function() {
+          $b.text('复制');
+        }, 300);
+      }).append(e);
+    })
+  </script>
+
+
+  
+
+</body>
+</html>

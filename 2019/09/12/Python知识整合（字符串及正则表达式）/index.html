@@ -1,0 +1,1220 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.0.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.0.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.0.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="1、字符串常规操作1.1、拼接字符串使用“+”号可以实现多个字符串的拼接，并产生一个字符串对象。如 a = &amp;quot;123&amp;quot; print(a+&amp;quot;1234&amp;quot;) 1.2计算字符串长度使用len（）函数如 str =&amp;quot;123a,时候&amp;quot; print(len(str)) 输出 7 可以看出在len函数计算字符串的长度时，不区分数字，英文，汉字，所有字符都">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python知识整合（字符串及正则表达式）">
+<meta property="og:url" content="https://wrgiun.github.io/2019/09/12/Python知识整合（字符串及正则表达式）/index.html">
+<meta property="og:site_name" content="giun">
+<meta property="og:description" content="1、字符串常规操作1.1、拼接字符串使用“+”号可以实现多个字符串的拼接，并产生一个字符串对象。如 a = &amp;quot;123&amp;quot; print(a+&amp;quot;1234&amp;quot;) 1.2计算字符串长度使用len（）函数如 str =&amp;quot;123a,时候&amp;quot; print(len(str)) 输出 7 可以看出在len函数计算字符串的长度时，不区分数字，英文，汉字，所有字符都">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-09-12T12:41:46.780Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Python知识整合（字符串及正则表达式）">
+<meta name="twitter:description" content="1、字符串常规操作1.1、拼接字符串使用“+”号可以实现多个字符串的拼接，并产生一个字符串对象。如 a = &amp;quot;123&amp;quot; print(a+&amp;quot;1234&amp;quot;) 1.2计算字符串长度使用len（）函数如 str =&amp;quot;123a,时候&amp;quot; print(len(str)) 输出 7 可以看出在len函数计算字符串的长度时，不区分数字，英文，汉字，所有字符都">
+
+
+
+
+
+
+  <link rel="canonical" href="https://wrgiun.github.io/2019/09/12/Python知识整合（字符串及正则表达式）/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Python知识整合（字符串及正则表达式） | giun</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">giun</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://wrgiun.github.io/2019/09/12/Python知识整合（字符串及正则表达式）/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wr">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="giun">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Python知识整合（字符串及正则表达式）
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-09-12 20:41:12 / 修改时间：20:41:46" itemprop="dateCreated datePublished" datetime="2019-09-12T20:41:12+08:00">2019-09-12</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="1、字符串常规操作"><a href="#1、字符串常规操作" class="headerlink" title="1、字符串常规操作"></a>1、字符串常规操作</h1><h2 id="1-1、拼接字符串"><a href="#1-1、拼接字符串" class="headerlink" title="1.1、拼接字符串"></a>1.1、拼接字符串</h2><p>使用“+”号可以实现多个字符串的拼接，并产生一个字符串对象。<br>如</p>
+<pre><code>a = &quot;123&quot;
+print(a+&quot;1234&quot;)
+</code></pre><h2 id="1-2计算字符串长度"><a href="#1-2计算字符串长度" class="headerlink" title="1.2计算字符串长度"></a>1.2计算字符串长度</h2><p>使用len（）函数<br>如</p>
+<pre><code>str =&quot;123a,时候&quot;
+print(len(str))
+</code></pre><p>输出</p>
+<pre><code>7
+</code></pre><p>可以看出在len函数计算字符串的长度时，不区分数字，英文，汉字，所有字符都认为是一个字节<br>但是，如果采用UTF-8编码，汉字占3个字节，采用GBK或者GB2312编码时，汉字占2个字节<br>如</p>
+<pre><code>str =&quot;123a,时候&quot;
+print(len(str.encode()))   #utf-8编码
+  print(len(str.encode(gbk)))   #gbk编码 
+</code></pre><p>输出</p>
+<pre><code>15
+12
+</code></pre><h2 id="1-3、截取字符串"><a href="#1-3、截取字符串" class="headerlink" title="1.3、截取字符串"></a>1.3、截取字符串</h2><p>通过切片方法实现<br>语法格式如下</p>
+<pre><code>string(start : end : step)
+</code></pre><p>   如</p>
+<pre><code>str = &quot;你就是个啊哈&quot;
+ str1 = str[1]       #截取第二个字符
+ str1 = str[2:]      #从第3个字符开始截取
+ str2 = str[:2]      #从左边开始截取2个字符
+ str3 = str[2:4]   #截取第3个到第4个字符
+</code></pre><h2 id="1-4、分隔字符串"><a href="#1-4、分隔字符串" class="headerlink" title="1.4、分隔字符串"></a>1.4、分隔字符串</h2><p>使用split函数分隔<br>语法格式</p>
+<pre><code>str.split(sep,maxsplit)
+</code></pre><p>说明<br>1、str:表示进行分隔的字符串<br>2、sep表示指定的分隔符，可以包含多个指定字符，如果不指定，那么默认为None，即所有的空字符（包括空格，\n等等）<br>3、maxsplit:可选参数，用于指定分隔的次数，如果不指定或者为-1，分隔次数没有限制，否则返回的元素最多为maxsplit+1。<br>4、如果不指定sep,也不能指定maxsplit<br>5、返回值为字符串列表</p>
+<h2 id="1-5、检索字符串"><a href="#1-5、检索字符串" class="headerlink" title="1.5、检索字符串"></a>1.5、检索字符串</h2><p><strong>1、count方法</strong><br>count（）方法检索字符串在另一个字符串中出现的次数。如果字符串不存在返回0，否则返回次数，其语法格式如下。</p>
+<pre><code>str.count(sub[,start[,end]])
+</code></pre><p>说明：<br>str表示原字符串<br>sub表示要检索的字符串<br>start表示可选参数，检索的起始位置，若不指定，从头检索<br>end，与start相似。</p>
+<p><strong>2、find方法</strong><br>检索是否包含指定的字符串，如果检索的字符串不存在则，返回-1，否则返回该字符串首次出现的索引<br>语法格式</p>
+<pre><code>str.find(sub[,start[,end]])
+</code></pre><p><strong>3、index（）方法</strong><br>与find（）方法类似，不过使用index()方法，当指定的字符串不存在时抛出异常<br>语法格式</p>
+<pre><code>str.index(sub[,start[,end]])
+</code></pre><p><strong>4、startwith()方法</strong><br>检测是否以指定字符串开头，是返回True,不是返回False<br>语法格式：</p>
+<pre><code>str.startswith(prefix[,start[,end]])
+</code></pre><p>参数说明，str表示原字符串，prefix表示要检索的字符串<br>其他参数说明与find()方法类似</p>
+<p><strong>5、endwith()方法</strong><br>检测是否以指定字符串结尾，是返回True,不是返回False<br>语法格式</p>
+<p>str.endswith(suffix[,start[,end]])</p>
+<h2 id="1-6、字母的大小写转换"><a href="#1-6、字母的大小写转换" class="headerlink" title="1.6、字母的大小写转换"></a>1.6、字母的大小写转换</h2><p><strong>1、lower（）方法</strong><br>将字符串中的全部的大写字母转化为小写字母。<br>语法格式：</p>
+<pre><code>str.lower()
+</code></pre><p><strong>2、upper()方法</strong><br>将字符串中的全部的小写字母转化为大写字母。<br>语法格式：</p>
+<pre><code>str.upper()
+</code></pre><p><strong>3、swapcase()方法</strong><br>同时将字符串中的全部的小写字母转化为大写字母，全部的大写字母转化为小写字母。</p>
+<pre><code>str.swapcase()
+</code></pre><h2 id="1-7、去除字符串中的空格和特殊字符"><a href="#1-7、去除字符串中的空格和特殊字符" class="headerlink" title="1.7、去除字符串中的空格和特殊字符"></a>1.7、去除字符串中的空格和特殊字符</h2><p>特殊字符在这里指的是：\t \r \n(制表、回车、换行)<br><strong>1、strip（）方法</strong><br>去除字符串的左右两侧的空格和特殊字符<br>语法格式</p>
+<pre><code>str.strip([chars])
+</code></pre><p>如</p>
+<pre><code>str1 = &quot; 12323 \n&quot;
+print(&quot;原字符串str1：&quot; + str1)
+print(&quot;字符串：&quot; + str1.strip() + &quot;.&quot;)   # 去除首尾的空格和特殊字符
+str2 = &quot;#133#.&quot;
+print(&quot;原字符串str2：&quot; + str2)
+print(&quot;字符串：&quot; + str2.strip(&apos;#.&apos;))         #去除首位的#或者.
+</code></pre><p>输出</p>
+<pre><code>原字符串str1： 12323 
+
+字符串：12323.
+原字符串str2：#133#.
+字符串：133
+</code></pre><p><strong>2、lstrip()方法</strong><br>lstrip（）方法可以去除字符串左侧的空格和特殊字符，<br>语法格式</p>
+<pre><code>str.lstrip([chars])
+</code></pre><p><strong>3、rstrip()方法</strong><br>rstrip（）方法可以去除字符串由右侧的空格和特殊字符，<br>语法格式</p>
+<pre><code>str.rstrip([chars])
+</code></pre><h2 id="1-8、格式化字符串"><a href="#1-8、格式化字符串" class="headerlink" title="1.8、格式化字符串"></a>1.8、格式化字符串</h2><p>格式化字符串就是先定义一个模板，然后在模板中留几个空位，空位用占位符来标记</p>
+<p><strong>1、使用%号操作符（逐渐没落）</strong></p>
+<p>常用的格式化字符<br>| 格式化字符 | 说明                  | 格式化字符 | 说明                   |<br>| ———- | ——————— | ———- | ———————- |<br>| %s         | 字符串（采用str显示） | %r         | 字符串（采用repr显示） |<br>| %c         | 单个字符              | %o         | 八进制整数             |<br>| %d或者%i   | 十进制整数            | %e         | 指数（基地写为e）      |<br>| %x         | 16进制整数            | %E         | 指数（基地写为E）      |<br>| %f或者%F   | 浮点数                | %%         | 字符%                  |</p>
+<p>如</p>
+<pre><code>a = &quot;小明为莆田%d中学生，学号为%d,同学都叫他%s&quot;   # 定义模板
+b1 = (6, 31111111, &apos;小明&apos;)                   # 定义与转化的内容
+print(a % b1)                               # 格式化输出
+</code></pre><p>输出</p>
+<pre><code>小明为莆田6中学生，学号为31111111,同学都叫他小明
+</code></pre><p><strong>2、使用字符串对象的format()方法（推荐使用）</strong><br>语法格式</p>
+<pre><code>str.format(args)
+</code></pre><p>args用于指定与转化的项</p>
+<p><strong>format()方法中常用的格式化字符</strong><br>| s        | 对字符串类型进行格式化                      |<br>| ——– | ——————————————- |<br>| b        | 将十进制数自动转换成二进制数表示再格式化    |<br>| d        | 十进制整数                                  |<br>| o        | 将十进制数自动转换成八进制数表示再格式化    |<br>| c        | 将十进制数自动转换成对应的unicode字符       |<br>| x 或者 X | 将十进制数自动转换成十六进制数表示再格式化  |<br>| e或者E   | 转化为科学计数法表示再格式化                |<br>| f或者F   | 转化为浮点数（默认小数点后保留6位）再格式化 |<br>| g或者G   | 自动在e和f或者E和F中切换                    |<br>| %        | 显示百分比（默认小数点后保留6位）           |</p>
+<p>如</p>
+<pre><code>a = &quot;小明为莆田{:d}中学生，学号为{:0&gt;7d},同学都叫他{:s}&quot;   # 定义模板
+b1 = a.format(6, 31111111, &apos;小明&apos;)             # 定义与转化的内容
+print(b1)            # 格式化输出
+</code></pre><p>输出</p>
+<pre><code>小明为莆田6中学生，学号为31111111,同学都叫他小明
+</code></pre><h1 id="2、正则表达式基础"><a href="#2、正则表达式基础" class="headerlink" title="2、正则表达式基础"></a>2、正则表达式基础</h1><h2 id="2-1、行定位符"><a href="#2-1、行定位符" class="headerlink" title="2.1、行定位符"></a>2.1、行定位符</h2><p>行定位符就是用来描述字符串的边界。“^”表示行的开始，“$”表示行的结尾<br>如</p>
+<pre><code>^tm$
+</code></pre><h2 id="2-2、常用的元字符"><a href="#2-2、常用的元字符" class="headerlink" title="2.2、常用的元字符"></a>2.2、常用的元字符</h2><table>
+<thead>
+<tr>
+<th>代码</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>.</td>
+<td>匹配除换行符以外的任意字符</td>
+</tr>
+<tr>
+<td>\w</td>
+<td>匹配字母数字、下划线或者汉字</td>
+</tr>
+<tr>
+<td>\s</td>
+<td>匹配任意的空格符</td>
+</tr>
+<tr>
+<td>\d</td>
+<td>匹配数字</td>
+</tr>
+<tr>
+<td>\b</td>
+<td>匹配单词的开始或者结束</td>
+</tr>
+<tr>
+<td>^</td>
+<td></td>
+<td>匹配字符串的开始</td>
+</tr>
+<tr>
+<td>$</td>
+<td>匹配字符串的结尾</td>
+</tr>
+</tbody>
+</table>
+<h2 id="2-3、限定符"><a href="#2-3、限定符" class="headerlink" title="2.3、限定符"></a>2.3、限定符</h2><p>如匹配8位QQ号码可以使用下面的方式表示</p>
+<pre><code>^\d{8}$
+</code></pre><p><strong>常用的限定符</strong><br>| 限定符 | 说明                            | 举例                                          |<br>| —— | ——————————- | ——————————————— |<br>| ？     | 匹配前面的字符零次或者一次      | app?le，该表达式可以匹配apple或者aple         |<br>| +      | 匹配前面的字符者一次或多次      | app+le，该表达式可以匹配apple到app….le      |<br>| <em>      | 匹配前面的字符者零次或多次      | app</em>le，该表达式可以匹配aple到app….le       |<br>| {n}    | 匹配前面的字符者n次             | app{2}le，该表达式可以匹配appple              |<br>| {n,}   | 匹配前面的字符者最少n次         | app{2,}le，该表达式可以匹配appple到appp…le  |<br>| {n,m}  | 匹配前面的字符者最少n次,最多m次 | app{2,3}le，该表达式可以匹配appple或者apppple |</p>
+<h2 id="2-4、字符类"><a href="#2-4、字符类" class="headerlink" title="2.4、字符类"></a>2.4、字符类</h2><p>如果匹配没有预定义的元字符的字符集合（比如元音字母a,e,i,o,u）我们可以使用方括号，然后把要匹配的内容写在方括号里，如[aeiou]匹配任何一个元音字母。<br>[0-9]与\d的效果一样<br>[a-z0-9A-Z]与\w的效果一样(只考虑英文)<br>[\u4e00-\u9fa5]匹配给定字符串的任意一个汉字，匹配连续多个汉字[\u4e00-\u9fa5]+</p>
+<h2 id="2-5、排除字符"><a href="#2-5、排除字符" class="headerlink" title="2.5、排除字符"></a>2.5、排除字符</h2><p>把^放在方括号里就是排除的意思<br>如</p>
+<pre><code>[^a-zA-Z]
+</code></pre><p>该表达式用于匹配一个不是字母的字符串</p>
+<h2 id="2-6、选择字符"><a href="#2-6、选择字符" class="headerlink" title="2.6、选择字符"></a>2.6、选择字符</h2><p>例子，匹配身份证号码<br>身份证号码为15位或者18位，如果是15位的全为数字，如果是17位，则最后一位是效验位，为数字或者X(x)<br>可以使用下面表达式匹配</p>
+<pre><code>^\d{15})|(^\d{18}) |(^\d{17} (\d|X|x)$
+</code></pre><p>意思是匹配15位或者18位数字或者17位数字和最后一位是数字或者X或者x</p>
+<h2 id="2-7、转义字符"><a href="#2-7、转义字符" class="headerlink" title="2.7、转义字符"></a>2.7、转义字符</h2><p>正则表达式中的转义字符也是将特殊字符（“.”、“？”，“\”）变为普通的字符<br>。如用正则表达式表示127.0.0.1这样格式的IP地址</p>
+<pre><code>[1-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}
+</code></pre><p>注意括号在正则表达式也算一个字符</p>
+<h2 id="2-8、分组"><a href="#2-8、分组" class="headerlink" title="2.8、分组"></a>2.8、分组</h2><p>例子</p>
+<pre><code>（thir|four）th
+</code></pre><p>意思是匹配单词thirth或者fourth，如果不使用小括号，就变成了匹配单词thir和fourth</p>
+<p>小括号的第二个作用就是分组。<br>如</p>
+<pre><code>（\.[1-9]{1,3}){2},就是对（\.[1-9]{1,3})进行操作
+</code></pre><h2 id="2-9、在python中使用正则表达式语法"><a href="#2-9、在python中使用正则表达式语法" class="headerlink" title="2.9、在python中使用正则表达式语法"></a>2.9、在python中使用正则表达式语法</h2><p>在Python中使用正则表达式就是将其作为模式字符串使用的。<br>将匹配以m开头的正则表达式转化为模式字符串</p>
+<pre><code>&apos;\\bm\\w*\\b&apos;
+</code></pre><p>因为模式字符串可能包含大量的特殊字符和斜杠，所以需要使用原生字符串<br>就是在模式字符串前加上r或者R.<br>如<br>     r ‘\bm\w*\b’</p>
+<h1 id="3、使用re模块实现正则表达式操作"><a href="#3、使用re模块实现正则表达式操作" class="headerlink" title="3、使用re模块实现正则表达式操作"></a>3、使用re模块实现正则表达式操作</h1><h2 id="3-1、匹配字符串"><a href="#3-1、匹配字符串" class="headerlink" title="3.1、匹配字符串"></a>3.1、匹配字符串</h2><p><strong>1.使用match（）方法进行匹配</strong><br>如果在其实位置匹配成功，则返回Match对象，否则返回None,其语法格式如下：</p>
+<pre><code>re.match(pattern,string,[flags])
+</code></pre><p>说明<br>pattern:表示模式字符串，由要匹配的正则表达式转换而来<br>string:表示要匹配的字符串<br>flags：可选参数，表示标识位，用于控制匹配方式，如是否区分字母大小写。<br>常用的标志如下表所示<br>| 标志          | 说明                                                         |<br>| ————- | ———————————————————— |<br>| A或ASCII      | 对\w、\W、\b、\B、\d、\D、\s、\S只进行ASCII匹配（只适用Python3.x） |<br>| I或ICNORECASE | 执行不按字母大小写匹配                                       |<br>| M或MULTLINE   | 将^和$用于包括整个字符串的开始和结尾的每一行                 |<br>| S或DOTALL     | 使用“.”字符匹配所有字符，包括换行符                          |<br>| X或VERBOSE    | 忽略模式字符串中为转义的空格和注释                           |</p>
+<p>如</p>
+<pre><code>import re
+pattern = r&apos;mr_\w+&apos;    # 模式字符串
+string = &apos;MR_SHOP mr_shop&apos;   # 要匹配的字符串
+match = re.match(pattern, string,re.I)  # 匹配字符串不区分大小写
+print(&quot;匹配值的起始位置：&quot;, match.start())
+print(&quot;匹配值的结束位置：&quot;, match.end())
+print(&quot;匹配位置的元组：&quot;, match.span())
+print(&quot;要匹配的字符串：&quot;, match.string)
+print(&quot;匹配数据&quot;, match.group())
+</code></pre><p>输出</p>
+<pre><code>匹配值的起始位置： 0
+匹配值的结束位置： 7
+匹配位置的元组： (0, 7)
+要匹配的字符串： MR_SHOP mr_shop
+匹配数据 MR_SHOP
+</code></pre><p><strong>2、使用search()方法进行匹配</strong><br>search()方法用于在整个字符串的搜索第一个匹配的值，如果在匹配成功返回match对象，否则返回None<br>语法格式</p>
+<pre><code>re.search(pattern,string,[flags])
+</code></pre><p>参数说明参考match方法</p>
+<p><strong>3、使用findall()方法进行匹配</strong><br>findall方法主要用于整个字符串中搜索所有符合正则表达式的字符串，并以列表的形式返回。如果匹配成功返回包含匹配结构的列表，否则返回空列表。<br>语法格式</p>
+<pre><code>re.findall(pattern,string,[flags])
+</code></pre><p>参数说明参考match方法<br>如</p>
+<pre><code>import re
+pattern = r&apos;([1-9]{1,3}(\.[0-9]{1,3}){3})&apos;
+str1 = &apos;127.0.0.1 192.168.122.2&apos;
+match = re.findall(pattern, str1)
+for i in match:
+    print(i[0])
+</code></pre><p>输出</p>
+<pre><code>127.0.0.1
+192.168.122.2
+</code></pre><h2 id="3-2、替换字符"><a href="#3-2、替换字符" class="headerlink" title="3.2、替换字符"></a>3.2、替换字符</h2><p>使用sub()方法进行字符串替换<br>语法格式</p>
+<pre><code>re.sub(pattern, repl, string, count, flags)
+</code></pre><p>说明<br>pattern:表示模式字符串<br>repl:表示替换的字符串<br>string：表示要被查找替换的原始字符串<br>count: 可选参数表示模式匹配后替换的最大次数，默认为0表示替换所有的匹配<br>flags: 可选参数，表示标志位，用于控制匹配方式，如区分大小写等，参考match()方法</p>
+<p>例子</p>
+<pre><code>import re
+pattern = r&apos;1[34578]\d{9}&apos;
+string = &apos;中奖号码为：84795643 联系电话为：13611111111&apos;
+result = re.sub(pattern, &apos;1xxxxxxxxxx&apos;, string)
+print(result)
+</code></pre><p>输出</p>
+<pre><code>中奖号码为：84795643 联系电话为：1xxxxxxxxxx
+</code></pre><h2 id="3-3、使用正则表达式分隔字符串"><a href="#3-3、使用正则表达式分隔字符串" class="headerlink" title="3.3、使用正则表达式分隔字符串"></a>3.3、使用正则表达式分隔字符串</h2><p>split()方法进行分隔字符串，并以列表形式返回<br>语法格式</p>
+<pre><code>re.split(pattern, string, [maxsplit], [flags])
+</code></pre><p>说明<br>pattern:表示模式字符串<br>string：表示要匹配的字符串<br>maxsplit: 可选参数，表示最大的拆分次数<br>flags: 可选参数，表示标志位，用于控制匹配方式，如区分大小写等，参考match()方法<br>例子</p>
+<pre><code>import re
+pattern = r&apos;[?|&amp;]&apos;
+url = &apos;http://www.baidu.com?a=xxx&amp;b=yyyy&apos;
+result = re.split(pattern, url)
+print(result)
+</code></pre><p>输出</p>
+<pre><code>[&apos;http://www.baidu.com&apos;, &apos;a=xxx&apos;, &apos;b=yyyy&apos;]
+</code></pre><h1 id="4、牛刀小试"><a href="#4、牛刀小试" class="headerlink" title="4、牛刀小试"></a>4、牛刀小试</h1><h2 id="4-1、按要求输出字符串"><a href="#4-1、按要求输出字符串" class="headerlink" title="4.1、按要求输出字符串"></a>4.1、按要求输出字符串</h2><p>已知字符串word=”aS98hdkHFSWEas754”,.编写一- 个程序，分别实现如下功能:<br>●请将word字符串中的大写字母改为小写字母，小写字母改为大写字母，<br>●请将word字符串中的数字取出，并输出成一 一个新的字符串</p>
+<p><strong>普通版：</strong></p>
+<pre><code>word = &quot;aS98hdkHFSWEas754&quot;
+ a = &quot;&quot;
+ b = &quot;&quot;
+ for i in word:
+     if  97 &lt;= ord(i) &lt;= 122:        #  小写字母变大写
+         a = a + i.upper()              
+     elif   65 &lt;= ord(i) &lt;= 90:      # 大写字母变小写
+        a = a + i.lower()
+     else:                                        
+         a = a + i                   # 数字不变
+         b = b + i                   # 数字取出，组成新的字符串
+ word = a
+ print(word)
+ print(b)
+</code></pre><p><strong>升级版：</strong></p>
+<pre><code>word = &quot;aS98hdkHFSWEas754&quot;
+word = word.swapcase()   # word字符串中的大写字母改为小写字母，小写字母改为大写字母
+b = &quot;&quot;
+for i in word:
+    if &apos;0&apos;&lt;=i &lt;=&apos;9&apos;:
+        b = b + i      # 数字取出，组成一个新的字符串
+print(word)
+print(b)
+</code></pre><h2 id="4-2、输出生日信息"><a href="#4-2、输出生日信息" class="headerlink" title="4.2、输出生日信息"></a>4.2、输出生日信息</h2><p>张三的身份证号码是“210011196809210451”.请提取张三的生日信息并输出。</p>
+<p>前置知识，身份证的第七位到第14位是出生日期，11位到14位是生日</p>
+<pre><code>number = &quot;210011196809210451&quot;
+birthday = &apos;张三的生日为：{:s}月{:s}日&apos;                   # 定义模块化字符串
+print(birthday.format(number[10:12], number[12:14]))   # 使用format方法输出张三生日
+</code></pre><h2 id="4-3、不重复字母"><a href="#4-3、不重复字母" class="headerlink" title="4.3、不重复字母"></a>4.3、不重复字母</h2><p>已知字符串word=”ABDPISDNGDA”.请去除word字符串多次出现的字母，仅留最先出现的一个。例如aabc经过去除后，输出abc。</p>
+<pre><code>b =&quot;&quot;
+word=&quot;ABDPISDNGDA&quot;
+
+for i in word:
+
+    if i not in b:
+        b += i
+print(b)
+</code></pre><h2 id="4-4、英文句子倒叙输出"><a href="#4-4、英文句子倒叙输出" class="headerlink" title="4.4、英文句子倒叙输出"></a>4.4、英文句子倒叙输出</h2><p>将一句英文句于单词顺序留序输出，但是不改变单词结构。例如: 1 am a beautiful ginl,输出为girl beautiful a am I</p>
+<pre><code>a = input(&quot;请输入英文句子：&quot;)
+b = a.split()                      # 将字符串按空格分开，生产一个列表
+c = &quot;&quot;
+for index, item in enumerate(b):   # 利用索引倒叙输出列表的值，并拼接为字符串
+    c = c + b[-1 - index] + &quot; &quot;
+print(c)
+</code></pre><p>输出</p>
+<pre><code>请输入英文句子：You are a beautiful girl
+girl beautiful a are You 
+</code></pre>
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+      <div>
+        
+
+
+
+  
+
+
+
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>wr</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    
+    <a href="https://wrgiun.github.io/2019/09/12/Python知识整合（字符串及正则表达式）/" title="Python知识整合（字符串及正则表达式）">https://wrgiun.github.io/2019/09/12/Python知识整合（字符串及正则表达式）/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/09/12/python知识整合（序列）/" rel="next" title="python知识整合（序列）">
+                <i class="fa fa-chevron-left"></i> python知识整合（序列）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/09/12/Python知识集合（异常处理和程序调试）/" rel="prev" title="Python知识集合（异常处理和程序调试）">
+                Python知识集合（异常处理和程序调试） <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="wr">
+            
+              <p class="site-author-name" itemprop="name">wr</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">46</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">10</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1、字符串常规操作"><span class="nav-number">1.</span> <span class="nav-text">1、字符串常规操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1、拼接字符串"><span class="nav-number">1.1.</span> <span class="nav-text">1.1、拼接字符串</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2计算字符串长度"><span class="nav-number">1.2.</span> <span class="nav-text">1.2计算字符串长度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-3、截取字符串"><span class="nav-number">1.3.</span> <span class="nav-text">1.3、截取字符串</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-4、分隔字符串"><span class="nav-number">1.4.</span> <span class="nav-text">1.4、分隔字符串</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-5、检索字符串"><span class="nav-number">1.5.</span> <span class="nav-text">1.5、检索字符串</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-6、字母的大小写转换"><span class="nav-number">1.6.</span> <span class="nav-text">1.6、字母的大小写转换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-7、去除字符串中的空格和特殊字符"><span class="nav-number">1.7.</span> <span class="nav-text">1.7、去除字符串中的空格和特殊字符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-8、格式化字符串"><span class="nav-number">1.8.</span> <span class="nav-text">1.8、格式化字符串</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2、正则表达式基础"><span class="nav-number">2.</span> <span class="nav-text">2、正则表达式基础</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1、行定位符"><span class="nav-number">2.1.</span> <span class="nav-text">2.1、行定位符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2、常用的元字符"><span class="nav-number">2.2.</span> <span class="nav-text">2.2、常用的元字符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3、限定符"><span class="nav-number">2.3.</span> <span class="nav-text">2.3、限定符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-4、字符类"><span class="nav-number">2.4.</span> <span class="nav-text">2.4、字符类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-5、排除字符"><span class="nav-number">2.5.</span> <span class="nav-text">2.5、排除字符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-6、选择字符"><span class="nav-number">2.6.</span> <span class="nav-text">2.6、选择字符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-7、转义字符"><span class="nav-number">2.7.</span> <span class="nav-text">2.7、转义字符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-8、分组"><span class="nav-number">2.8.</span> <span class="nav-text">2.8、分组</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-9、在python中使用正则表达式语法"><span class="nav-number">2.9.</span> <span class="nav-text">2.9、在python中使用正则表达式语法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3、使用re模块实现正则表达式操作"><span class="nav-number">3.</span> <span class="nav-text">3、使用re模块实现正则表达式操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1、匹配字符串"><span class="nav-number">3.1.</span> <span class="nav-text">3.1、匹配字符串</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2、替换字符"><span class="nav-number">3.2.</span> <span class="nav-text">3.2、替换字符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3、使用正则表达式分隔字符串"><span class="nav-number">3.3.</span> <span class="nav-text">3.3、使用正则表达式分隔字符串</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4、牛刀小试"><span class="nav-number">4.</span> <span class="nav-text">4、牛刀小试</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1、按要求输出字符串"><span class="nav-number">4.1.</span> <span class="nav-text">4.1、按要求输出字符串</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2、输出生日信息"><span class="nav-number">4.2.</span> <span class="nav-text">4.2、输出生日信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-3、不重复字母"><span class="nav-number">4.3.</span> <span class="nav-text">4.3、不重复字母</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-4、英文句子倒叙输出"><span class="nav-number">4.4.</span> <span class="nav-text">4.4、英文句子倒叙输出</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">wr</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.0.0</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+  
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.0"></script>
+
+  <script src="/js/src/motion.js?v=7.0.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=7.0.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=7.0.0"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.0"></script>
+<script src="/js/src/post-details.js?v=7.0.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=7.0.0"></script>
+
+
+
+  
+
+
+  
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  <style>
+    .copy-btn {
+      display: inline-block;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 20px;
+      color: #333;
+      white-space: nowrap;
+      vertical-align: middle;
+      cursor: pointer;
+      background-color: #eee;
+      background-image: linear-gradient(#fcfcfc, #eee);
+      border: 1px solid #d5d5d5;
+      border-radius: 3px;
+      user-select: none;
+      outline: 0;
+    }
+
+    .highlight-wrap .copy-btn {
+      transition: opacity .3s ease-in-out;
+      opacity: 0;
+      padding: 2px 6px;
+      position: absolute;
+      right: 4px;
+      top: 8px;
+    }
+
+    .highlight-wrap:hover .copy-btn,
+    .highlight-wrap .copy-btn:focus {
+      opacity: 1
+    }
+
+    .highlight-wrap {
+      position: relative;
+    }
+  </style>
+  <script>
+    $('.highlight').each(function(i, e) {
+      var $wrap = $('<div>').addClass('highlight-wrap');
+      $(e).after($wrap);
+      $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function(e) {
+        var code = $(this).parent().find('.code').find('.line').map(function(i, e) {
+          return $(e).text();
+        }).toArray().join('\n');
+        var ta = document.createElement('textarea');
+        var range = document.createRange(); //For Chrome
+        var sel = window.getSelection(); //For Chrome
+        var yPosition = window.pageYOffset || document.documentElement.scrollTop;
+        ta.style.top = yPosition + 'px'; //Prevent page scroll
+        ta.style.position = 'absolute';
+        ta.style.opacity = '0';
+        ta.value = code;
+        ta.textContent = code; //For FireFox
+        ta.contentEditable = true;
+        ta.readOnly = false;
+        document.body.appendChild(ta);
+        range.selectNode(ta);
+        sel.removeAllRanges();
+        sel.addRange(range);
+        ta.setSelectionRange(0, code.length);
+        var result = document.execCommand('copy');
+        
+          if (result) $(this).text('复制成功');
+          else $(this).text('复制失败');
+        
+        ta.blur(); //For iOS
+        $(this).blur();
+      })).on('mouseleave', function(e) {
+        var $b = $(this).find('.copy-btn');
+        setTimeout(function() {
+          $b.text('复制');
+        }, 300);
+      }).append(e);
+    })
+  </script>
+
+
+  
+
+</body>
+</html>

@@ -1,0 +1,1415 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.0.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.0.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.0.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="1、序列序列就是用于存放多个值的连续的空间，且具有顺序关系。python中序列结构主要包括列表、元素、集合和字典。 1.1索引（indexing）索引是从0开始计算在python中索引也可以是负数，从右向左计数，最右边的数是的索引为-1（也就是最后一个数的下标可以是-1）.如 a = [&amp;quot;你&amp;quot;,&amp;quot;好&amp;quot;,&amp;quot;啊&amp;quot;,&amp;quot;吗&amp;quot;]">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python知识整合（序列）">
+<meta property="og:url" content="https://wrgiun.github.io/2019/09/12/python知识整合（序列）/index.html">
+<meta property="og:site_name" content="giun">
+<meta property="og:description" content="1、序列序列就是用于存放多个值的连续的空间，且具有顺序关系。python中序列结构主要包括列表、元素、集合和字典。 1.1索引（indexing）索引是从0开始计算在python中索引也可以是负数，从右向左计数，最右边的数是的索引为-1（也就是最后一个数的下标可以是-1）.如 a = [&amp;quot;你&amp;quot;,&amp;quot;好&amp;quot;,&amp;quot;啊&amp;quot;,&amp;quot;吗&amp;quot;]">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-09-12T12:40:50.239Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="python知识整合（序列）">
+<meta name="twitter:description" content="1、序列序列就是用于存放多个值的连续的空间，且具有顺序关系。python中序列结构主要包括列表、元素、集合和字典。 1.1索引（indexing）索引是从0开始计算在python中索引也可以是负数，从右向左计数，最右边的数是的索引为-1（也就是最后一个数的下标可以是-1）.如 a = [&amp;quot;你&amp;quot;,&amp;quot;好&amp;quot;,&amp;quot;啊&amp;quot;,&amp;quot;吗&amp;quot;]">
+
+
+
+
+
+
+  <link rel="canonical" href="https://wrgiun.github.io/2019/09/12/python知识整合（序列）/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>python知识整合（序列） | giun</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">giun</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://wrgiun.github.io/2019/09/12/python知识整合（序列）/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wr">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="giun">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">python知识整合（序列）
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-09-12 20:40:20 / 修改时间：20:40:50" itemprop="dateCreated datePublished" datetime="2019-09-12T20:40:20+08:00">2019-09-12</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="1、序列"><a href="#1、序列" class="headerlink" title="1、序列"></a>1、序列</h1><p>序列就是用于存放多个值的连续的空间，且具有顺序关系。<br>python中序列结构主要包括列表、元素、集合和字典。</p>
+<h2 id="1-1索引（indexing）"><a href="#1-1索引（indexing）" class="headerlink" title="1.1索引（indexing）"></a>1.1索引（indexing）</h2><p>索引是从0开始计算<br>在python中索引也可以是负数，从右向左计数，最右边的数是的索引为-1（也就是最后一个数的下标可以是-1）.<br>如</p>
+<pre><code>a = [&quot;你&quot;,&quot;好&quot;,&quot;啊&quot;,&quot;吗&quot;]
+print( a[0] )
+print(a[-4])
+print(&quot;--------分割线--------&quot;)
+print(a[1])
+print(a[-3])
+print(&quot;--------分割线--------&quot;)
+print(a[2])
+print(a[-2])
+print(&quot;--------分割线--------&quot;)
+print(a[3])
+print(a[-1])
+</code></pre><p>输出</p>
+<pre><code>你
+你
+--------分割线--------
+好
+好
+--------分割线--------
+啊
+啊
+--------分割线--------
+吗
+吗
+</code></pre><h2 id="1-2、切片（Slicing）"><a href="#1-2、切片（Slicing）" class="headerlink" title="1.2、切片（Slicing）"></a>1.2、切片（Slicing）</h2><p>切片操作是访问序列中的元素的另一种方法<br><strong>语法格式：</strong></p>
+<pre><code>sname[start : end : step]
+</code></pre><p><strong>说明：</strong><br>1、sname:序列的名字<br>2、start:切片的起始位置（包括该位置），如果不指定，默认为0<br>3、end：切片的截止位置（不包括该位置），如果不知道，默认为序列的长度<br>4、step: 切片的步长，如果省略（省略时可以连最后一个冒号也一起省略），默认为1。</p>
+<p>如：</p>
+<pre><code>animal = [&quot;小马&quot;, &quot;小牛&quot;, &quot;小羊&quot;, &quot;小狗&quot;, &quot;小猴&quot;, &quot;小猫&quot;, &quot;小蛇&quot;, &quot;小虎&quot;, &quot;小兔&quot;]
+print(animal[1:5])
+print(animal[2:5:2])
+</code></pre><p>输出</p>
+<pre><code>[&apos;小牛&apos;, &apos;小羊&apos;, &apos;小狗&apos;, &apos;小猴&apos;]
+[&apos;小羊&apos;, &apos;小猴&apos;]
+</code></pre><p>技巧：如果需要复制一整个序列，可以将start,end都有省略，但是中间的冒号要保留。如</p>
+<pre><code>animal[ : ]
+</code></pre><h2 id="1-3、序列相加与相乘"><a href="#1-3、序列相加与相乘" class="headerlink" title="1.3、序列相加与相乘"></a>1.3、序列相加与相乘</h2><p><strong>1、序列相加</strong><br>可以将2个同类型（同为列表、元组、字典等，序列里的元素类型可以不同）的序列进行相加操作（使用+号进行），其实就是拼接2个序列</p>
+<p><strong>2、序列相乘</strong><br>一个序列乘以数字n，那么就将序列重复n次成为新的序列。<br>如</p>
+<pre><code>animal = [&quot;小马&quot;, &quot;小牛&quot;, &quot;小羊&quot;]
+print(animal * 3)
+</code></pre><p>输出</p>
+<pre><code>[&apos;小马&apos;, &apos;小牛&apos;, &apos;小羊&apos;, &apos;小马&apos;, &apos;小牛&apos;, &apos;小羊&apos;, &apos;小马&apos;, &apos;小牛&apos;, &apos;小羊&apos;]
+</code></pre><p>如果只是为了初始化指定列表长度的功能，那么可以采取以下方式<br>如</p>
+<pre><code>a = [None] * 5
+print(a)
+</code></pre><p>输出</p>
+<pre><code>[None, None, None, None, None]
+</code></pre><h2 id="1-4、检查某个元素是否是序列的成员（元素）"><a href="#1-4、检查某个元素是否是序列的成员（元素）" class="headerlink" title="1.4、检查某个元素是否是序列的成员（元素）"></a>1.4、检查某个元素是否是序列的成员（元素）</h2><p>可以使用in关键字来检查<br><strong>语法格式:</strong></p>
+<pre><code>value in sequence
+</code></pre><p>例子</p>
+<pre><code>animal = [&quot;小马&quot;, &quot;小牛&quot;, &quot;小羊&quot;]
+print(&quot;小马&quot; in animal)
+print(&quot;xiaoma&quot; in animal)
+print(&quot;xiaoma&quot; not in animal)
+</code></pre><p>输出</p>
+<pre><code>True
+False
+True
+</code></pre><h2 id="1-5、计算序列的长度、最大值和最小值"><a href="#1-5、计算序列的长度、最大值和最小值" class="headerlink" title="1.5、计算序列的长度、最大值和最小值"></a>1.5、计算序列的长度、最大值和最小值</h2><p>计算序列的长度使用内置函数len()、最大值使用内置函数max()和最小值使用内置函数min()<br>如：</p>
+<pre><code>a = [&quot;1&quot;, &quot;5&quot;, &quot;2&quot;]
+print(&quot;a序列的长度&quot;, len(a))
+print(&quot;a序列的最大元素&quot;, max(a))
+print(&quot;a序列的最小元素&quot;, min(a))
+</code></pre><p>输出</p>
+<pre><code>a序列的长度 3
+a序列的最大元素 5
+a序列的最小元素 1
+</code></pre><p>python中的其他内置函数及其作用</p>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>list()</td>
+<td>将序列转化为列表</td>
+</tr>
+<tr>
+<td>str</td>
+<td>将序列转化为字符串</td>
+</tr>
+<tr>
+<td>sum()</td>
+<td>计算元素和</td>
+</tr>
+<tr>
+<td>sorted</td>
+<td>对元素进行排序</td>
+</tr>
+<tr>
+<td>reversed()</td>
+<td>反向序列元素</td>
+</tr>
+<tr>
+<td>enumerate()</td>
+<td>将序列组合为一个索引序列，多用在for循环中</td>
+</tr>
+</tbody>
+</table>
+<p>如</p>
+<pre><code>a = [&quot;1&quot;, &quot;5&quot;, &quot;2&quot;]
+print(&quot;[1,2,3]序列的元素和&quot;, sum([1,2,3]))
+print(&quot;正序&quot;, sorted(a, reverse=True))
+print(&quot;逆序&quot;, sorted(a, reverse=False))
+</code></pre><h1 id="2、列表（list）"><a href="#2、列表（list）" class="headerlink" title="2、列表（list）"></a>2、列表（list）</h1><p>python中的列表是非常灵活的，列表里的元素内容可以不同，因为他们之间没有任何关系，但是通常情况下我们在一个列表里只放一种数据类型，为得是增加数据的可读性</p>
+<h2 id="2-1、创建与删除列表"><a href="#2-1、创建与删除列表" class="headerlink" title="2.1、创建与删除列表"></a>2.1、创建与删除列表</h2><p><strong>1、使用赋值运算符直接创建列表</strong><br>语法格式如下：</p>
+<pre><code>listname = [element 1, element 2, ......, element n]      
+</code></pre><p><strong>2、创建空列表</strong><br>语法如下：</p>
+<pre><code>emptylist = []
+</code></pre><p><strong>3、创建数值列表</strong><br>可以使用list()函数直接将range()函数循环出口的结果直接转换为列表<br>语法如下：（其中data的类型可以是range对象、字符串、元组或者其他可以迭代类型的数据）</p>
+<pre><code>list(data)
+</code></pre><p>例子：</p>
+<pre><code>print(list(range(10)))
+</code></pre><p>输出</p>
+<pre><code>[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+</code></pre><p><strong>4、删除列表</strong><br>语法格式：</p>
+<pre><code>del listname
+</code></pre><p>值得注意的是在python中有自带的垃圾回收机制会自动销毁不用的列表，故该语句我们比较少用。</p>
+<h2 id="2-2、访问列表元素"><a href="#2-2、访问列表元素" class="headerlink" title="2.2、访问列表元素"></a>2.2、访问列表元素</h2><p>输出列表或者列表的某个元素的语法格式：</p>
+<pre><code>print(listname)或者print(listname[n])
+</code></pre><h2 id="2-3、遍历列表"><a href="#2-3、遍历列表" class="headerlink" title="2.3、遍历列表"></a>2.3、遍历列表</h2><p>遍历列表的方法很多，这边介绍2种最常用的</p>
+<p> <strong>1、使用for循环</strong><br>语法格式：</p>
+<pre><code>for item in listname:
+    # 输出item
+</code></pre><p>例子：</p>
+<pre><code>fruit = [&apos;apple&apos;, &apos;banana&apos;, &apos;orange&apos;, &apos;pear&apos;, &apos;watermelon&apos;]
+for i in fruit:
+    print(i)
+</code></pre><p>输出</p>
+<pre><code>apple
+banana
+orange
+pear
+watermelon
+</code></pre><p><strong>2、使用for循环和enumerate()函数实现</strong><br>使用for循环和enumerate()函数实现输出索引和元素<br>语法格式：</p>
+<pre><code>for index, item in enumerate(listname):
+</code></pre><p>例子</p>
+<pre><code>fruit = [&apos;apple&apos;, &apos;banana&apos;, &apos;orange&apos;, &apos;pear&apos;, &apos;watermelon&apos;]
+for index,i in enumerate(fruit):
+    print(index, i)
+</code></pre><p>输出</p>
+<pre><code>0 apple
+1 banana
+2 orange
+3 pear
+4 watermelon
+</code></pre><h2 id="2-4、添加、删除、修改列表元素"><a href="#2-4、添加、删除、修改列表元素" class="headerlink" title="2.4、添加、删除、修改列表元素"></a>2.4、添加、删除、修改列表元素</h2><p><strong>1、添加元素</strong><br>语法格式如下：</p>
+<pre><code>listname.append(obj)    #速度快，常用
+或者
+使用+号，                #速度太慢
+或者
+insert()函数            #效率低，不推荐
+</code></pre><p>例子：</p>
+<pre><code>fruit = [&apos;apple&apos;, &apos;banana&apos;, &apos;orange&apos;, &apos;pear&apos;, &apos;watermelon&apos;]
+print(&quot;水果的种类有&quot; + str(len(fruit)) + &apos;种&apos;)
+fruit.append(&quot;grape&quot;)
+print(&quot;水果的种类有&quot;+ str(len(fruit)) + &apos;种&apos;)
+</code></pre><p>输出</p>
+<pre><code>水果的种类有5种
+水果的种类有6种
+</code></pre><p>如果要将一个列表里的元素全部添加到另一个列表<br>可以使用下面语句：</p>
+<pre><code>listname.extend(seq)         #seq为要添加进去的列表
+</code></pre><p><strong>2、修改元素</strong><br>直接举例子说明</p>
+<pre><code>fruit = [&apos;apple&apos;, &apos;banana&apos;, &apos;orange&apos;, &apos;pear&apos;, &apos;watermelon&apos;]
+print(fruit)
+fruit[2] = &apos;strawberry&apos;
+print(fruit)
+</code></pre><p>输出</p>
+<pre><code>[&apos;apple&apos;, &apos;banana&apos;, &apos;orange&apos;, &apos;pear&apos;, &apos;watermelon&apos;]
+[&apos;apple&apos;, &apos;banana&apos;, &apos;strawberry&apos;, &apos;pear&apos;, &apos;watermelon&apos;]
+</code></pre><p><strong>3、删除元素</strong></p>
+<p>（1）、根据索引删除</p>
+<p>如：</p>
+<pre><code>fruit = [&apos;apple&apos;, &apos;banana&apos;, &apos;orange&apos;, &apos;pear&apos;, &apos;watermelon&apos;]
+del fruit[1]
+print(fruit)
+</code></pre><p>输出</p>
+<pre><code>[&apos;apple&apos;, &apos;orange&apos;, &apos;pear&apos;, &apos;watermelon&apos;]
+</code></pre><p>（2）、根据元素值删除</p>
+<p>如：</p>
+<pre><code>fruit = [&apos;apple&apos;, &apos;banana&apos;, &apos;orange&apos;, &apos;pear&apos;, &apos;watermelon&apos;]
+value = &quot;apple&quot;
+if fruit.count(value) &gt; 0:    # 判断元素是否存在防止报错
+    fruit.remove(value)
+print(fruit)
+</code></pre><p>输出</p>
+<pre><code>[&apos;banana&apos;, &apos;orange&apos;, &apos;pear&apos;, &apos;watermelon&apos;]
+</code></pre><h2 id="2-5、对列表进行统计计算"><a href="#2-5、对列表进行统计计算" class="headerlink" title="2.5、对列表进行统计计算"></a>2.5、对列表进行统计计算</h2><p><strong>1、获取指定元素出现的次数</strong><br>使用count()函数<br>语法格式：</p>
+<pre><code>listname.count(obj)
+</code></pre><p><strong>2、获取指定元素首次出现的下标</strong><br>使用index（）函数<br>语法格式：</p>
+<pre><code>listname.index(obj)
+</code></pre><p><strong>3、统计数值列表的元素和</strong><br>使用sum()函数</p>
+<pre><code>sum(iterable[,strart])    #iterable为要统计的列表名
+</code></pre><h2 id="2-6、对列表进行排序"><a href="#2-6、对列表进行排序" class="headerlink" title="2.6、对列表进行排序"></a>2.6、对列表进行排序</h2><p><strong>1、使用sort函数进行排序</strong><br>语法格式：</p>
+<pre><code>listname.sort(key=None,reverse=False)
+</code></pre><p>参数说明，key是指定一个比较键，如当key=str.lower时，不区分大小写。<br>reverse=False时为降序，为True时为升序，默认为升序。</p>
+<p>注意sort()函数对字符串进行排序时，先对大写字母进行排序，然后对小写字母进行排序。且对中文排序时，容易出错<br>如</p>
+<pre><code>fruit = [&apos;Apple&apos;, &apos;banana&apos;, &apos;Orange&apos;, &apos;pear&apos;, &apos;watermelon&apos;]
+print(&apos;-------区分大小写-------&apos;)
+fruit.sort()
+print(fruit)
+print(&apos;-------不区分大小写-------&apos;)
+fruit.sort(key=str.lower)
+print(fruit)
+</code></pre><p>输出<br>——-区分大小写——-</p>
+<pre><code>[&apos;Apple&apos;, &apos;Orange&apos;, &apos;banana&apos;, &apos;pear&apos;, &apos;watermelon&apos;]
+-------不区分大小写-------
+[&apos;Apple&apos;, &apos;banana&apos;, &apos;Orange&apos;, &apos;pear&apos;, &apos;watermelon&apos;]
+</code></pre><p><strong>2、使用sorted()函数进行排序</strong><br>作用与sort()基本一样，但是sorted（）不会改变原列表的顺序，sort（）会。<br>语法格式：</p>
+<pre><code>sorted(iterable, key=None,reverse=False)   #iterable为要排序的列表
+</code></pre><p>如</p>
+<pre><code>fruit = [&apos;Apple&apos;, &apos;banana&apos;, &apos;Orange&apos;, &apos;pear&apos;, &apos;watermelon&apos;]
+fruit_a = sorted(fruit)
+print(&quot;原列表顺序不变&quot;, fruit)
+print(fruit_a)
+</code></pre><p>输出</p>
+<pre><code>原列表顺序不变 [&apos;Apple&apos;, &apos;banana&apos;, &apos;Orange&apos;, &apos;pear&apos;, &apos;watermelon&apos;]
+[&apos;Apple&apos;, &apos;Orange&apos;, &apos;banana&apos;, &apos;pear&apos;, &apos;watermelon&apos;]
+</code></pre><h2 id="2-7、列表推导式"><a href="#2-7、列表推导式" class="headerlink" title="2.7、列表推导式"></a>2.7、列表推导式</h2><p>使用列表推导式可以快速生成一个列表，或让摸个列表生成满足指定需求的列表。<br>有以下几种常用方法<br><strong>1、生成指定范围的数值列表</strong><br>语法格式：<br>list = [Expression for var in range]  </p>
+<p>参数说明：list生成的列表名，Expression表达式用于计算新列表的元素<br>var循环变量，range采用range()生成的range对象<br>如生产10个随机数，范围在10到100之间</p>
+<pre><code>import random
+randomnumber = [random.randint(10,100) for i in range(10)]
+print(randomnumber)
+</code></pre><p>输出</p>
+<pre><code>[65, 50, 57, 84, 56, 30, 27, 47, 98, 79]
+</code></pre><p><strong>2、根据列表生成指定需求的列表</strong><br>语法格式：</p>
+<pre><code>newlist = [Expression for var in list]
+</code></pre><p>如</p>
+<pre><code>import random
+price = [100, 200, 300]           # 商品价格
+sale = [int(i*0.5) for i in price]      # 打五折后的价格
+print(sale)
+</code></pre><p>输出</p>
+<pre><code>[50, 100, 150]
+</code></pre><p><strong>3、从列表中选择符合条件的元素组成新的列表</strong><br>语法格式：</p>
+<pre><code>newlist = [Expression for var in list if condition]
+如
+import random
+price = [100, 200, 300]           # 商品价格
+sale = [i for i in price if i &gt; 200]      # 价格大于200的商品价格
+print(sale)
+</code></pre><p>输出</p>
+<pre><code>[300]
+</code></pre><h1 id="3、元组"><a href="#3、元组" class="headerlink" title="3、元组"></a>3、元组</h1><p>元组简单说就是<strong>不可变</strong>的<strong>列表</strong>（不可变序），用于保存不可修改的内容。</p>
+<h2 id="3-1、元组的创建与删除"><a href="#3-1、元组的创建与删除" class="headerlink" title="3.1、元组的创建与删除"></a>3.1、元组的创建与删除</h2><p><strong>1、用赋值运算符直接创建元组</strong><br>语法格式（括号可以省略）</p>
+<pre><code>tuplename = (element 1,element 2,...element n)
+</code></pre><p>如果创建的元组只有一个符号时，需要在元素的后面加个逗号<br>如：</p>
+<pre><code>a = (&quot;a&quot;,)   # 元组
+a = (&quot;a&quot;)    # 字符串
+</code></pre><p><strong>2、创建空元组</strong><br>语法格式</p>
+<pre><code>emptytuple = ()
+</code></pre><p><strong>3、创建数值元组</strong><br>语法格式</p>
+<pre><code>tuple(data)
+</code></pre><p>如</p>
+<pre><code>print(tuple(range(0, 10, 3)))
+</code></pre><p>输出</p>
+<pre><code>(0, 3, 6, 9)
+</code></pre><p><strong>4、删除元组</strong><br>语法格式</p>
+<pre><code>del tuplename
+</code></pre><h2 id="3-2、访问元组元素"><a href="#3-2、访问元组元素" class="headerlink" title="3.2、访问元组元素"></a>3.2、访问元组元素</h2><p><strong>print直接打印元组</strong><br>语法格式</p>
+<pre><code>print(tuplename)         #打印整个元组
+print(tuplename[n])      #打印单个元组元素
+print(tuplement[x:y])    #打印多个元素
+</code></pre><p>当然也可以使用for循环来遍历，语法格式与列表一样</p>
+<h2 id="3-3、修改元组元素"><a href="#3-3、修改元组元素" class="headerlink" title="3.3、修改元组元素"></a>3.3、修改元组元素</h2><p>修改元组里的单个元素的内容，是<strong>不支持</strong>的<br>如</p>
+<pre><code>a = (1,2,3)
+a[1]= &quot;a&quot;
+print(a)
+</code></pre><p>报错</p>
+<pre><code>TypeError: &apos;tuple&apos; object does not support item assignment
+</code></pre><p>但是我们可以把一整个元组重新赋值<br>如</p>
+<pre><code>a = (&apos;1&apos;, 2, 3)
+print(a)
+a = (&apos;1&apos;, 6, 9)
+print(a)
+a = a+a
+print(a)
+</code></pre><p>输出</p>
+<pre><code>(&apos;1&apos;, 2, 3)
+(&apos;1&apos;, 6, 9)
+(&apos;1&apos;, 6, 9, &apos;1&apos;, 6, 9)
+</code></pre><p>注意进行元组的连接时，连接的内容必须都是元组。连接的元组只有一个元素时，不用忘记元素后面的逗号。</p>
+<h2 id="3-4、元组的推导式"><a href="#3-4、元组的推导式" class="headerlink" title="3.4、元组的推导式"></a>3.4、元组的推导式</h2><p>语法格式与列表类似</p>
+<p>例子</p>
+<pre><code>import random
+randomname = (random.randint(10,100) for i in range(5))
+print(&quot;生产的元组为&quot;, randomname)
+</code></pre><p>输出</p>
+<pre><code>生产的元组为 &lt;generator object &lt;genexpr&gt; at 0x000001C573448E60&gt;
+</code></pre><p>可以发现元组推导式生成的结果是一个生成器对象，而不是元组或者列表。这点与列表不同。其中转化成元组用tuple()函数，转化为列表用list函数</p>
+<p>通过for循环遍历，或者使用<strong>next</strong>()方法可以使用元组推导器生成的生成器对象</p>
+<p>如：（<strong>next</strong>()例子）</p>
+<pre><code>import random
+randomname = (i for i in range(3))
+print(randomname.__next__())
+print(randomname.__next__())
+print(randomname.__next__())
+print(tuple(randomname))
+</code></pre><p>输出</p>
+<pre><code>0
+1
+2
+()
+</code></pre><p>如（for循环遍历例子）</p>
+<pre><code>import random
+randomname = (i for i in range(3))
+for i in randomname:
+    print(i, end=&quot; &quot;)
+print(tuple(randomname))
+</code></pre><p>输出</p>
+<pre><code>0 1 2 ()
+</code></pre><h2 id="3-5、元组与列表的区别"><a href="#3-5、元组与列表的区别" class="headerlink" title="3.5、元组与列表的区别"></a>3.5、元组与列表的区别</h2><p>1、元组不可变序列；列表可变序列</p>
+<p>2、元组不能修改、添加，删除单个元素；列表可以</p>
+<p>3、元组只支持切片访问，不支持切片修改；列表都支持</p>
+<p>4、元组访问和处理速度比列表快。使用当只需要对其中的元素进行访问时，，建议使用元组</p>
+<p>5、元组可以作为字典的键；列表不能。</p>
+<h1 id="4、字典"><a href="#4、字典" class="headerlink" title="4、字典"></a>4、字典</h1><p>字典是无序的可变序列。保存内容是以“键—值对”的形式存放，键是唯一的，值可以是多个的。</p>
+<p><strong>字典的主要特征：</strong><br>1、通过键来读取而不是索引</p>
+<p>2、字典是任意对象的无序集合</p>
+<p>3、字典是可变的，并且可以任意嵌套。</p>
+<p>4、字典的键必须是唯一和不可变的。</p>
+<h2 id="4-1、字典的创建与删除"><a href="#4-1、字典的创建与删除" class="headerlink" title="4.1、字典的创建与删除"></a>4.1、字典的创建与删除</h2><p><strong>创建字典语法格式</strong></p>
+<pre><code>dictionary = {&apos;key1&apos;:&apos;value1&apos;,&apos;key1&apos;:&apos;value1&apos;,...,&apos;keyn&apos;:&apos;valuen&apos;,}
+</code></pre><p><strong>创建空字典的语法</strong></p>
+<pre><code>dictionary = {}或者dictionary = dict()
+</code></pre><p><strong>1、通过映射函数创建字典</strong></p>
+<pre><code>dicttionary = dict(zip(list1,list2))   #list1作为键的列表  list2作为值的列表
+</code></pre><p>注意如果list1与list2长度不一样，则与最短的列表长度一样</p>
+<p><strong>2、通过“键——值对”创建字典</strong></p>
+<pre><code>dictionary = dict(key1=value1,key2=value2,...,keyn=value n)
+</code></pre><p>如</p>
+<pre><code>a = dict(福州=&apos;3&apos;,)
+print(a)
+</code></pre><p>输出</p>
+<pre><code>{&apos;福州&apos;: &apos;3&apos;}
+</code></pre><p>python中还可以使用dict对象的fromkeys()方法创建值为空的字典<br>语法格式：</p>
+<pre><code>dictionary = dict.fromkeys(list1)   #list1为键的列表
+</code></pre><p>当然还有可以通过存在的元组和列表来创建字典（列表不能作为键，字典可以）<br>如</p>
+<pre><code>list = [1, 2, 3]
+b = (&apos;1&apos;, &apos;2&apos;, &apos;3&apos;)
+c = {b: list}
+print(c)
+</code></pre><p>输出</p>
+<pre><code>{(&apos;1&apos;, &apos;2&apos;, &apos;3&apos;): [1, 2, 3]}
+</code></pre><p><strong>3、删除字典</strong><br>语法格式</p>
+<pre><code>del dictionary
+</code></pre><p><strong>4、把字典变为空字典</strong><br>语法格式</p>
+<pre><code>dictionary.clear()
+</code></pre><p>当然还有pop(),popitem（）方法。</p>
+<h2 id="4-2、通过键—值对访问字典"><a href="#4-2、通过键—值对访问字典" class="headerlink" title="4.2、通过键—值对访问字典"></a>4.2、通过键—值对访问字典</h2><p>如果想直接输出字典的内容直接<code>printf（dictionary）</code>，但是我们一般不这么做。一般是根据指定的键得到我们想要的结果。<br>如</p>
+<pre><code>print(dictionary([key])
+</code></pre><p>但是这样容易出错，我们一般使用以下语句</p>
+<pre><code>print(dictionary[key] if  &apos;key &apos; in dictionary else &apos;我的字典里没有该内容&apos;)
+</code></pre><p>python中推荐使用字典对象的<code>get()</code>方法获取指定的键的值<br>语法格式如下：</p>
+<pre><code>dictionary.get(key,[default])
+</code></pre><p>说明defaults是当指定的键不存的时候就返回一个默认值，default可以省略，如果省略返回None</p>
+<h2 id="4-3、遍历字典"><a href="#4-3、遍历字典" class="headerlink" title="4.3、遍历字典"></a>4.3、遍历字典</h2><p><strong>1、通过items()方法遍历</strong><br>语法格式：</p>
+<pre><code>dictionary.items()  #返回可以遍历的j键-值元组列表
+</code></pre><p><strong>2、for循环遍历该元组列表</strong><br>如</p>
+<pre><code>dictionary = {&apos;qq&apos;:&apos;12333&apos;}
+for i in dictionary.items():
+    print(i)
+    或
+for key,value in dictionary():
+    print(value)
+</code></pre><h2 id="4-4、添加、修改、删除字典元素"><a href="#4-4、添加、修改、删除字典元素" class="headerlink" title="4.4、添加、修改、删除字典元素"></a>4.4、添加、修改、删除字典元素</h2><p><strong>1、添加元素</strong><br>语法格式</p>
+<pre><code>dictionary[key] = value
+</code></pre><p>注意如果键名之前已经存在，那么将换替换该键的值</p>
+<p>2、删除某个元素<br>如：</p>
+<pre><code>dictionary = dict[key]
+或者
+if &quot;key&quot; in dictionary:    #防止键不存在时报错
+    dictionary = dict[key]
+</code></pre><h2 id="4-5、字典推导式"><a href="#4-5、字典推导式" class="headerlink" title="4.5、字典推导式"></a>4.5、字典推导式</h2><p>其表现形式与列表推导式相似，这边不做说明</p>
+<h1 id="5、列表、元组、字典的区别"><a href="#5、列表、元组、字典的区别" class="headerlink" title="5、列表、元组、字典的区别"></a>5、列表、元组、字典的区别</h1><table>
+<thead>
+<tr>
+<th>数据结构</th>
+<th>是否可变</th>
+<th>是否有序</th>
+<th>定义符号</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>列表</td>
+<td>可变</td>
+<td>有序</td>
+<td>[]</td>
+</tr>
+<tr>
+<td>元组</td>
+<td>不可变</td>
+<td>有序</td>
+<td>()</td>
+</tr>
+<tr>
+<td>字典</td>
+<td>可变</td>
+<td>无序</td>
+<td>{key,value}</td>
+</tr>
+</tbody>
+</table>
+<p>题目：创建一个包含1~50之间所有素数的列表，打印显示该列表;随后只保留该列表前5个数字，删除其余内容并打印输出相应结果;再将每个元素值加。上20，显示列表内容。</p>
+<pre><code>prime_number = [2]
+for i in range(3, 51):
+    for j in range(2, i):
+        if i % j != 0:
+            n = i
+            if j == n-1:
+                prime_number.append(i)
+                break
+        else:
+            break
+print(prime_number)
+prime_number = prime_number[:5]
+for k in range(5):
+    prime_number[k] = prime_number[k] + 20
+print(prime_number)
+</code></pre><h1 id="6、逻辑判断内置函数"><a href="#6、逻辑判断内置函数" class="headerlink" title="6、逻辑判断内置函数"></a>6、逻辑判断内置函数</h1><table>
+<thead>
+<tr>
+<th>all(iterable)</th>
+<th>集合中的元素都为真的时候为真，注意空字串返回为True</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>any(iterable)</td>
+<td>集合中的元素有一个为真的时候为真，特别是空串返回False</td>
+</tr>
+<tr>
+<td>cmp（x,y）</td>
+<td>x&lt;y，返回负数；x = y,返回0；x&gt;y返回正数</td>
+</tr>
+</tbody>
+</table>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+      <div>
+        
+
+
+
+  
+
+
+
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>wr</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    
+    <a href="https://wrgiun.github.io/2019/09/12/python知识整合（序列）/" title="python知识整合（序列）">https://wrgiun.github.io/2019/09/12/python知识整合（序列）/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/09/12/python知识整合（基础）/" rel="next" title="python知识整合（基础）">
+                <i class="fa fa-chevron-left"></i> python知识整合（基础）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/09/12/Python知识整合（字符串及正则表达式）/" rel="prev" title="Python知识整合（字符串及正则表达式）">
+                Python知识整合（字符串及正则表达式） <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="wr">
+            
+              <p class="site-author-name" itemprop="name">wr</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">46</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">10</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1、序列"><span class="nav-number">1.</span> <span class="nav-text">1、序列</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1索引（indexing）"><span class="nav-number">1.1.</span> <span class="nav-text">1.1索引（indexing）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2、切片（Slicing）"><span class="nav-number">1.2.</span> <span class="nav-text">1.2、切片（Slicing）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-3、序列相加与相乘"><span class="nav-number">1.3.</span> <span class="nav-text">1.3、序列相加与相乘</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-4、检查某个元素是否是序列的成员（元素）"><span class="nav-number">1.4.</span> <span class="nav-text">1.4、检查某个元素是否是序列的成员（元素）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-5、计算序列的长度、最大值和最小值"><span class="nav-number">1.5.</span> <span class="nav-text">1.5、计算序列的长度、最大值和最小值</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2、列表（list）"><span class="nav-number">2.</span> <span class="nav-text">2、列表（list）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1、创建与删除列表"><span class="nav-number">2.1.</span> <span class="nav-text">2.1、创建与删除列表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2、访问列表元素"><span class="nav-number">2.2.</span> <span class="nav-text">2.2、访问列表元素</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3、遍历列表"><span class="nav-number">2.3.</span> <span class="nav-text">2.3、遍历列表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-4、添加、删除、修改列表元素"><span class="nav-number">2.4.</span> <span class="nav-text">2.4、添加、删除、修改列表元素</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-5、对列表进行统计计算"><span class="nav-number">2.5.</span> <span class="nav-text">2.5、对列表进行统计计算</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-6、对列表进行排序"><span class="nav-number">2.6.</span> <span class="nav-text">2.6、对列表进行排序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-7、列表推导式"><span class="nav-number">2.7.</span> <span class="nav-text">2.7、列表推导式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3、元组"><span class="nav-number">3.</span> <span class="nav-text">3、元组</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1、元组的创建与删除"><span class="nav-number">3.1.</span> <span class="nav-text">3.1、元组的创建与删除</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2、访问元组元素"><span class="nav-number">3.2.</span> <span class="nav-text">3.2、访问元组元素</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3、修改元组元素"><span class="nav-number">3.3.</span> <span class="nav-text">3.3、修改元组元素</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-4、元组的推导式"><span class="nav-number">3.4.</span> <span class="nav-text">3.4、元组的推导式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-5、元组与列表的区别"><span class="nav-number">3.5.</span> <span class="nav-text">3.5、元组与列表的区别</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4、字典"><span class="nav-number">4.</span> <span class="nav-text">4、字典</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1、字典的创建与删除"><span class="nav-number">4.1.</span> <span class="nav-text">4.1、字典的创建与删除</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2、通过键—值对访问字典"><span class="nav-number">4.2.</span> <span class="nav-text">4.2、通过键—值对访问字典</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-3、遍历字典"><span class="nav-number">4.3.</span> <span class="nav-text">4.3、遍历字典</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-4、添加、修改、删除字典元素"><span class="nav-number">4.4.</span> <span class="nav-text">4.4、添加、修改、删除字典元素</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-5、字典推导式"><span class="nav-number">4.5.</span> <span class="nav-text">4.5、字典推导式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5、列表、元组、字典的区别"><span class="nav-number">5.</span> <span class="nav-text">5、列表、元组、字典的区别</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6、逻辑判断内置函数"><span class="nav-number">6.</span> <span class="nav-text">6、逻辑判断内置函数</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">wr</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.0.0</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+  
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.0"></script>
+
+  <script src="/js/src/motion.js?v=7.0.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=7.0.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=7.0.0"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.0"></script>
+<script src="/js/src/post-details.js?v=7.0.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=7.0.0"></script>
+
+
+
+  
+
+
+  
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  <style>
+    .copy-btn {
+      display: inline-block;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 20px;
+      color: #333;
+      white-space: nowrap;
+      vertical-align: middle;
+      cursor: pointer;
+      background-color: #eee;
+      background-image: linear-gradient(#fcfcfc, #eee);
+      border: 1px solid #d5d5d5;
+      border-radius: 3px;
+      user-select: none;
+      outline: 0;
+    }
+
+    .highlight-wrap .copy-btn {
+      transition: opacity .3s ease-in-out;
+      opacity: 0;
+      padding: 2px 6px;
+      position: absolute;
+      right: 4px;
+      top: 8px;
+    }
+
+    .highlight-wrap:hover .copy-btn,
+    .highlight-wrap .copy-btn:focus {
+      opacity: 1
+    }
+
+    .highlight-wrap {
+      position: relative;
+    }
+  </style>
+  <script>
+    $('.highlight').each(function(i, e) {
+      var $wrap = $('<div>').addClass('highlight-wrap');
+      $(e).after($wrap);
+      $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function(e) {
+        var code = $(this).parent().find('.code').find('.line').map(function(i, e) {
+          return $(e).text();
+        }).toArray().join('\n');
+        var ta = document.createElement('textarea');
+        var range = document.createRange(); //For Chrome
+        var sel = window.getSelection(); //For Chrome
+        var yPosition = window.pageYOffset || document.documentElement.scrollTop;
+        ta.style.top = yPosition + 'px'; //Prevent page scroll
+        ta.style.position = 'absolute';
+        ta.style.opacity = '0';
+        ta.value = code;
+        ta.textContent = code; //For FireFox
+        ta.contentEditable = true;
+        ta.readOnly = false;
+        document.body.appendChild(ta);
+        range.selectNode(ta);
+        sel.removeAllRanges();
+        sel.addRange(range);
+        ta.setSelectionRange(0, code.length);
+        var result = document.execCommand('copy');
+        
+          if (result) $(this).text('复制成功');
+          else $(this).text('复制失败');
+        
+        ta.blur(); //For iOS
+        $(this).blur();
+      })).on('mouseleave', function(e) {
+        var $b = $(this).find('.copy-btn');
+        setTimeout(function() {
+          $b.text('复制');
+        }, 300);
+      }).append(e);
+    })
+  </script>
+
+
+  
+
+</body>
+</html>
