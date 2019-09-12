@@ -336,6 +336,845 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://wrgiun.github.io/2019/08/02/bugku-16-26-writeup-misc/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wr">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="giun">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/08/02/bugku-16-26-writeup-misc/" class="post-title-link" itemprop="url">bugku 16-26 writeup(misc)</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-08-02 20:35:36 / 修改时间：21:45:42" itemprop="dateCreated datePublished" datetime="2019-08-02T20:35:36+08:00">2019-08-02</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/bugkuCTF/" itemprop="url" rel="index"><span itemprop="name">bugkuCTF</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="十六、想蹭网络先破解wifi密码"><a href="#十六、想蹭网络先破解wifi密码" class="headerlink" title="十六、想蹭网络先破解wifi密码"></a>十六、想蹭网络先破解wifi密码</h2><p>题目给了我们一个数据包，且提示我们flag为wifi密码，</p>
+<h3 id="第一步："><a href="#第一步：" class="headerlink" title="第一步："></a>第一步：</h3><p>打开文件，WIFI连接认证的重点在WPA的四次握手包，即eapol协议的包，过滤一下：<br>刚好四个包<br><img src="/2019/08/02/bugku-16-26-writeup-misc/1.png" alt="在这里插入图片描述"></p>
+<h3 id="第二步"><a href="#第二步" class="headerlink" title="第二步"></a>第二步</h3><p>既然是密码，还给了我们数据包，那么我们开始爆破，首先需要一个字典</p>
+<p>因为手机号为11位，给了我们7位，故我们使用一下python代码生成字典<br>代码如下：</p>
+<pre><code>import string
+s = string.digits
+f = open(&apos;1.txt&apos;, &apos;w&apos;)
+for i in s:
+    for j in s:
+        for k in s:
+            for o in s:
+                f.write(&quot;1391040&quot;+i+j+k+o+&apos;\n&apos;)
+</code></pre><h3 id="第三步"><a href="#第三步" class="headerlink" title="第三步"></a>第三步</h3><p>使用aircrack-ng进行爆破。</p>
+<p>首先进行安装aircrack-ng，我在kali下进行操作。无法锁定的原因是我之前使用终端时，可能强制退出，还有命令在执行，那么我们就强制解除,命令如下</p>
+<pre><code>sudo rm /var/cache/apt/archives/lock
+sudo rm /var/lib/dpkg/lock
+</code></pre><p><img src="/2019/08/02/bugku-16-26-writeup-misc/2.png" alt="在这里插入图片描述"><br>然后进行安装<strong>aircrack-ng</strong><br>命令如下</p>
+<pre><code>apt-get install aircrack-ng
+</code></pre><p>安装好用，进行爆破，得出密码</p>
+<pre><code>aircrack-ng -a2 wifi.cap -w password.txt
+</code></pre><p><img src="/2019/08/02/bugku-16-26-writeup-misc/3.png" alt="在这里插入图片描述"><br> <strong>aircrack-ng使用</strong></p>
+<pre><code>aircrack-ng -w 字典文件 目标 
+
+破解KEY,漫长的过程.漫不漫长取决于两个方面:一是网管的聪明程度(能否设置出复杂的密码),二是电脑的速度. 
+usage:aircrack-ng[options]&lt;.cap/.ivsfile(s)&gt;
+
+Commonoptions:
+-a&lt;amode&gt;:暴破(1/WEP,2/WPA-PSK)
+
+-e&lt;essid&gt;:选择essid为目标
+
+-b&lt;bssid&gt;:选择ap的mac为目标,就是破解识别的关键字
+
+-q:使用安静模式,无数出模式
+
+-C&lt;macs&gt;:将所有的AP合并为一个虚拟的
+
+–help:显示这个帮助
+</code></pre><h2 id="十七、linux2"><a href="#十七、linux2" class="headerlink" title="十七、linux2"></a>十七、linux2</h2><p>根据题目提示，flag为key{}，那么使用winhex打开文件，并搜索key发现flag.</p>
+<h2 id="十八、账号被盗了"><a href="#十八、账号被盗了" class="headerlink" title="十八、账号被盗了"></a>十八、账号被盗了</h2><p>点击getf lag，发现没有管理员权限，那么我们就想到cookie,使用抓包工具将cookie的值，改成ture，即可得到一个网站然而发现该网站我怎么也进去，打扰了。</p>
+<h2 id="十九、细心的大象"><a href="#十九、细心的大象" class="headerlink" title="十九、细心的大象"></a>十九、细心的大象</h2><p>1、下载图片，使用winhex打开没发现什么有用的信息</p>
+<p>2、用binwalk查看图片是否包含其他文件，成功分离出一个压缩文件<br><img src="/2019/08/02/bugku-16-26-writeup-misc/4.png" alt="在这里插入图片描述"><br>3、发现该压缩文件里有个图片是加密的，于是我们寻找密码</p>
+<p>4、在用winhex看一下大象的图片，还是没发现重要信息，我们打开文件的属性，去看看文件的详细信息里面有什么信息，发现一串类似于base64加密的东西。<br><img src="/2019/08/02/bugku-16-26-writeup-misc/5.png" alt="在这里插入图片描述"><br>5、把该串信息当作密码输入，发现失败了，base64解密后，再输入，可以得到以下图片<br><img src="/2019/08/02/bugku-16-26-writeup-misc/6.png" alt="在这里插入图片描述"><br>使用winhex打开修改图片的高为500，就可以在图片里看到flag了<br><img src="/2019/08/02/bugku-16-26-writeup-misc/7.png" alt="在这里插入图片描述"></p>
+<h2 id="二十、爆照"><a href="#二十、爆照" class="headerlink" title="二十、爆照"></a>二十、爆照</h2><p>1、首先对文件进行分析，发现1个压缩包，压缩包里有一个动态图和8个文件。更具文件的大小可以发现88、888、8888比较特殊。flag应该在这3张图片里。</p>
+<p>使用winhex打开可以依次打开这3个文件可以发现这3个文件都是jpg文件。修改后缀名为jpg</p>
+<p>可以发现88文件有个二维码，扫描得bilibili</p>
+<p><img src="/2019/08/02/bugku-16-26-writeup-misc/8.png" alt="在这里插入图片描述"><br>888文件是个图片，查看文件详细信息可以发现一段base64加密的数据，解密得silisili<br><img src="/2019/08/02/bugku-16-26-writeup-misc/9.png" alt="在这里插入图片描述"><br>8888文件修改后缀名得到一张图片，详细信息没有有用信息，使用binwalk分析下，发现了一个压缩包。压缩包里有一个二维码图片，扫描得panama<br><img src="/2019/08/02/bugku-16-26-writeup-misc/10.png" alt="在这里插入图片描述"><br>故该题flag为{bilibili_silisili_panama}</p>
+<h2 id="二十一、猫片（安恒）"><a href="#二十一、猫片（安恒）" class="headerlink" title="二十一、猫片（安恒）"></a>二十一、猫片（安恒）</h2><p>根据题目提示，这样应该是LBS隐写<br><img src="/2019/08/02/bugku-16-26-writeup-misc/11.png" alt="在这里插入图片描述"><br>1、下载附件修改后缀名为png</p>
+<p>2、使用stegsolve打开，使用其DATA extract功能进行分析，根据提示为LSB,BGR隐写，经过下图操作，保存为png文件。<br><img src="/2019/08/02/bugku-16-26-writeup-misc/12.png" alt="在这里插入图片描述"><br>3、发现图片打不开，使用winhex打开查看，进行下图操作，然后保存，发现是半张二维码<br><img src="/2019/08/02/bugku-16-26-writeup-misc/13.png" alt="在这里插入图片描述"></p>
+<p>4、进行图片高度的修改，可以得到一张完整的二维码，扫描下载flag.rar压缩包<br><img src="/2019/08/02/bugku-16-26-writeup-misc/14.png" alt="在这里插入图片描述"><br>打开文件，有上面的错误，flag文件里的内容，有点气，费尽脑子，发现无可奈何，于是开始查各种资料。<br><img src="/2019/08/02/bugku-16-26-writeup-misc/15.png" alt="在这里插入图片描述"><br>发现是ntfs文件数据流隐写，就说题目的提示为什么ntfs没用到。<br>使用ntfsstreamsEditor工具查找数据流，然后导出（注意这边一个坑：flag.rar这个压缩文件一定要用winrar来解压才能找得到数据流）</p>
+<p><img src="/2019/08/02/bugku-16-26-writeup-misc/16.png" alt="在这里插入图片描述"><br>发现导出的数据流文件是python反编译文件。直接扔到在线我就进行python反编译  ，<a href="https://tool.lu/pyc/" target="_blank" rel="noopener">https://tool.lu/pyc/</a><br>得到以下结果</p>
+<pre><code>import base64
+
+def encode():
+    flag = &apos;*************&apos;
+    ciphertext = []
+    for i in range(len(flag)):
+        s = chr(i ^ ord(flag[i]))
+        if i % 2 == 0:
+            s = ord(s) + 10
+        else:
+            s = ord(s) - 10
+        ciphertext.append(str(s))
+
+    return ciphertext[::-1]
+
+ciphertext = [
+    &apos;96&apos;,
+    &apos;65&apos;,
+    &apos;93&apos;,
+    &apos;123&apos;,
+    &apos;91&apos;,
+    &apos;97&apos;,
+    &apos;22&apos;,
+    &apos;93&apos;,
+    &apos;70&apos;,
+    &apos;102&apos;,
+    &apos;94&apos;,
+    &apos;132&apos;,
+    &apos;46&apos;,
+    &apos;112&apos;,
+    &apos;64&apos;,
+    &apos;97&apos;,
+    &apos;88&apos;,
+    &apos;80&apos;,
+    &apos;82&apos;,
+    &apos;137&apos;,
+    &apos;90&apos;,
+    &apos;109&apos;,
+    &apos;99&apos;,
+    &apos;112&apos;]
+</code></pre><p>进行解密脚本的编写</p>
+<pre><code>def decode():
+    ciphertext = [
+        &apos;96&apos;,
+        &apos;65&apos;,
+        &apos;93&apos;,
+        &apos;123&apos;,
+        &apos;91&apos;,
+        &apos;97&apos;,
+        &apos;22&apos;,
+        &apos;93&apos;,
+        &apos;70&apos;,
+        &apos;102&apos;,
+        &apos;94&apos;,
+        &apos;132&apos;,
+        &apos;46&apos;,
+        &apos;112&apos;,
+        &apos;64&apos;,
+        &apos;97&apos;,
+        &apos;88&apos;,
+        &apos;80&apos;,
+        &apos;82&apos;,
+        &apos;137&apos;,
+        &apos;90&apos;,
+        &apos;109&apos;,
+        &apos;99&apos;,
+        &apos;112&apos;]
+    ciphertext.reverse()             # 加密中使用ciphertext[::-1]进行取反，故使用reverse取反，
+    flag = &apos;&apos;
+    for i in range(len(ciphertext)):     # 加密中使用的是flag的长度，而ciphertext与flag长度一样
+        if i % 2 == 0:
+            s = int(ciphertext[i]) - 10    # 加密中s的值其实就是int(ciphertext[i])
+        else:
+            s = int(ciphertext[i]) + 10
+        s = chr(i ^ s)                    # 加密中为i和flag异或，那么i与s异或即可的到flag
+        flag += s
+    return flag
+
+if __name__ == &apos;__main__&apos;:
+    flag = decode()
+    print(flag)
+</code></pre><h2 id="二十二、多彩"><a href="#二十二、多彩" class="headerlink" title="二十二、多彩"></a>二十二、多彩</h2><p>下载图片，放到Stegsolve里面跑下。<br>发现了<br><img src="/2019/08/02/bugku-16-26-writeup-misc/17.png" alt="在这里插入图片描述"><br>图片的名称又是lipstick.png (lipstick是口红意思），这边又有YSL，所以怀疑与YSL口红有关(圣罗兰口红).使用data extract分析下，发现PK开头，直接save bin 存为zip格式<br>![在这里插入图片描述]bugku-16-26-writeup-misc\18.png)<br>发现文件打不开，于是使用winhex打开，进行图中操作，成功打开文件，发现flag.txt文件加密</p>
+<p><img src="/2019/08/02/bugku-16-26-writeup-misc/20.png" alt="在这里插入图片描述"><br>然后解压文件会产生错误，这里有个小坑注意，不能使用winrar解压，要使用360压缩等解压。<br><img src="/2019/08/02/bugku-16-26-writeup-misc/19.png" alt="在这里插入图片描述"><br>未完待续，卡住了这题</p>
+<h2 id="二十三、旋转跳跃"><a href="#二十三、旋转跳跃" class="headerlink" title="二十三、旋转跳跃"></a>二十三、旋转跳跃</h2><p>一看题目，提示我们密码，还是音频文件，目测是音频隐写。<br>上工具MP3Stego。可以参考我的<a href="https://mp.csdn.net/postedit/89817197" target="_blank" rel="noopener">这篇博客</a><br><img src="/2019/08/02/bugku-16-26-writeup-misc/E:/hexo\blog\wrgiun\source\_posts\bugku-16-26-writeup-misc\22.png" alt="在这里插入图片描述"><br>可以得到一个txt文件，，得到flag<br><img src="/2019/08/02/bugku-16-26-writeup-misc/21.png" alt="在这里插入图片描述"></p>
+<h2 id="二十四、普通的二维码"><a href="#二十四、普通的二维码" class="headerlink" title="二十四、普通的二维码"></a>二十四、普通的二维码</h2><p>扫描会得到一句话：我不会告诉你flag就在这里。使用winhex打开发现最后一段数字，应该是8进制数。<br><img src="/2019/08/02/bugku-16-26-writeup-misc/23.png" alt="在这里插入图片描述"><br>编写python脚本转ASCII码，即可得到flag</p>
+<pre><code>a = &apos;146154141147173110141166145137171060125137120171137163143162151160164137117164143137124157137124145156137101163143151151041175&apos;
+flag = &apos;&apos;
+for i in range(len(a) // 3):
+    flag += chr(int(a[i * 3:i * 3 + 3], 8))     # 八进制3为一个ASCII码
+print(flag)
+</code></pre><h2 id="二十五、乌云邀请码"><a href="#二十五、乌云邀请码" class="headerlink" title="二十五、乌云邀请码"></a>二十五、乌云邀请码</h2><p>经过一些尝试，原理是LSB隐写，使用Stegsolve工具的Data Extract功能即可得到flag<br><img src="/2019/08/02/bugku-16-26-writeup-misc/24.png" alt="在这里插入图片描述"></p>
+<h2 id="二十六、"><a href="#二十六、" class="headerlink" title="二十六、"></a>二十六、</h2><p>下载附件，发现里面有一张图片，和一个压缩包，且压缩包里也有一个一模一样不过是加密的图片。<br>1、于是我们想到明文攻击。使用ARCHPR工具进行攻击。</p>
+<p>2、注意把logo压缩成压缩包，并且把flag.zip的压缩包里的doc文件删除。</p>
+<p>3、这边有一个坑，我们的压缩算法要与flag.zip的压缩算法一样才可以。我卡了好久在这。</p>
+<p>4、可以复制flag.zip然后存入logo.png文件，然后修改名字为logo.zip。</p>
+<p>5、可以得到口令，输入口令我们发现是一个笑脸<br><img src="/2019/08/02/bugku-16-26-writeup-misc/26.png" alt="在这里插入图片描述"><br>进行binwalk文件分离<br><img src="/2019/08/02/bugku-16-26-writeup-misc/27.png" alt="在这里插入图片描述"><br>然后在docProps文件下有个flag.txt，进行base64解码即可得flag。<br>破解zip加密的常见的几种方法，可以参考这个大佬的<a href="https://www.cnblogs.com/ECJTUACM-873284962/p/9387711.html" target="_blank" rel="noopener">博客</a></p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://wrgiun.github.io/2019/08/02/bugku-1-15-writeup-misc/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wr">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="giun">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/08/02/bugku-1-15-writeup-misc/" class="post-title-link" itemprop="url">bugku 1-15 writeup(misc)</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-08-02 20:22:59 / 修改时间：20:38:45" itemprop="dateCreated datePublished" datetime="2019-08-02T20:22:59+08:00">2019-08-02</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/bugkuCTF/" itemprop="url" rel="index"><span itemprop="name">bugkuCTF</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="一、这是一张单纯的图片"><a href="#一、这是一张单纯的图片" class="headerlink" title="一、这是一张单纯的图片"></a>一、这是一张单纯的图片</h2><p>保存图片，使用记事本打开图片，发现末尾有编码的一段文字<br><img src="/2019/08/02/bugku-1-15-writeup-misc/1.png" alt="在这里插入图片描述"><br>在网页中&amp;#开头的是HTML实体，一些字符在 HTML 中是预留的，拥有特殊的含义，比如小于号‘&lt;’用于定义 HTML 标签的开始。如果我们希望浏览器正确地显示这些字符，我们必须在 HTML 源码中插入字符实体。详情请看<a href="http://baike.baidu.com/view/4757776.htm" target="_blank" rel="noopener">http://baike.baidu.com/view/4757776.htm</a></p>
+<p>如何把汉字转换成HTML实体呢？</p>
+<p>其实很简单，汉字的HTML实体由三部分组成，”&amp;#+ASCII+;“ 即可。<br>在线转化链接<br><a href="https://uni2ascii.supfree.net/" target="_blank" rel="noopener">https://uni2ascii.supfree.net/</a></p>
+<p>解密即可得flag</p>
+<h2 id="二、隐写"><a href="#二、隐写" class="headerlink" title="二、隐写"></a>二、隐写</h2><p><strong>前置知识</strong><br>png图片的参数IHDR</p>
+<p>文件头数据块IHDR(header chunk)：它包含有PNG文件中存储的图像数据的基本信息，并要作为第一个数据块出现在PNG数据流中，而且一个PNG数据流中只能有一个文件头数据块。</p>
+<p>文件头数据块由13字节组成，它的格式如下表所示。<br><img src="/2019/08/02/bugku-1-15-writeup-misc/2.png" alt="在这里插入图片描述"><br>找到IHDR，然后修改A1为F1,即可得到flag.</p>
+<h2 id="三、telnet"><a href="#三、telnet" class="headerlink" title="三、telnet"></a>三、telnet</h2><p><strong>前置知识：</strong><br>Telnet协议是TCP/IP协议族中的一员，是Internet远程登录服务的标准协议和主要方式。它为用户提供了在本地计算机上完成远程主机工作的能力</p>
+<p>打开题目，下载数据包，使用wireshark软件打开，过滤telnet数据包，寻找flag<br><img src="/2019/08/02/bugku-1-15-writeup-misc/3.png" alt="在这里插入图片描述"></p>
+<h2 id="四、眼见非实-ISCCCTF"><a href="#四、眼见非实-ISCCCTF" class="headerlink" title="四、眼见非实(ISCCCTF)"></a>四、眼见非实(ISCCCTF)</h2><p>得到文件：zip ，无法解压用winhex打开，发现文件头是：504B0304<br>是zip文件，改后缀为zip解压，得到word文档，打开错误，继续改后缀为zip解压得到很多文件，最后在document.xml文件中发现flag。</p>
+<h2 id="五、又一张图片，还单纯吗"><a href="#五、又一张图片，还单纯吗" class="headerlink" title="五、又一张图片，还单纯吗"></a>五、又一张图片，还单纯吗</h2><p>使用StegSolve打开使用其analyse中的frame browser发现flag</p>
+<h2 id="六、猜"><a href="#六、猜" class="headerlink" title="六、猜"></a>六、猜</h2><p>根据题目提示：进行<a href="http://image.baidu.com/?fr=shitu" target="_blank" rel="noopener">在线识图</a>，即可得出flag</p>
+<h2 id="七、宽带信息泄露"><a href="#七、宽带信息泄露" class="headerlink" title="七、宽带信息泄露"></a>七、宽带信息泄露</h2><p>bin文件是二进制文件，那么就用routerpassview工具打开，发现是个配置文件，题目说是宽带用户名，我们尝试下搜索username，flag为flag{053700357621}<br><img src="/2019/08/02/bugku-1-15-writeup-misc/4.png" alt="在这里插入图片描述"></p>
+<h2 id="八、隐写2"><a href="#八、隐写2" class="headerlink" title="八、隐写2"></a>八、隐写2</h2><p>1、下载图片，首先思路是用winHex打开，发现没有内容。修改文件后缀名为zip,发现里面包含了2个文件，一个是密码提示文件，一个是flag文件。</p>
+<p>2、通过百度可以知道红桃k为查理曼，雅典娜为黑桃Q,梅<br>花J代表着兰斯洛特<br>（扑克牌的J、Q、K分别代表着侍卫、王后、国王）<br>使用密码为KJQ（王后和国王间有个小三），观察键盘可以发现面应数字为871（提示密码为3位数）.<br>当然也可以使用APCHPR进行爆破<br><img src="/2019/08/02/bugku-1-15-writeup-misc/5.png" alt="在这里插入图片描述"><br>得到图片后使用winhex打开，发现<br><img src="/2019/08/02/bugku-1-15-writeup-misc/7.png" alt="在这里插入图片描述"><br>base64加密解密即可得flag，但是不知道为什么flag一直提交不正确<br>flag{y0u Are a h@cker!}</p>
+<h2 id="九、多种方法解决"><a href="#九、多种方法解决" class="headerlink" title="九、多种方法解决"></a>九、多种方法解决</h2><p>下载附件，发现无法直接打开。<br>使用notepad打开，发现是个png文件，且base64加密，删除密文前面没用的信息，然后进行base64解密，另存为png图片，得到一个二维码，扫描可得flag，或者使用OR research分析。即可得flag。</p>
+<h2 id="十、闪得好快"><a href="#十、闪得好快" class="headerlink" title="十、闪得好快"></a>十、闪得好快</h2><p>拿到图片。第一想法就是StegSolve打开使用其analyse中的frame browser功能，发现有18张二维码，一张张扫吧，即可得出flag。<br><img src="/2019/08/02/bugku-1-15-writeup-misc/8.png" alt="在这里插入图片描述"></p>
+<h2 id="十一、come-game"><a href="#十一、come-game" class="headerlink" title="十一、come_game"></a>十一、come_game</h2><p>打开游戏玩了几下，发现到第二个怎么也过不去（或许是我菜）发现多了个保存文件，用winhex打开保存文件发现以下内容，把32改成35。这里的32应该代表第二个，那么改成35直接通关。然后再次打开游戏，即可得到flag注意flag格式为SYC{}。因为题目来源：第七季极客大挑战。<br><img src="/2019/08/02/bugku-1-15-writeup-misc/9.png" alt="在这里插入图片描述"></p>
+<h2 id="十二、白哥的鸽子"><a href="#十二、白哥的鸽子" class="headerlink" title="十二、白哥的鸽子"></a>十二、白哥的鸽子</h2><p>直接使用notpade打开，<img src="/2019/08/02/bugku-1-15-writeup-misc/10.png" alt="在这里插入图片描述"><br>发现文件末尾有类似flag格式的字符串，拷贝出来得到   g2ivyo}l{2s3_o@aw__rcl@进行栅栏解密得到<br> lag{w22_is_v3ry_cool}@@<br> <img src="/2019/08/02/bugku-1-15-writeup-misc/11.png" alt="在这里插入图片描述"><br> 加个f即可得到flag，注意提交flag时需要把最后的@@去掉</p>
+<h2 id="十三、linux"><a href="#十三、linux" class="headerlink" title="十三、linux"></a>十三、linux</h2><p>下载附件，打开后直接用notepad打开flag文件，发现里面有个key,就是flag<br><img src="/2019/08/02/bugku-1-15-writeup-misc/12.png" alt="在这里插入图片描述"></p>
+<h2 id="十四、隐写3"><a href="#十四、隐写3" class="headerlink" title="十四、隐写3"></a>十四、隐写3</h2><p>查看图片明显少了下半身<br><img src="/2019/08/02/bugku-1-15-writeup-misc/13.png" alt="在这里插入图片描述"><br>得到flag<br><img src="/2019/08/02/bugku-1-15-writeup-misc/14.png" alt="在这里插入图片描述"></p>
+<h2 id="十五、做个游戏"><a href="#十五、做个游戏" class="headerlink" title="十五、做个游戏"></a>十五、做个游戏</h2><p>这个游戏是坚持60秒就可以得到flag,我最多玩18秒就gameover了。这时候就需要反编译了，使用反编译工具jd-gui，不过需要java环境。开始审计代码，发现flag<br><img src="/2019/08/02/bugku-1-15-writeup-misc/15.png" alt="在这里插入图片描述"><br>编译工具jd-gui（windows版本）下载链接：<a href="https://pan.baidu.com/s/1sp7U7YwrXc7XObRe1r6jVg" target="_blank" rel="noopener">https://pan.baidu.com/s/1sp7U7YwrXc7XObRe1r6jVg</a><br>提取码：6dbs </p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://wrgiun.github.io/2019/08/02/zip伪加密/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wr">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="giun">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/08/02/zip伪加密/" class="post-title-link" itemprop="url">zip伪加密</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-08-02 20:16:55 / 修改时间：20:19:21" itemprop="dateCreated datePublished" datetime="2019-08-02T20:16:55+08:00">2019-08-02</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/misc/" itemprop="url" rel="index"><span itemprop="name">misc</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="zip伪加密"><a href="#zip伪加密" class="headerlink" title="zip伪加密"></a>zip伪加密</h1><h3 id="1-原理"><a href="#1-原理" class="headerlink" title="1. 原理"></a>1. 原理</h3><p>就是修改了zip的文件头的加密标位（全局方式标记位），使文件打开显示需要密码，实际没有密码。</p>
+<h3 id="2-zip文件的格式"><a href="#2-zip文件的格式" class="headerlink" title="2. zip文件的格式"></a>2. zip文件的格式</h3><p>   简单说一个 ZIP 文件由三个部分组成：<br>     压缩源文件数据区+压缩源文件目录区+压缩源文件目录结束标志</p>
+<p>压缩源文件 数据区：<br>50 4B 03 04   头文件标记</p>
+<p>压缩源文件 目录区：<br>50 4B 01 02：目录区文件头标记<br>1F 00：压缩使用的 pkware 版本 或3F 00<br>14 00：解压文件所需 pkware 版本<br>00 00：全局方式位标记（伪加密，改为 09 00 就提示有密码了）</p>
+<p>压缩源文件 目录结束：</p>
+<p>可以参考这篇<a href="https://blog.csdn.net/wclxyn/article/details/7288994" target="_blank" rel="noopener">博客</a><br>如<br>  压缩文件数据区域<br><img src="/2019/08/02/zip伪加密/1.png" alt="在这里插入图片描述"></p>
+<h3 id="3-识别真假加密"><a href="#3-识别真假加密" class="headerlink" title="3.识别真假加密"></a>3.识别真假加密</h3><p><strong>无加密</strong><br>数据区 的全局加密应当为 00 00<br>目录区 的全局方式位标记应当为 00 00</p>
+<p><strong>假加密</strong><br>数据区 的全局加密应当为 00 00<br>目录区 的全局方式位标记应当为 09 00</p>
+<p><strong>真加密</strong><br>数据区 的全局加密应当为 09 00<br>目录区 的全局方式位标记应当为 09 00</p>
+<p>如<br>压缩文件目录区域<br><img src="/2019/08/02/zip伪加密/2.png" alt="在这里插入图片描述"></p>
+<p><img src="/2019/08/02/zip伪加密/3.png" alt="在这里插入图片描述"></p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://wrgiun.github.io/2019/08/02/攻防世界misc部分/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wr">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="giun">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/08/02/攻防世界misc部分/" class="post-title-link" itemprop="url">攻防世界misc部分</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-08-02 20:09:41 / 修改时间：20:16:02" itemprop="dateCreated datePublished" datetime="2019-08-02T20:09:41+08:00">2019-08-02</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/misc/" itemprop="url" rel="index"><span itemprop="name">misc</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="一、功夫再高也怕菜刀"><a href="#一、功夫再高也怕菜刀" class="headerlink" title="一、功夫再高也怕菜刀"></a>一、功夫再高也怕菜刀</h2><p>下载附件，用foremost进行pcapng文件的分离，得到一个压缩包，打开压缩包，得到一份加密的flag文件。</p>
+<p>foremost的下载地址<a href="https://github.com/raddyfiy/foremost" target="_blank" rel="noopener">https://github.com/raddyfiy/foremost</a>  （windows系统可用）</p>
+<p><strong>简单的使用介绍</strong><br><img src="/2019/08/02/攻防世界misc部分/1.png" alt="在这里插入图片描述"><br><img src="/2019/08/02/攻防世界misc部分/2.png" alt="在这里插入图片描述"><br>在zip里可以发现一个加密的flag.txt文件。用wireshark打开6666.pcapng文件，查找flag.txt关键字<br><img src="/2019/08/02/攻防世界misc部分/3.png" alt="在这里插入图片描述"><br>发现有个6666.jpg文件，使用TCP追踪流，复习下面蓝色部分。FFD8开头，FFD9结尾，并在winhex中新建文件复制并粘贴。注意粘贴格式选择为ASCII Hex。<br><img src="/2019/08/02/攻防世界misc部分/4.png" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/2019070612032079.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ0MTA1Nzc4,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>报存为jpg格式，可以得到图片，图片里的文字就是密码，输入密码，得到flag.</p>
+<h2 id="二、菜狗收到了图后很开心，玩起了pdf-flag格式为大写"><a href="#二、菜狗收到了图后很开心，玩起了pdf-flag格式为大写" class="headerlink" title="二、菜狗收到了图后很开心，玩起了pdf(flag格式为大写)"></a>二、菜狗收到了图后很开心，玩起了pdf(flag格式为大写)</h2><p>下载附件后，发现是pdf,那么<br>在google上安装插件PDF Viewer，控制台输入document.documentElement.textContent（获取整个文档的文本以及<a href="https://baike.sogou.com/v10745386.htm?fromTitle=cdata" target="_blank" rel="noopener">CDATA数据</a>），得到一串AB编码而成的字符串，猜测是<a href="https://baike.sogou.com/v5713.htm?fromTitle=%E6%91%A9%E6%96%AF%E5%AF%86%E7%A0%81" target="_blank" rel="noopener">摩斯密码</a>，利用记事本的功能快速，将A变为 . ，B变为 - ，<br><img src="https://img-blog.csdnimg.cn/20190706160143704.png" alt="在这里插入图片描述">然后将替换后的字符进行<a href="http://www.zhongguosou.com/zonghe/moErSiCodeConverter.aspx" target="_blank" rel="noopener">摩斯解密在线解密</a>即可得出flag</p>
+<p>j<br><img src="/2019/08/02/攻防世界misc部分/5.png" alt="在这里插入图片描述"></p>
+<h2 id="三、SSCTF线上选举美男大赛开始了，泰迪拿着他的密码去解密了，提交花括号内内容（Z2dRQGdRMWZxaDBvaHRqcHRfc3d7Z2ZoZ3MjfQ-）"><a href="#三、SSCTF线上选举美男大赛开始了，泰迪拿着他的密码去解密了，提交花括号内内容（Z2dRQGdRMWZxaDBvaHRqcHRfc3d7Z2ZoZ3MjfQ-）" class="headerlink" title="三、SSCTF线上选举美男大赛开始了，泰迪拿着他的密码去解密了，提交花括号内内容（Z2dRQGdRMWZxaDBvaHRqcHRfc3d7Z2ZoZ3MjfQ==）"></a>三、SSCTF线上选举美男大赛开始了，泰迪拿着他的密码去解密了，提交花括号内内容（Z2dRQGdRMWZxaDBvaHRqcHRfc3d7Z2ZoZ3MjfQ==）</h2><p><strong>前置知识</strong><br>所谓<strong>栅栏密码</strong>，就是把要加密的明文分成N个一组，然后把每组的第i个字连起来，形成一段无规律的话。<br> 一般比较常见的是2栏的棚栏密码。<br> 比如明文：THERE IS A CIPHER<br> 去掉空格后变为：THEREISACIPHER<br> 两个一组，得到：TH ER EI SA CI PH ER<br> 先取出第一个字母：TEESCPE<br> 再取出第二个字母：HRIAIHR<br> 连在一起就是：TEESCPEHRIAIHR<br> 这样就得到我们需要的密码了！<br> 而解密的时候，我们先吧密文从中间分开，变为两行：<br> T E E S C P E<br> H R I A I H R<br> 再按上下上下的顺序组合起来：<br> THEREISACIPHER<br> 分出空格，就可以得到原文了：<br> THERE IS A CIPHER<br> 但是有些人就偏不把密码作出2栏，比如：<br> 明文：THERE IS A CIPHER<br> 七个一组：THEREIS ACIPHER<br> 抽取字母：TA HC EI RP EH IE SR<br> 组合得到密码：TAHCEIRPEHIESR<br> 那么这时候就无法再按照2栏的方法来解了…<br> 不过棚栏密码本身有一个潜规则，就是组成棚栏的字母一般不会太多。（一般不超过30个，也就是一、两句话）<br> 这样，我们可以通过分析密码的字母数来解出密码…<br> 比如：TAHCEIRPEHIESR<br> 一共有14个字母，可能是2栏或者7栏…<br> 尝试2栏…失败<br> 尝试7栏…成功<br> 然而当棚栏和拼音相结合后，诞生出一种令人痛恨的新思路（如韵母和声母）</p>
+<p> <strong>凯撒移位密码</strong><br>也就是一种最简单的错位法，将字母表前移或者后错几位，例如：<br>明码表：ABCDEFGHIJKLMNOPQRSTUVWXYZ<br>密码表：DEFGHIJKLMNOPQRSTUVWXYZABC<br>这就形成了一个简单的密码表，如果我想写frzy（即明文），那么对照上面密码表编成密码也就是iucb（即密文）了。密码表可以自己选择移几位，移动的位数也就是密钥。<br>进制转换密码。 比如给你一堆数字，乍一看头晕晕的，你可以观察数字的规律，将其转换为10进制数字，然后按照每个数字在字母表中的排列顺序，拼出正确字母。<br>举例：110 10010 11010 11001<br>解：<br>很明显，这些数字都是由1和0组成，那么你很快联想到什么？二进制数，是不是？嗯，那么就试着把这些数字转换成十进制试试，得到数字6 18 26 25，对应字母表，破解出明文为frzy</p>
+<p><img src="/2019/08/02/攻防世界misc部分/6.png" alt="在这里插入图片描述"><br>然后再进行<a href="https://www.qqxiuzi.cn/bianma/zhalanmima.php" target="_blank" rel="noopener">栅栏解密</a>得到flag<br><img src="/2019/08/02/攻防世界misc部分/7.png" alt="在这里插入图片描述"></p>
+<h1 id="四、一个恐怖份子上传了这张照片到社交网络。里面藏了什么信息？"><a href="#四、一个恐怖份子上传了这张照片到社交网络。里面藏了什么信息？" class="headerlink" title="四、一个恐怖份子上传了这张照片到社交网络。里面藏了什么信息？"></a>四、一个恐怖份子上传了这张照片到社交网络。里面藏了什么信息？</h1><p>本题为jpg图片信息隐写outguess 工具（在kali里，可对jpg图形隐藏信息查询）</p>
+<p>安装方法<br>终端命令输入git clone <a href="https://github.com/crorvick/outguess进行下载，下载完成后进入outguess文件夹，" target="_blank" rel="noopener">https://github.com/crorvick/outguess进行下载，下载完成后进入outguess文件夹，</a></p>
+<p>执行命令./configure &amp;&amp; make &amp;&amp; make install 进行编译及安装。<br>使用方法</p>
+<p>加密：<br>outguess -k “my secret key” -d hidden.txt demo.jpg out.jpg<br>加密之后，demo.jpg会覆盖out.jpg,<br>hidden.txt中的内容是要隐藏的东西</p>
+<p>解密：<br>outguess -k “my secret key” -r out.jpg hidden.txt或者outguess -r lamb.jpg  hidden.txt</p>
+<p>解密之后，解密内容放在hidden.txt中<br>然后使用cat hidden.txt查看</p>
+<p>-r解密，-d加密</p>
+<p>使用,下面2行代码得到flag</p>
+<pre><code>outguess -r lamb.jpg  hidden.txt
+cat hidden.txt
+</code></pre>
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://wrgiun.github.io/2019/08/01/information-collection/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1705,915 +2544,6 @@ if($_GET[id] == &quot;hackerDJ&quot;)
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://wrgiun.github.io/2019/05/01/ereg正则截断/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="wr">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="giun">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/05/01/ereg正则截断/" class="post-title-link" itemprop="url">ereg正则截断</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2019-05-01 09:13:52 / 修改时间：09:14:12" itemprop="dateCreated datePublished" datetime="2019-05-01T09:13:52+08:00">2019-05-01</time>
-            
-
-            
-              
-
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/代码审计（基础篇）/" itemprop="url" rel="index"><span itemprop="name">代码审计（基础篇）</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <pre><code>&lt;?php 
-
-$flag = &quot;flag&quot;;
-
-if (isset ($_GET[&apos;password&apos;])) 
-{
-  if (ereg (&quot;^[a-zA-Z0-9]+$&quot;, $_GET[&apos;password&apos;]) === FALSE)
-  {
-    echo &apos;&lt;p&gt;You password must be alphanumeric&lt;/p&gt;&apos;;
-  }
-  else if (strlen($_GET[&apos;password&apos;]) &lt; 8 &amp;&amp; $_GET[&apos;password&apos;] &gt; 9999999)
-   {
-     if (strpos ($_GET[&apos;password&apos;], &apos;*-*&apos;) !== FALSE) //strpos — 查找字符串首次出现的位置
-      {
-      die(&apos;Flag: &apos; . $flag);
-      }
-      else
-      {
-        echo(&apos;&lt;p&gt;*-* have not been found&lt;/p&gt;&apos;); 
-       }
-      }
-     else 
-     {
-        echo &apos;&lt;p&gt;Invalid password&lt;/p&gt;&apos;; 
-      }
-   } 
-?&gt;
-</code></pre><p>审计上面代码可以发现<br>要想的到flag必须满足一下3个条件<br>1、必须是数字、字母组成的密码<br>2、密码的长度小于8，却必须要大于9999999<br>3、密码必须包含<em>—</em></p>
-<p>对于第二个条件，使用科学计数法绕过<br>对于第三个条件，由于ereg()函数存在NULL截断漏洞，所以可以用%00（空字符）来截断正则匹配。那么我们就可以绕过第3个条件了<br>那么我们就可以构造出payload为<code>1e8%00*—*</code></p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://wrgiun.github.io/2019/05/01/SQL注入-WITH-ROLLUP绕过/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="wr">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="giun">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/05/01/SQL注入-WITH-ROLLUP绕过/" class="post-title-link" itemprop="url">SQL注入_WITH ROLLUP绕过</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2019-05-01 09:12:36 / 修改时间：09:13:03" itemprop="dateCreated datePublished" datetime="2019-05-01T09:12:36+08:00">2019-05-01</time>
-            
-
-            
-              
-
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/代码审计（基础篇）/" itemprop="url" rel="index"><span itemprop="name">代码审计（基础篇）</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>题目地址<br><a href="http://ctf5.shiyanbar.com/web/pcat/index.php" target="_blank" rel="noopener">http://ctf5.shiyanbar.com/web/pcat/index.php</a>    </p>
-<pre><code>&lt;?php
-    error_reporting(0);
-
-    if (!isset($_POST[&apos;uname&apos;]) || !isset($_POST[&apos;pwd&apos;])) {
-        echo &apos;&lt;form action=&quot;&quot; method=&quot;post&quot;&gt;&apos;.&quot;&lt;br/&gt;&quot;;
-        echo &apos;&lt;input name=&quot;uname&quot; type=&quot;text&quot;/&gt;&apos;.&quot;&lt;br/&gt;&quot;;
-        echo &apos;&lt;input name=&quot;pwd&quot; type=&quot;text&quot;/&gt;&apos;.&quot;&lt;br/&gt;&quot;;
-        echo &apos;&lt;input type=&quot;submit&quot; /&gt;&apos;.&quot;&lt;br/&gt;&quot;;
-        echo &apos;&lt;/form&gt;&apos;.&quot;&lt;br/&gt;&quot;;
-        echo &apos;&lt;!--source: source.txt--&gt;&apos;.&quot;&lt;br/&gt;&quot;;
-        die;
-    }
-
-    function AttackFilter($StrKey,$StrValue,$ArrReq){  
-        if (is_array($StrValue)){
-
-    //检测变量是否是数组
-
-            $StrValue=implode($StrValue);
-
-    //返回由数组元素组合成的字符串
-
-        }
-        if (preg_match(&quot;/&quot;.$ArrReq.&quot;/is&quot;,$StrValue)==1){   
-
-    //匹配成功一次后就会停止匹配
-
-            print &quot;水可载舟，亦可赛艇！&quot;;
-            exit();
-        }
-    }
-
-    $filter = &quot;and|select|from|where|union|join|sleep|benchmark|,|\(|\)&quot;;
-    foreach($_POST as $key=&gt;$value){ 
-
-    //遍历数组
-
-        AttackFilter($key,$value,$filter);
-    }
-
-    $con = mysql_connect(&quot;XXXXXX&quot;,&quot;XXXXXX&quot;,&quot;XXXXXX&quot;);
-    if (!$con){
-        die(&apos;Could not connect: &apos; . mysql_error());
-    }
-    $db=&quot;XXXXXX&quot;;
-    mysql_select_db($db, $con);
-
-    //设置活动的 MySQL 数据库
-
-    $sql=&quot;SELECT * FROM interest WHERE uname = &apos;{$_POST[&apos;uname&apos;]}&apos;&quot;;
-    $query = mysql_query($sql); 
-
-    //执行一条 MySQL 查询
-
-    if (mysql_num_rows($query) == 1) { 
-
-    //返回结果集中行的数目
-
-        $key = mysql_fetch_array($query);
-
-    //返回根据从结果集取得的行生成的数组，如果没有更多行则返回 false
-
-        if($key[&apos;pwd&apos;] == $_POST[&apos;pwd&apos;]) {
-            print &quot;CTF{XXXXXX}&quot;;
-        }else{
-            print &quot;亦可赛艇！&quot;;
-        }
-    }else{
-        print &quot;一颗赛艇！&quot;;
-    }
-    mysql_close($con);
-    ?&gt;
-</code></pre><p>审计代码寻找有用部分</p>
-<pre><code>if (mysql_num_rows($query) == 1) { 
-
- //返回结果集中行的数目
-
-     $key = mysql_fetch_array($query);
-
- //返回根据从结果集取得的行生成的数组，如果没有更多行则返回 false
-
-     if($key[&apos;pwd&apos;] == $_POST[&apos;pwd&apos;]) {
-         print &quot;CTF{XXXXXX}&quot;;
-</code></pre><p>注入成功要满足2个条件：</p>
-<ol>
-<li><p>mysql_num_rows($query) == 1 即查询返回的结果行数为1</p>
-</li>
-<li><p>$key[‘pwd’] == $_POST[‘pwd’] 即查询返回的结果与POST发送的pwd值相同</p>
-</li>
-</ol>
-<p>从源代码得出，注入点在uname这个位置上，$filter没有过滤掉 or </p>
-<p>$sql=”SELECT * FROM interest WHERE uname = ‘{$_POST[‘uname’]}’”;</p>
-<pre><code>$filter = &quot;and|select|from|where|union|join|sleep|benchmark|,|\(|\)&quot;;
-</code></pre><p>  对and等等进行过滤。<br>  那么如果只让其对返回结果只取最后一行呢，自然而然的想到limit a,b这样的命令。但是“，”被过滤了。那么我们可以使用 limit a offset b</p>
-<p><strong>SQL查询语句中的 limit 与 offset 的区别：</strong></p>
-<p>limit y 分句表示: 读取 y 条数据         //limit 10,就是 从第0个开始，获取10条数据</p>
-<p>limit x, y 分句表示: 跳过 x 条数据，读取 y 条数据   //limit 1,2 就是读取2-3条数据</p>
-<p>limit y offset x 分句表示: 跳过 x 条数据，读取 y 条数据   //limit 2 offest 1 就是读取2-3条数据</p>
-<p><strong>注意初始偏移量为0</strong></p>
-<p><strong>payload如下</strong></p>
-<pre><code>uname=&apos; || 1 group by pwd with rollup limit 1 offset 2 #
-</code></pre><p>   // uname=’ or 1 group by pwd with rollup limit 1 offset 2#</p>
-<p>‘是对前面的’的封闭，然后利用||1将这个条件变成true，即可得出flag,</p>
-<p>(group by是把前面的查询的内容按照pwd来分组。with rollup是统计信息的这里就是重点了，因为代码中$key[‘pwd’] == $_POST[‘pwd’]用的是双等号是弱比较。而with rollup会在查询的结果后面加上一个为空的列,所以password为空和NULL是相等的就绕过了pwd的比较)</p>
-<p>至于为啥offset 2，这个是试出来的，其实我们根本不可能知道with rollup会总结归纳出多少条信息，offset 2能过说明正确的pwd位于第三条信息</p>
-<p><strong>这里要注意一点，当使用rollup的时候就不能使用order by进行排序，换句话说 rollup和order by是相互排斥的。</strong></p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://wrgiun.github.io/2019/05/01/Multiple-Encryption/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="wr">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="giun">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/05/01/Multiple-Encryption/" class="post-title-link" itemprop="url">多重加密</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2019-05-01 09:09:45 / 修改时间：09:11:52" itemprop="dateCreated datePublished" datetime="2019-05-01T09:09:45+08:00">2019-05-01</time>
-            
-
-            
-              
-
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/代码审计（基础篇）/" itemprop="url" rel="index"><span itemprop="name">代码审计（基础篇）</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <pre><code>&lt;?php
-    include &apos;common.php&apos;;
-    $requset = array_merge($_GET, $_POST, $_SESSION, $_COOKIE);
-    //把一个或多个数组合并为一个数组
-    class db
-    {
-        public $where;
-        function __wakeup()
-        {
-            if(!empty($this-&gt;where))
-            {
-                $this-&gt;select($this-&gt;where);
-            }
-        }
-        function select($where)
-        {
-            $sql = mysql_query(&apos;select * from user where &apos;.$where);
-            //函数执行一条 MySQL 查询。
-            return @mysql_fetch_array($sql);
-            //从结果集中取得一行作为关联数组，或数字数组，或二者兼有返回根据从结果集取得的行生成的数组，如果没有更多行则返回 false
-        }
-    }
-
-    if(isset($requset[&apos;token&apos;]))
-    //测试变量是否已经配置。若变量已存在则返回 true 值。其它情形返回 false 值。
-    {
-        $login = unserialize(gzuncompress(base64_decode($requset[&apos;token&apos;])));
-        //gzuncompress:进行字符串压缩
-        //unserialize: 将已序列化的字符串还原回 PHP 的值
-
-        $db = new db();
-        $row = $db-&gt;select(&apos;user=\&apos;&apos;.mysql_real_escape_string($login[&apos;user&apos;]).&apos;\&apos;&apos;);
-        //mysql_real_escape_string() 函数转义 SQL 语句中使用的字符串中的特殊字符。
-
-        if($login[&apos;user&apos;] === &apos;ichunqiu&apos;)
-        {
-            echo $flag;
-        }else if($row[&apos;pass&apos;] !== $login[&apos;pass&apos;]){
-            echo &apos;unserialize injection!!&apos;;
-        }else{
-            echo &quot;(╯‵□′)╯︵┴─┴ &quot;;
-        }
-    }else{
-        header(&apos;Location: index.php?error=1&apos;);
-    }
-
-?&gt; 
-</code></pre><p>阅读代码寻找有用的代码段</p>
-<pre><code>if($login[&apos;user&apos;] === &apos;ichunqiu&apos;)
-        {
-            echo $flag;
-</code></pre><p>发现login[user]要求=ichunqiu，才能输出flag。但是</p>
-<pre><code>$login = unserialize(gzuncompress(base64_decode($requset[&apos;token&apos;])));
-//先对token进行base-64解密，然后再进行解压gzuncompress字符串，最后在反序列化
-</code></pre><p>那么我们就要在cookie中给token一个参数，先是创建一个数组并给其中的user键赋值为ichunqiu先序列化，然后压缩字符串（gzcompress方法），最后再base-64加密<br>写成php代码如下（）</p>
-<pre><code>&lt;?php 
-$a = array(&apos;user&apos;=&gt;&apos;ichunqiu&apos;);
-$b = base64_encode(gzcompress(serialize($a)));
-echo $b
-?&gt;
-</code></pre><p>可以输出<img src="/2019/05/01/Multiple-Encryption/1.png" alt="在这里插入图片描述"></p>
-<p>然后抓包，在cookie中添加 taken参数，其值为截图中的内容即可得出flag</p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://wrgiun.github.io/2019/04/08/Blank-to-bypass/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="wr">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="giun">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/04/08/Blank-to-bypass/" class="post-title-link" itemprop="url">绕过过滤的空白字符</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2019-04-08 20:28:29 / 修改时间：20:30:54" itemprop="dateCreated datePublished" datetime="2019-04-08T20:28:29+08:00">2019-04-08</time>
-            
-
-            
-              
-
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/代码审计（基础篇）/" itemprop="url" rel="index"><span itemprop="name">代码审计（基础篇）</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>  &lt;?php</p>
-<pre><code>$info = &quot;&quot;; 
-$req = [];
-$flag=&quot;xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx&quot;;
-
-ini_set(&quot;display_error&quot;, false); //为一个配置选项设置值
-error_reporting(0); //关闭所有PHP错误报告
-
-if(!isset($_GET[&apos;number&apos;])){
-   header(&quot;hint:26966dc52e85af40f59b4fe73d8c323a.txt&quot;); //HTTP头显示hint 26966dc52e85af40f59b4fe73d8c323a.txt
-
-   die(&quot;have a fun!!&quot;); //die — 等同于 exit()
-
-}
-
-foreach([$_GET, $_POST] as $global_var) {  //foreach 语法结构提供了遍历数组的简单方式 
-    foreach($global_var as $key =&gt; $value) { 
-        $value = trim($value);  //trim — 去除字符串首尾处的空白字符（或者其他字符）
-        is_string($value) &amp;&amp; $req[$key] = addslashes($value); // is_string — 检测变量是否是字符串，addslashes — 使用反斜线引用字符串
-    } 
-} 
-</code></pre><p>​<br>    function is_palindrome_number($number) {<br>        $number = strval($number); //strval — 获取变量的字符串值<br>        $i = 0;<br>        $j = strlen($number) - 1; //strlen — 获取字符串长度<br>        while($i &lt; $j) {<br>            if($number[$i] !== $number[$j]) {<br>                return false;<br>            }<br>            $i++;<br>            $j–;<br>        }<br>        return true;<br>    } </p>
-<p>​<br>    if(is_numeric($_REQUEST[‘number’])) //is_numeric — 检测变量是否为数字或数字字符串<br>    {</p>
-<pre><code>   $info=&quot;sorry, you cann&apos;t input a number!&quot;;
-
-}
-elseif($req[&apos;number&apos;]!=strval(intval($req[&apos;number&apos;]))) //intval — 获取变量的整数值
-{
-
-     $info = &quot;number must be equal to it&apos;s integer!! &quot;;  
-
-}
-else
-{
-
-     $value1 = intval($req[&quot;number&quot;]);
-     $value2 = intval(strrev($req[&quot;number&quot;]));  
-
-     if($value1!=$value2){
-          $info=&quot;no, this is not a palindrome number!&quot;;
-     }
-     else
-     {
-
-          if(is_palindrome_number($req[&quot;number&quot;])){
-              $info = &quot;nice! {$value1} is a palindrome number!&quot;; 
-          }
-          else
-          {
-             $info=$flag;
-          }
-     }
-
-}
-
-echo $info;
-</code></pre><p>审计代码可以发现，number必须符合下面3个条件才可以输出flag<br>1.不为空，且不能是一个数值型数字，包括小数。(由is_numeric函数判断)<br>2.不能是一个回文数。（is_palindrome_number判断）<br>3.该数的反转的整数值应该和它本身的整数值相等;即</p>
-<pre><code>intval($req[&quot;number&quot;])=intval(strrev($req[&quot;number&quot;]))
-</code></pre><p>但是2和3又冲突，这该怎么办</p>
-<h2 id="方法一"><a href="#方法一" class="headerlink" title="方法一"></a>方法一</h2><p>我们构造的payload为：</p>
-<pre><code>?number=%002147483647
-</code></pre><p><strong>解释下为什么可以这么构造；</strong><br>1、is_numeric函数对于空字符%00判断为非数值，绕过第一个条件。<br>  函数判断为非数值，但又不影响它值的构造，理所当然想到空格字符%20和空字符%00。</p>
-<p>2、2147483647不是一个回文数绕过第二个条件。</p>
-<p>3、这里利用了intval函数的溢出问题。<br>      Intval最大的值取决于操作系统。 32 位系统最大带符号的 integer 范围是 -2147483648 到 2147483647。举例，在这样的系统上， intval(‘1000000000000’) 会返回 2147483647。64 位系统上，最大带符号的 integer 值是 9223372036854775807。<br>      至于服务器是什么系统的可以用burp抓包分析出来为32位</p>
-<pre><code>$value1 = intval($req[&quot;number&quot;]);
-$value2 = intval(strrev($req[&quot;number&quot;]));  
-</code></pre><p>我们构造的2147483647经过strrev反转函数后为7463847412，又经过intval函数值又变为2147483647。<br>故满足条件3，可以输出flag</p>
-<h2 id="方法二"><a href="#方法二" class="headerlink" title="方法二"></a>方法二</h2><p>因为要求不能为回文数，但又要满足<code>intval($req[&quot;number&quot;])=intval(strrev($req[&quot;number&quot;]))，</code>所以我们采用科学计数法构造payload为<code>number=0e-0%00</code>，这样的话我们就可以绕过。</p>
-<p>xey在php中就是x*10的y次方</p>
-<p><strong>注意</strong><br>is_numeric函数对于空字符%00，无论是%00放在前后都可以判断为非数值，而%20空格字符只能放在数值后</p>
-<h2 id="方法三"><a href="#方法三" class="headerlink" title="方法三"></a>方法三</h2><p>is_numeric函数在开始判断前，会先跳过所有空白字符可是题目获取$req[‘number’]的时候明明使用trim过滤了空白字符这时候我们可以引入\f（也就是%0c）在数字前面，来绕过最后那个is_palindrome_number函数，而对于前面的数字判断，因为intval和is_numeric都会忽略这个字符，所以不会影响。<br>所以我们构造payload=URL?%00%0c191即可绕过上面的条件获得flag</p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2663,7 +2593,7 @@ $value2 = intval(strrev($req[&quot;number&quot;]));
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">34</span>
+                    <span class="site-state-item-count">38</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
