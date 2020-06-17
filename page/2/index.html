@@ -336,6 +336,357 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://wrgiun.github.io/2019/08/02/bugku-16-26-writeup-misc/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wr">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="giun">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/08/02/bugku-16-26-writeup-misc/" class="post-title-link" itemprop="url">bugku 16-31 writeup(misc)</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-08-02 20:35:36" itemprop="dateCreated datePublished" datetime="2019-08-02T20:35:36+08:00">2019-08-02</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-09-12 20:32:01" itemprop="dateModified" datetime="2019-09-12T20:32:01+08:00">2019-09-12</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/bugkuCTF/" itemprop="url" rel="index"><span itemprop="name">bugkuCTF</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="十六、想蹭网络先破解wifi密码"><a href="#十六、想蹭网络先破解wifi密码" class="headerlink" title="十六、想蹭网络先破解wifi密码"></a>十六、想蹭网络先破解wifi密码</h2><p>题目给了我们一个数据包，且提示我们flag为wifi密码，</p>
+<h3 id="第一步："><a href="#第一步：" class="headerlink" title="第一步："></a>第一步：</h3><p>打开文件，WIFI连接认证的重点在WPA的四次握手包，即eapol协议的包，过滤一下：<br>刚好四个包<br><img src="/2019/08/02/bugku-16-26-writeup-misc/1.png" alt="在这里插入图片描述"></p>
+<h3 id="第二步"><a href="#第二步" class="headerlink" title="第二步"></a>第二步</h3><p>既然是密码，还给了我们数据包，那么我们开始爆破，首先需要一个字典</p>
+<p>因为手机号为11位，给了我们7位，故我们使用一下python代码生成字典<br>代码如下：</p>
+<pre><code>import string
+s = string.digits
+f = open(&apos;1.txt&apos;, &apos;w&apos;)
+for i in s:
+    for j in s:
+        for k in s:
+            for o in s:
+                f.write(&quot;1391040&quot;+i+j+k+o+&apos;\n&apos;)
+</code></pre><h3 id="第三步"><a href="#第三步" class="headerlink" title="第三步"></a>第三步</h3><p>使用aircrack-ng进行爆破。</p>
+<p>首先进行安装aircrack-ng，我在kali下进行操作。无法锁定的原因是我之前使用终端时，可能强制退出，还有命令在执行，那么我们就强制解除,命令如下</p>
+<pre><code>sudo rm /var/cache/apt/archives/lock
+sudo rm /var/lib/dpkg/lock
+</code></pre><p><img src="/2019/08/02/bugku-16-26-writeup-misc/2.png" alt="在这里插入图片描述"><br>然后进行安装<strong>aircrack-ng</strong><br>命令如下</p>
+<pre><code>apt-get install aircrack-ng
+</code></pre><p>安装好用，进行爆破，得出密码</p>
+<pre><code>aircrack-ng -a2 wifi.cap -w password.txt
+</code></pre><p><img src="/2019/08/02/bugku-16-26-writeup-misc/3.png" alt="在这里插入图片描述"><br> <strong>aircrack-ng使用</strong></p>
+<pre><code>aircrack-ng -w 字典文件 目标 
+
+破解KEY,漫长的过程.漫不漫长取决于两个方面:一是网管的聪明程度(能否设置出复杂的密码),二是电脑的速度. 
+usage:aircrack-ng[options]&lt;.cap/.ivsfile(s)&gt;
+
+Commonoptions:
+-a&lt;amode&gt;:暴破(1/WEP,2/WPA-PSK)
+
+-e&lt;essid&gt;:选择essid为目标
+
+-b&lt;bssid&gt;:选择ap的mac为目标,就是破解识别的关键字
+
+-q:使用安静模式,无数出模式
+
+-C&lt;macs&gt;:将所有的AP合并为一个虚拟的
+
+–help:显示这个帮助
+</code></pre><h2 id="十七、linux2"><a href="#十七、linux2" class="headerlink" title="十七、linux2"></a>十七、linux2</h2><p>根据题目提示，flag为key{}，那么使用winhex打开文件，并搜索key发现flag.</p>
+<h2 id="十八、账号被盗了"><a href="#十八、账号被盗了" class="headerlink" title="十八、账号被盗了"></a>十八、账号被盗了</h2><p>点击getf lag，发现没有管理员权限，那么我们就想到cookie,使用抓包工具将cookie的值，改成ture，即可得到一个网站然而发现该网站我怎么也进去，打扰了。</p>
+<h2 id="十九、细心的大象"><a href="#十九、细心的大象" class="headerlink" title="十九、细心的大象"></a>十九、细心的大象</h2><p>1、下载图片，使用winhex打开没发现什么有用的信息</p>
+<p>2、用binwalk查看图片是否包含其他文件，成功分离出一个压缩文件<br><img src="/2019/08/02/bugku-16-26-writeup-misc/4.png" alt="在这里插入图片描述"><br>3、发现该压缩文件里有个图片是加密的，于是我们寻找密码</p>
+<p>4、在用winhex看一下大象的图片，还是没发现重要信息，我们打开文件的属性，去看看文件的详细信息里面有什么信息，发现一串类似于base64加密的东西。<br><img src="/2019/08/02/bugku-16-26-writeup-misc/5.png" alt="在这里插入图片描述"><br>5、把该串信息当作密码输入，发现失败了，base64解密后，再输入，可以得到以下图片<br><img src="/2019/08/02/bugku-16-26-writeup-misc/6.png" alt="在这里插入图片描述"><br>使用winhex打开修改图片的高为500，就可以在图片里看到flag了<br><img src="/2019/08/02/bugku-16-26-writeup-misc/7.png" alt="在这里插入图片描述"></p>
+<h2 id="二十、爆照"><a href="#二十、爆照" class="headerlink" title="二十、爆照"></a>二十、爆照</h2><p>1、首先对文件进行分析，发现1个压缩包，压缩包里有一个动态图和8个文件。更具文件的大小可以发现88、888、8888比较特殊。flag应该在这3张图片里。</p>
+<p>使用winhex打开可以依次打开这3个文件可以发现这3个文件都是jpg文件。修改后缀名为jpg</p>
+<p>可以发现88文件有个二维码，扫描得bilibili</p>
+<p><img src="/2019/08/02/bugku-16-26-writeup-misc/8.png" alt="在这里插入图片描述"><br>888文件是个图片，查看文件详细信息可以发现一段base64加密的数据，解密得silisili<br><img src="/2019/08/02/bugku-16-26-writeup-misc/9.png" alt="在这里插入图片描述"><br>8888文件修改后缀名得到一张图片，详细信息没有有用信息，使用binwalk分析下，发现了一个压缩包。压缩包里有一个二维码图片，扫描得panama<br><img src="/2019/08/02/bugku-16-26-writeup-misc/10.png" alt="在这里插入图片描述"><br>故该题flag为{bilibili_silisili_panama}</p>
+<h2 id="二十一、猫片（安恒）"><a href="#二十一、猫片（安恒）" class="headerlink" title="二十一、猫片（安恒）"></a>二十一、猫片（安恒）</h2><p>根据题目提示，这样应该是LBS隐写<br><img src="/2019/08/02/bugku-16-26-writeup-misc/11.png" alt="在这里插入图片描述"><br>1、下载附件修改后缀名为png</p>
+<p>2、使用stegsolve打开，使用其DATA extract功能进行分析，根据提示为LSB,BGR隐写，经过下图操作，保存为png文件。<br><img src="/2019/08/02/bugku-16-26-writeup-misc/12.png" alt="在这里插入图片描述"><br>3、发现图片打不开，使用winhex打开查看，进行下图操作，然后保存，发现是半张二维码<br><img src="/2019/08/02/bugku-16-26-writeup-misc/13.png" alt="在这里插入图片描述"></p>
+<p>4、进行图片高度的修改，可以得到一张完整的二维码，扫描下载flag.rar压缩包<br><img src="/2019/08/02/bugku-16-26-writeup-misc/14.png" alt="在这里插入图片描述"><br>打开文件，有上面的错误，flag文件里的内容，有点气，费尽脑子，发现无可奈何，于是开始查各种资料。<br><img src="/2019/08/02/bugku-16-26-writeup-misc/15.png" alt="在这里插入图片描述"><br>发现是ntfs文件数据流隐写，就说题目的提示为什么ntfs没用到。<br>使用ntfsstreamsEditor工具查找数据流，然后导出（注意这边一个坑：flag.rar这个压缩文件一定要用winrar来解压才能找得到数据流）</p>
+<p><img src="/2019/08/02/bugku-16-26-writeup-misc/16.png" alt="在这里插入图片描述"><br>发现导出的数据流文件是python反编译文件。直接扔到在线我就进行python反编译  ，<a href="https://tool.lu/pyc/" target="_blank" rel="noopener">https://tool.lu/pyc/</a><br>得到以下结果</p>
+<pre><code>import base64
+
+def encode():
+    flag = &apos;*************&apos;
+    ciphertext = []
+    for i in range(len(flag)):
+        s = chr(i ^ ord(flag[i]))
+        if i % 2 == 0:
+            s = ord(s) + 10
+        else:
+            s = ord(s) - 10
+        ciphertext.append(str(s))
+
+    return ciphertext[::-1]
+
+ciphertext = [
+    &apos;96&apos;,
+    &apos;65&apos;,
+    &apos;93&apos;,
+    &apos;123&apos;,
+    &apos;91&apos;,
+    &apos;97&apos;,
+    &apos;22&apos;,
+    &apos;93&apos;,
+    &apos;70&apos;,
+    &apos;102&apos;,
+    &apos;94&apos;,
+    &apos;132&apos;,
+    &apos;46&apos;,
+    &apos;112&apos;,
+    &apos;64&apos;,
+    &apos;97&apos;,
+    &apos;88&apos;,
+    &apos;80&apos;,
+    &apos;82&apos;,
+    &apos;137&apos;,
+    &apos;90&apos;,
+    &apos;109&apos;,
+    &apos;99&apos;,
+    &apos;112&apos;]
+</code></pre><p>进行解密脚本的编写</p>
+<pre><code>def decode():
+    ciphertext = [
+        &apos;96&apos;,
+        &apos;65&apos;,
+        &apos;93&apos;,
+        &apos;123&apos;,
+        &apos;91&apos;,
+        &apos;97&apos;,
+        &apos;22&apos;,
+        &apos;93&apos;,
+        &apos;70&apos;,
+        &apos;102&apos;,
+        &apos;94&apos;,
+        &apos;132&apos;,
+        &apos;46&apos;,
+        &apos;112&apos;,
+        &apos;64&apos;,
+        &apos;97&apos;,
+        &apos;88&apos;,
+        &apos;80&apos;,
+        &apos;82&apos;,
+        &apos;137&apos;,
+        &apos;90&apos;,
+        &apos;109&apos;,
+        &apos;99&apos;,
+        &apos;112&apos;]
+    ciphertext.reverse()             # 加密中使用ciphertext[::-1]进行取反，故使用reverse取反，
+    flag = &apos;&apos;
+    for i in range(len(ciphertext)):     # 加密中使用的是flag的长度，而ciphertext与flag长度一样
+        if i % 2 == 0:
+            s = int(ciphertext[i]) - 10    # 加密中s的值其实就是int(ciphertext[i])
+        else:
+            s = int(ciphertext[i]) + 10
+        s = chr(i ^ s)                    # 加密中为i和flag异或，那么i与s异或即可的到flag
+        flag += s
+    return flag
+
+if __name__ == &apos;__main__&apos;:
+    flag = decode()
+    print(flag)
+</code></pre><h2 id="二十二、多彩"><a href="#二十二、多彩" class="headerlink" title="二十二、多彩"></a>二十二、多彩</h2><p>下载图片，放到Stegsolve里面跑下。<br>发现了<br><img src="/2019/08/02/bugku-16-26-writeup-misc/17.png" alt="在这里插入图片描述"><br>图片的名称又是lipstick.png (lipstick是口红意思），这边又有YSL，所以怀疑与YSL口红有关(圣罗兰口红).使用data extract分析下，发现PK开头，直接save bin 存为zip格式<br>![在这里插入图片描述]bugku-16-26-writeup-misc\18.png)<br>发现文件打不开，于是使用winhex打开，进行图中操作，成功打开文件，发现flag.txt文件加密</p>
+<p><img src="/2019/08/02/bugku-16-26-writeup-misc/20.png" alt="在这里插入图片描述"><br>然后解压文件会产生错误，这里有个小坑注意，不能使用winrar解压，要使用360压缩等解压。<br><img src="/2019/08/02/bugku-16-26-writeup-misc/19.png" alt="在这里插入图片描述"><br>未完待续，卡住了这题</p>
+<h2 id="二十三、旋转跳跃"><a href="#二十三、旋转跳跃" class="headerlink" title="二十三、旋转跳跃"></a>二十三、旋转跳跃</h2><p>一看题目，提示我们密码，还是音频文件，目测是音频隐写。<br>上工具MP3Stego。可以参考我的<a href="https://mp.csdn.net/postedit/89817197" target="_blank" rel="noopener">这篇博客</a><br><img src="/2019/08/02/bugku-16-26-writeup-misc/E:/hexo\blog\wrgiun\source\_posts\bugku-16-26-writeup-misc\22.png" alt="在这里插入图片描述"><br>可以得到一个txt文件，，得到flag<br><img src="/2019/08/02/bugku-16-26-writeup-misc/21.png" alt="在这里插入图片描述"></p>
+<h2 id="二十四、普通的二维码"><a href="#二十四、普通的二维码" class="headerlink" title="二十四、普通的二维码"></a>二十四、普通的二维码</h2><p>扫描会得到一句话：我不会告诉你flag就在这里。使用winhex打开发现最后一段数字，应该是8进制数。<br><img src="/2019/08/02/bugku-16-26-writeup-misc/23.png" alt="在这里插入图片描述"><br>编写python脚本转ASCII码，即可得到flag</p>
+<pre><code>a = &apos;146154141147173110141166145137171060125137120171137163143162151160164137117164143137124157137124145156137101163143151151041175&apos;
+flag = &apos;&apos;
+for i in range(len(a) // 3):
+    flag += chr(int(a[i * 3:i * 3 + 3], 8))     # 八进制3为一个ASCII码
+print(flag)
+</code></pre><h2 id="二十五、乌云邀请码"><a href="#二十五、乌云邀请码" class="headerlink" title="二十五、乌云邀请码"></a>二十五、乌云邀请码</h2><p>经过一些尝试，原理是LSB隐写，使用Stegsolve工具的Data Extract功能即可得到flag<br><img src="/2019/08/02/bugku-16-26-writeup-misc/24.png" alt="在这里插入图片描述"></p>
+<h2 id="二十六、神秘文件"><a href="#二十六、神秘文件" class="headerlink" title="二十六、神秘文件"></a>二十六、神秘文件</h2><p>下载附件，发现里面有一张图片，和一个压缩包，且压缩包里也有一个一模一样不过是加密的图片。<br>1、于是我们想到明文攻击。使用ARCHPR工具进行攻击。</p>
+<p>2、注意把logo压缩成压缩包，并且把flag.zip的压缩包里的doc文件删除。</p>
+<p>3、这边有一个坑，我们的压缩算法要与flag.zip的压缩算法一样才可以。我卡了好久在这。</p>
+<p>4、可以复制flag.zip然后存入logo.png文件，然后修改名字为logo.zip。</p>
+<p>5、可以得到口令，输入口令我们发现是一个笑脸<br><img src="/2019/08/02/bugku-16-26-writeup-misc/26.png" alt="在这里插入图片描述"><br>进行binwalk文件分离<br><img src="/2019/08/02/bugku-16-26-writeup-misc/27.png" alt="在这里插入图片描述"><br>然后在docProps文件下有个flag.txt，进行base64解码即可得flag。<br>破解zip加密的常见的几种方法，可以参考这个大佬的<a href="https://www.cnblogs.com/ECJTUACM-873284962/p/9387711.html" target="_blank" rel="noopener">博客</a></p>
+<h2 id="二十八、图穷比见"><a href="#二十八、图穷比见" class="headerlink" title="二十八、图穷比见"></a>二十八、图穷比见</h2><p>下载附件<br>，使用winhex打开，在文件最后面发现一大堆16进制，然后复制到notepad里使用插件里的converter进行转化为ascii码。发现是一对坐标，然后把左右括号去掉，把逗号换成空格<br><img src="/2019/08/02/bugku-16-26-writeup-misc/28.png" alt="在这里插入图片描述"><br>然后使用gnuplot工具画图<br>使用命令 <code>plot &quot;E:\\gnuplot\\2.txt&quot;</code><br><img src="/2019/08/02/bugku-16-26-writeup-misc/29.png" alt="在这里插入图片描述"><br><img src="/2019/08/02/bugku-16-26-writeup-misc/30.png" alt="在这里插入图片描述"><br>扫描得flag</p>
+<h2 id="二十九、convert"><a href="#二十九、convert" class="headerlink" title="二十九、convert"></a>二十九、convert</h2><p>一、打开文件发现一堆二进制，保存为2.txt文件，那肯定得转化为16进制，这边我尝试直接利用脚本转化为10进制然后转化为ASCII,发现是个rar文件，却因为有些字体识别不了乱码，打不开文件。</p>
+<pre><code>with open(&apos;2.txt&apos;, &apos;w&apos;,encoding=&apos;utf-8&apos;) as f1:
+    with open(&apos;1.txt&apos;,encoding=&apos;utf-8&apos;) as f2:
+        while True:
+            temp = f2.read(4)
+            if temp:
+                temp = int(temp, 2)   # 二进制转10进制
+                temp = hex(temp)      # 10进制转16进制
+                f1.write(temp[2:])    # 去掉0x
+            else:
+                break
+</code></pre><p>二、利用Notepad++自带的十六进制转ascii，发现rar文件头，将文件另存为一个rar文件。<br>打开文件发现里面有一个图片，我们先看下属性，发现有一串base64码。<br>然后在线解密，发现flag.</p>
+<h2 id="三十、听首音乐"><a href="#三十、听首音乐" class="headerlink" title="三十、听首音乐"></a>三十、听首音乐</h2><p>听了一会后，没听出啥，使用audacity进行分析，发现有点像摩斯密码<br><img src="/2019/08/02/bugku-16-26-writeup-misc/31.png" alt="在这里插入图片描述"><br>然后放大，摩斯密码有两种“符号”用来表示字符：点（.）和划（-），或叫“滴”（Dit）和“答”（Dah）。（滴，1t；嗒，3t），<br>分析，写出摩斯密码为（<strong>每一组后面加上空格</strong>）</p>
+<pre><code>..... -... -.-. ----. ..--- ..... -.... ....- ----. -.-. -.. ----- .---- ---.. ---.. ..-. ..... ..--- . -.... .---- --... -.. --... ----- ----. ..--- ----. .---- ----. .---- -.-.
+</code></pre><p>在线解密<a href="http://www.zhongguosou.com/zonghe/moErSiCodeConverter.aspx" target="_blank" rel="noopener">http://www.zhongguosou.com/zonghe/moErSiCodeConverter.aspx</a><br><img src="/2019/08/02/bugku-16-26-writeup-misc/32.png" alt="在这里插入图片描述"></p>
+<h2 id="三十一、好多数值"><a href="#三十一、好多数值" class="headerlink" title="三十一、好多数值"></a>三十一、好多数值</h2><p>打开题目发现一堆数值，有点像rgb的值，255,255,255就是白色。<br>那么题目的思路就是一个根据这堆值生成图片</p>
+<p>把行61366因式分解分解成两个数相乘（503*122）</p>
+<pre><code>from PIL import Image
+x = 503  # x坐标  通过对txt里的行数进行整数分解
+y = 122  # y坐标  x*y = 行数
+
+im = Image.new(&quot;RGB&quot;, (x, y))  # 创建图片
+with open(&apos;1.txt&apos;) as file:  # 打开rbg值文件
+    # 通过一个个rgb点生成图片
+    for i in range(0,x):
+        for j in range(0,y):
+            line = file.readline()  # 获取一行的rgb值
+            rgb = line.split(&quot;,&quot;)  # 分离rgb
+            im.putpixel((i,j),(int(rgb[0]),int(rgb[1]),int(rgb[2])))  # rgb转化为像素
+    im.show()
+</code></pre><p><img src="/2019/08/02/bugku-16-26-writeup-misc/33.png" alt="在这里插入图片描述"></p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://wrgiun.github.io/2019/08/02/bugku-1-15-writeup-misc/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2237,195 +2588,6 @@ if($_GET[id] == &quot;hackerDJ&quot;)
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://wrgiun.github.io/2019/05/01/ereg正则截断/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="wr">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="giun">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/05/01/ereg正则截断/" class="post-title-link" itemprop="url">ereg正则截断</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2019-05-01 09:13:52 / 修改时间：09:14:12" itemprop="dateCreated datePublished" datetime="2019-05-01T09:13:52+08:00">2019-05-01</time>
-            
-
-            
-              
-
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/代码审计（基础篇）/" itemprop="url" rel="index"><span itemprop="name">代码审计（基础篇）</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <pre><code>&lt;?php 
-
-$flag = &quot;flag&quot;;
-
-if (isset ($_GET[&apos;password&apos;])) 
-{
-  if (ereg (&quot;^[a-zA-Z0-9]+$&quot;, $_GET[&apos;password&apos;]) === FALSE)
-  {
-    echo &apos;&lt;p&gt;You password must be alphanumeric&lt;/p&gt;&apos;;
-  }
-  else if (strlen($_GET[&apos;password&apos;]) &lt; 8 &amp;&amp; $_GET[&apos;password&apos;] &gt; 9999999)
-   {
-     if (strpos ($_GET[&apos;password&apos;], &apos;*-*&apos;) !== FALSE) //strpos — 查找字符串首次出现的位置
-      {
-      die(&apos;Flag: &apos; . $flag);
-      }
-      else
-      {
-        echo(&apos;&lt;p&gt;*-* have not been found&lt;/p&gt;&apos;); 
-       }
-      }
-     else 
-     {
-        echo &apos;&lt;p&gt;Invalid password&lt;/p&gt;&apos;; 
-      }
-   } 
-?&gt;
-</code></pre><p>审计上面代码可以发现<br>要想的到flag必须满足一下3个条件<br>1、必须是数字、字母组成的密码<br>2、密码的长度小于8，却必须要大于9999999<br>3、密码必须包含<em>—</em></p>
-<p>对于第二个条件，使用科学计数法绕过<br>对于第三个条件，由于ereg()函数存在NULL截断漏洞，所以可以用%00（空字符）来截断正则匹配。那么我们就可以绕过第3个条件了<br>那么我们就可以构造出payload为<code>1e8%00*—*</code></p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2475,7 +2637,7 @@ if (isset ($_GET[&apos;password&apos;]))
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">46</span>
+                    <span class="site-state-item-count">47</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -2572,7 +2734,7 @@ if (isset ($_GET[&apos;password&apos;]))
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>
